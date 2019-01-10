@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jveProject>
   <!-- TODO add CDATA plain text comment -->
-  <settings rangeEnd="110770" rangeStart="1">
+  <settings rangeEnd="110770" rangeStart="2">
     <video size="1920x1080" fps="23.976023976"/>
     <audio sampleRate="48000" channels="2"/>
   </settings>
-  <state playheadPosition="1439" videoMonitorQuality="100"/>
+  <state videoMonitorQuality="100" playheadPosition="1439"/>
   <sources>
     <sourceItem id="f3b14e56704a7324dd427ab2d305151b5cead8f3" checkSum="fe5cbbd3a94a81c4c08cb19ba673d391e987982f">
       <image path="../../test-files/jm.jpg"/>
@@ -32,7 +32,7 @@
   <tree>
     <treeNode>
       <data>
-        <region length="3568" streamIndex="0" offset="200" sourceId="2d3ad8f304a7305151b5cef3b14e56724dd427ab" streamOffset="0"/>
+        <region length="3568" streamOffset="0" sourceId="2d3ad8f304a7305151b5cef3b14e56724dd427ab" offset="200" streamIndex="0"/>
       </data>
       <childNodes/>
     </treeNode>
