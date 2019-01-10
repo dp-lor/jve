@@ -28,9 +28,11 @@ Run applications (jve, jve-cli) from ./bin/ directory.
 # Screenshots
 
 Fuson style
+
 ![jve screenshot](https://raw.githubusercontent.com/dp-lor/jve/master/images/jve-1.png)
 
 GTK2 style
+
 ![jve screenshot](https://raw.githubusercontent.com/dp-lor/jve/master/images/jve-2.png)
 ![jve screenshot](https://raw.githubusercontent.com/dp-lor/jve/master/images/jve-3.png)
 ![jve screenshot](https://raw.githubusercontent.com/dp-lor/jve/master/images/jve-4.png)
