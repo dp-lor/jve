@@ -18,7 +18,7 @@ Linguist ask: Skip loading the first named file?
 
 You choose: No
 
-Then release all files, close Linguist.
+Then click "File"->"Release All" and close Linguist.
 
 Run build.sh
 
