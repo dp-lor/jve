@@ -27,7 +27,7 @@ Run applications (jve, jve-cli) from ./bin/ directory.
 
 # Screenshots
 
-Fuson style
+Fusion style
 
 ![jve screenshot](https://raw.githubusercontent.com/dp-lor/jve/master/images/jve-1.png)
 
