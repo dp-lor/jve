@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jveProject>
   <!-- TODO add CDATA plain text comment -->
-  <settings rangeEnd="110770" rangeStart="2">
+  <settings rangeEnd="110764" rangeStart="2">
     <video size="1920x1080" fps="23.976023976"/>
     <audio sampleRate="48000" channels="2"/>
   </settings>
