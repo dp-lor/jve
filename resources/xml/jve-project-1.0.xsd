@@ -1,0 +1,293 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">
+            Project schema for Just Video Editor.
+            Copyright 2017-2019 jve.org. All rights reserved.
+        </xsd:documentation>
+    </xsd:annotation>
+
+
+    <!-- *** CUSTOM SIMPLE TYPES *************************************** -->
+
+    <!-- jveBooleanType -->
+    <xsd:simpleType name="jveBooleanType">
+        <xsd:restriction base="xsd:int">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- jveQualityPercentageType -->
+    <xsd:simpleType name="jveQualityPercentageType">
+        <xsd:restriction base="xsd:int">
+            <xsd:minInclusive value="1"/>
+            <xsd:maxInclusive value="100"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- jveUnsignedFrameNumberType (depends of MAX_INT but unsigned) -->
+    <xsd:simpleType name="jveUnsignedFrameNumberType">
+        <xsd:restriction base="xsd:int">
+            <xsd:minInclusive value="1"/>
+            <xsd:maxInclusive value="2147483646"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- jveSignedFrameNumberType -->
+    <xsd:simpleType name="jveSignedFrameNumberType">
+        <xsd:restriction base="xsd:int">
+            <xsd:minInclusive value="-2147483646"/>
+            <xsd:maxInclusive value="2147483646"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+
+    <!-- *** SETTINGS ************************************************** -->
+
+    <!-- jveProject -> settings -->
+    <xsd:complexType name="jveProjectSettingsType">
+        <xsd:all>
+            <xsd:element name="video"
+                            type="jveProjectSettingsVideoType"
+                            minOccurs="1"
+                            maxOccurs="1"/>
+            <xsd:element name="audio"
+                            type="jveProjectSettingsAudioType"
+                            minOccurs="1"
+                            maxOccurs="1"/>
+        </xsd:all>
+        <xsd:attribute name="rangeStart"
+                        type="jveUnsignedFrameNumberType"
+                        use="required"/>
+        <xsd:attribute name="rangeEnd"
+                        type="jveUnsignedFrameNumberType"
+                        use="required"/>
+    </xsd:complexType>
+
+    <!-- jveProject -> settings -> video -->
+    <xsd:complexType name="jveProjectSettingsVideoType">
+        <xsd:attribute name="size"
+                        type="xsd:token"
+                        use="required"/>
+        <xsd:attribute name="fps"
+                        type="xsd:double"
+                        use="required"/>
+    </xsd:complexType>
+
+    <!-- jveProject -> settings -> audio -->
+    <xsd:complexType name="jveProjectSettingsAudioType">
+        <xsd:attribute name="channels"
+                        type="xsd:unsignedByte"
+                        use="required"/>
+        <xsd:attribute name="sampleRate"
+                        type="xsd:unsignedInt"
+                        use="required"/>
+    </xsd:complexType>
+
+
+    <!-- *** STATE ***************************************************** -->
+
+    <!-- jveProject -> state -->
+    <xsd:complexType name="jveProjectStateType">
+        <xsd:attribute name="playheadPosition"
+                        type="jveUnsignedFrameNumberType"
+                        use="required"/>
+        <xsd:attribute name="videoMonitorQuality"
+                        type="jveQualityPercentageType"
+                        use="required"/>
+    </xsd:complexType>
+
+
+    <!-- *** SOURCES *************************************************** -->
+
+    <!-- jveProject -> sources -->
+    <xsd:complexType name="jveProjectSourcesType">
+        <xsd:sequence>
+            <xsd:element name="sourceItem"
+                            type="jveProjectSourceItemType"
+                            minOccurs="0"
+                            maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- jveProject -> sources -> sourceItem -->
+    <xsd:complexType name="jveProjectSourceItemType">
+        <xsd:choice>
+            <xsd:element name="image"
+                            type="jveProjectSourceItemImageType"
+                            minOccurs="1"
+                            maxOccurs="1"/>
+            <xsd:element name="imagesSequence"
+                            type="jveProjectSourceItemImagesSequenceType"
+                            minOccurs="1"
+                            maxOccurs="1"/>
+            <xsd:element name="audio"
+                            type="jveProjectSourceItemAudioType"
+                            minOccurs="1"
+                            maxOccurs="1"/>
+            <xsd:element name="video"
+                            type="jveProjectSourceItemVideoType"
+                            minOccurs="1"
+                            maxOccurs="1"/>
+            <!-- xsd:element name="project"
+                            type="jveProjectSourceItemProjectType"
+                            minOccurs="1"
+                            maxOccurs="1"/ -->
+        </xsd:choice>
+        <!-- id = md5 hash of added date and time with microseconds -->
+        <xsd:attribute name="id"
+                        type="xsd:hexBinary"
+                        use="required"/>
+        <!-- checkSum = md5 source file(s) checksum -->
+        <xsd:attribute name="checkSum"
+                        type="xsd:hexBinary"
+                        use="required"/>
+    </xsd:complexType>
+
+    <!-- jveProject -> sources -> sourceItem -> image -->
+    <xsd:complexType name="jveProjectSourceItemImageType">
+        <xsd:attribute name="path"
+                        type="xsd:anyURI"
+                        use="required"/>
+    </xsd:complexType>
+
+    <!-- jveProject -> sources -> sourceItem -> imagesSequence -->
+    <xsd:complexType name="jveProjectSourceItemImagesSequenceType">
+        <xsd:sequence>
+            <xsd:element name="sequenceItem"
+                            type="jveProjectSourceItemImagesSequenceItemType"
+                            minOccurs="1"
+                            maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- jveProject -> sources -> sourceItem -> imagesSequence -> sequenceItem -->
+    <xsd:complexType name="jveProjectSourceItemImagesSequenceItemType">
+        <xsd:attribute name="path"
+                        type="xsd:anyURI"
+                        use="required"/>
+    </xsd:complexType>
+
+    <!-- jveProject -> sources -> sourceItem -> audio -->
+    <xsd:complexType name="jveProjectSourceItemAudioType">
+        <xsd:attribute name="path"
+                        type="xsd:anyURI"
+                        use="required"/>
+    </xsd:complexType>
+
+    <!-- jveProject -> sources -> sourceItem -> video -->
+    <xsd:complexType name="jveProjectSourceItemVideoType">
+        <xsd:attribute name="path"
+                        type="xsd:anyURI"
+                        use="required"/>
+    </xsd:complexType>
+
+    <!-- jveProject -> sources -> sourceItem -> project -->
+    <!-- xsd:complexType name="jveProjectSourceItemProjectType">
+        <xsd:attribute name="path"
+                        type="xsd:anyURI"
+                        use="required"/>
+    </xsd:complexType -->
+
+
+    <!-- *** TREE ****************************************************** -->
+
+    <!-- jveProject -> tree -->
+    <xsd:complexType name="jveProjectTreeType">
+        <xsd:sequence>
+            <xsd:element name="treeNode"
+                            type="jveProjectTreeNodeType"
+                            minOccurs="0"
+                            maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- jveProject -> tree -> treeNode -->
+    <xsd:complexType name="jveProjectTreeNodeType">
+        <xsd:all>
+            <xsd:element name="data"
+                            type="jveProjectTreeNodeDataType"
+                            minOccurs="1"
+                            maxOccurs="1"/>
+            <xsd:element name="childNodes"
+                            type="jveProjectTreeNodeChildNodesType"
+                            minOccurs="1"
+                            maxOccurs="1"/>
+        </xsd:all>
+    </xsd:complexType>
+
+    <!-- jveProject -> tree -> treeNode -> data -->
+    <xsd:complexType name="jveProjectTreeNodeDataType">
+        <xsd:choice>
+            <xsd:element name="region"
+                            type="jveProjectTreeNodeDataRegionType"
+                            minOccurs="1"
+                            maxOccurs="1"/>
+        </xsd:choice>
+    </xsd:complexType>
+
+    <!-- jveProject -> tree -> treeNode -> data -> region -->
+    <xsd:complexType name="jveProjectTreeNodeDataRegionType">
+        <xsd:attribute name="sourceId"
+                        type="xsd:hexBinary"
+                        use="required"/>
+        <xsd:attribute name="streamIndex"
+                        type="xsd:unsignedByte"
+                        use="required"/>
+        <xsd:attribute name="streamOffset"
+                        type="xsd:unsignedInt"
+                        use="required"/>
+        <xsd:attribute name="offset"
+                        type="jveSignedFrameNumberType"
+                        use="required"/>
+        <xsd:attribute name="length"
+                        type="jveUnsignedFrameNumberType"
+                        use="required"/>
+    </xsd:complexType>
+
+    <!-- jveProject -> tree -> treeNode -> childNodes -->
+    <xsd:complexType name="jveProjectTreeNodeChildNodesType">
+        <xsd:sequence>
+            <xsd:element name="treeNode"
+                            type="jveProjectTreeNodeType"
+                            minOccurs="0"
+                            maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+
+    <!-- *** DOCUMENT ELEMENT ****************************************** -->
+
+    <!-- jveProject -->
+    <xsd:complexType name="jveProjectType">
+        <xsd:all>
+            <xsd:element name="settings"
+                            type="jveProjectSettingsType"
+                            minOccurs="1"
+                            maxOccurs="1"/>
+            <xsd:element name="state"
+                            type="jveProjectStateType"
+                            minOccurs="1"
+                            maxOccurs="1"/>
+            <xsd:element name="sources"
+                            type="jveProjectSourcesType"
+                            minOccurs="1"
+                            maxOccurs="1"/>
+            <xsd:element name="tree"
+                            type="jveProjectTreeType"
+                            minOccurs="1"
+                            maxOccurs="1"/>
+        </xsd:all>
+    </xsd:complexType>
+
+
+    <!-- *** BEGIN ***************************************************** -->
+
+    <!-- document element -->
+    <xsd:element name="jveProject"
+                    type="jveProjectType"/>
+
+
+</xsd:schema>

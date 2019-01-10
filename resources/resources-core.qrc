@@ -1,0 +1,10 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/translations/core">
+        <file alias="en_US.qm">translations/core/en_US.qm</file>
+        <file alias="ru_RU.qm">translations/core/ru_RU.qm</file>
+    </qresource>
+    <qresource prefix="/xml">
+        <file alias="jve-project-1.0.xsd">xml/jve-project-1.0.xsd</file>
+    </qresource>
+</RCC>

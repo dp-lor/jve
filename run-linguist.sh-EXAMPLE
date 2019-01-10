@@ -1,0 +1,14 @@
+#!/bin/sh
+
+
+export QT_SELECT=5
+export QTTOOLDIR=/usr/lib/i386-linux-gnu/qt5/bin
+
+
+/usr/lib/i386-linux-gnu/qt5/bin/linguist ./translations/core/*.ts ./translations/gui/*.ts
+
+
+cp ./translations/core/*.qm ./resources/translations/core/
+cp ./translations/gui/*.qm ./resources/translations/gui/
+
+

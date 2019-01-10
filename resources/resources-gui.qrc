@@ -1,0 +1,29 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/translations/gui">
+        <file alias="en_US.qm">translations/gui/en_US.qm</file>
+        <file alias="ru_RU.qm">translations/gui/ru_RU.qm</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file alias="dummy-icon.png">icons/dummy-icon.png</file>
+        <file alias="jve-icon.png">icons/jve-icon.png</file>
+        <file alias="history-clean-icon.png">icons/history-clean-icon.png</file>
+        <file alias="plus-icon.png">icons/plus-icon.png</file>
+        <file alias="seek-to-start-icon.png">icons/seek-to-start-icon.png</file>
+        <file alias="seek-to-previous-keyframe-icon.png">icons/seek-to-previous-keyframe-icon.png</file>
+        <file alias="play-icon.png">icons/play-icon.png</file>
+        <file alias="pause-icon.png">icons/pause-icon.png</file>
+        <file alias="seek-to-next-keyframe-icon.png">icons/seek-to-next-keyframe-icon.png</file>
+        <file alias="seek-to-end-icon.png">icons/seek-to-end-icon.png</file>
+        <file alias="loop-icon.png">icons/loop-icon.png</file>
+        <file alias="search-icon.png">icons/search-icon.png</file>
+        <file alias="add-media-item-icon.png">icons/add-media-item-icon.png</file>
+        <file alias="add-images-sequence-item-icon.png">icons/add-images-sequence-item-icon.png</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file alias="jve-gray-sharpen-logo.png">images/jve-gray-sharpen-logo.png</file>
+    </qresource>
+    <qresource prefix="/patterns">
+        <file alias="dock-title-bar-trail-pattern.png">patterns/dock-title-bar-trail-pattern.png</file>
+    </qresource>
+</RCC>

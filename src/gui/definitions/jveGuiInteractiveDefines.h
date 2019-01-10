@@ -1,0 +1,13 @@
+
+
+#ifndef JVEGUIINTERACTIVEDEFINES_H
+#define JVEGUIINTERACTIVEDEFINES_H
+
+
+#define JVE_GUI_DEBOUNCE_TIME       100 // milliseconds
+#define JVE_GUI_STATUS_BAR_TIMEOUT  140 // milliseconds per symbol
+
+
+#endif // JVEGUIINTERACTIVEDEFINES_H
+
+

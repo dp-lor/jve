@@ -1,0 +1,189 @@
+#!/bin/sh
+
+
+BUILD_TYPE=release
+
+
+clear
+
+export QT_SELECT=5
+export QTTOOLDIR=/usr/lib/i386-linux-gnu/qt5/bin
+
+rm -Rf ./tmp/dummy/*
+rm -Rf ./tmp/rcc/*
+rm -f ./bin/jve
+rm -f ./bin/jve-cli
+
+
+####################################################
+
+
+# core linguist (for linguist translations only)
+echo "" > ./qmake-projects/core-linguist.pro
+echo "
+
+OBJECTS_DIR = tmp/dummy
+MOC_DIR = tmp/dummy
+RCC_DIR = tmp/dummy
+DESTDIR = tmp/dummy
+
+" >> ./qmake-projects/core-linguist.pro
+
+echo "
+
+TRANSLATIONS += ../translations/core/en_US.ts
+TRANSLATIONS += ../translations/core/ru_RU.ts
+
+" >> ./qmake-projects/core-linguist.pro
+
+echo "
+HEADERS += \\" >> ./qmake-projects/core-linguist.pro
+find ./src/core/ -name "*.h" | sed 's|^\.|\.\.|' | sed 's|$| \\|' >> ./qmake-projects/core-linguist.pro
+
+echo "
+SOURCES += \\" >> ./qmake-projects/core-linguist.pro
+find ./src/core/ -name "*.cpp" | sed 's|^\.|\.\.|' | sed 's|$| \\|' >> ./qmake-projects/core-linguist.pro
+
+
+####################################################
+
+
+# gui linguist (for linguist translations only)
+echo "" > ./qmake-projects/gui-linguist.pro
+echo "
+
+OBJECTS_DIR = tmp/dummy
+MOC_DIR = tmp/dummy
+RCC_DIR = tmp/dummy
+DESTDIR = tmp/dummy
+
+" >> ./qmake-projects/gui-linguist.pro
+
+echo "
+
+TRANSLATIONS += ../translations/gui/en_US.ts
+TRANSLATIONS += ../translations/gui/ru_RU.ts
+
+" >> ./qmake-projects/gui-linguist.pro
+
+echo "
+HEADERS += \\" >> ./qmake-projects/gui-linguist.pro
+find ./src/gui/ -name "*.h" | sed 's|^\.|\.\.|' | sed 's|$| \\|' >> ./qmake-projects/gui-linguist.pro
+
+echo "
+SOURCES += \\" >> ./qmake-projects/gui-linguist.pro
+find ./src/gui/ -name "*.cpp" | sed 's|^\.|\.\.|' | sed 's|$| \\|' >> ./qmake-projects/gui-linguist.pro
+
+
+####################################################
+
+
+# jve-cli (cli)
+echo "" > ./qmake-projects/jve-cli.pro
+echo "
+
+CONFIG += $BUILD_TYPE
+QMAKE_CXXFLAGS_DEBUG += -Og
+
+TEMPLATE = app
+
+QT += xmlpatterns
+QT += xml
+QT += widgets
+
+QMAKE_CXXFLAGS += -DJVE_CLI_APP
+
+QMAKE_LFLAGS += -lavformat
+QMAKE_LFLAGS += -lavcodec
+QMAKE_LFLAGS += -lavutil
+QMAKE_LFLAGS += -lavresample
+
+RESOURCES += ../resources/resources-core.qrc
+#RESOURCES += ../resources/resources-cli.qrc
+
+OBJECTS_DIR = tmp/obj
+MOC_DIR = tmp/moc
+RCC_DIR = tmp/rcc
+DESTDIR = bin
+
+" >> ./qmake-projects/jve-cli.pro
+
+echo "
+HEADERS += \\" >> ./qmake-projects/jve-cli.pro
+find ./src/core/ -name "*.h" | sed 's|^\.|\.\.|' | sed 's|$| \\|' >> ./qmake-projects/jve-cli.pro
+find ./src/cli/  -name "*.h" | sed 's|^\.|\.\.|' | sed 's|$| \\|' >> ./qmake-projects/jve-cli.pro
+
+echo "
+SOURCES += \\" >> ./qmake-projects/jve-cli.pro
+find ./src/core/ -name "*.cpp" | sed 's|^\.|\.\.|' | sed 's|$| \\|' >> ./qmake-projects/jve-cli.pro
+find ./src/cli/  -name "*.cpp" | sed 's|^\.|\.\.|' | sed 's|$| \\|' >> ./qmake-projects/jve-cli.pro
+
+
+####################################################
+
+
+# jve (gui)
+echo "" > ./qmake-projects/jve.pro
+echo "
+
+CONFIG += $BUILD_TYPE
+QMAKE_CXXFLAGS_DEBUG += -Og
+
+QMAKE_LFLAGS += -lxcb
+
+TEMPLATE = app
+
+QT += xmlpatterns
+QT += xml
+QT += x11extras
+QT += widgets
+
+QMAKE_CXXFLAGS += -DJVE_GUI_APP
+
+QMAKE_LFLAGS += -lavformat
+QMAKE_LFLAGS += -lavcodec
+QMAKE_LFLAGS += -lavutil
+QMAKE_LFLAGS += -lavresample
+
+RESOURCES += ../resources/resources-core.qrc
+RESOURCES += ../resources/resources-gui.qrc
+RC_ICONS = ../resources/icons/jve-icon.ico
+
+OBJECTS_DIR = tmp/obj
+MOC_DIR = tmp/moc
+RCC_DIR = tmp/rcc
+DESTDIR = bin
+
+" >> ./qmake-projects/jve.pro
+
+echo "
+HEADERS += \\" >> ./qmake-projects/jve.pro
+find ./src/core/ -name "*.h" | sed 's|^\.|\.\.|' | sed 's|$| \\|' >> ./qmake-projects/jve.pro
+find ./src/gui/  -name "*.h" | sed 's|^\.|\.\.|' | sed 's|$| \\|' >> ./qmake-projects/jve.pro
+
+echo "
+SOURCES += \\" >> ./qmake-projects/jve.pro
+find ./src/core/ -name "*.cpp" | sed 's|^\.|\.\.|' | sed 's|$| \\|' >> ./qmake-projects/jve.pro
+find ./src/gui/  -name "*.cpp" | sed 's|^\.|\.\.|' | sed 's|$| \\|' >> ./qmake-projects/jve.pro
+
+
+####################################################
+
+
+# update linguist translations
+# WARNING! use -no-obsolete if you sure about not loose translations
+#/usr/lib/i386-linux-gnu/qt5/bin/lupdate -no-obsolete ./qmake-projects/e.g.pro
+
+/usr/lib/i386-linux-gnu/qt5/bin/lupdate ./qmake-projects/core-linguist.pro
+/usr/lib/i386-linux-gnu/qt5/bin/lupdate ./qmake-projects/gui-linguist.pro
+
+
+# make jve-cli (cli)
+/usr/lib/i386-linux-gnu/qt5/bin/qmake -nomoc -nodepend ./qmake-projects/jve-cli.pro
+make
+
+# make jve (gui)
+/usr/lib/i386-linux-gnu/qt5/bin/qmake -nomoc -nodepend ./qmake-projects/jve.pro
+make
+
+
