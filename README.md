@@ -35,5 +35,11 @@ GTK2 style
 
 ![jve screenshot](https://raw.githubusercontent.com/dp-lor/jve/master/images/jve-2.png)
 ![jve screenshot](https://raw.githubusercontent.com/dp-lor/jve/master/images/jve-3.png)
+
+Windows 95 style
+
 ![jve screenshot](https://raw.githubusercontent.com/dp-lor/jve/master/images/jve-4.png)
+
+Black MATE (GTK2) style
+
 ![jve screenshot](https://raw.githubusercontent.com/dp-lor/jve/master/images/jve-5.png)
