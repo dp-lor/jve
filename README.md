@@ -1,7 +1,7 @@
 # jve
 Just Video Editor
 
-# WORKING IN PROGRESS!!!
+# WORK IN PROGRESS!!!
 This is not ready yet for using.
 
 
