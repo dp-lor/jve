@@ -12,8 +12,8 @@
 
 jveGuiProjectSourcesItemPropertiesDialog
     ::jveGuiProjectSourcesItemPropertiesDialog(
-              QWidget                     *parent,
-        const jveProjectSourcesItemStruct &item
+              QWidget              *parent,
+        const jveSourcesItemStruct &item
 ) : QDialog(parent),
         mp_item(item),
         mp_layout(this),

@@ -1,7 +1,7 @@
 
 
-#ifndef JVEPROJECTSOURCESITEMSTRUCT_H
-#define JVEPROJECTSOURCESITEMSTRUCT_H
+#ifndef JVESOURCESITEMSTRUCT_H
+#define JVESOURCESITEMSTRUCT_H
 
 
 #include <QString>
@@ -11,7 +11,7 @@
 #include "../definitions/jveProjectSourcesItemStatus.h"
 
 
-typedef struct _jveProjectSourcesItemStruct
+typedef struct _jveSourcesItemStruct
 {
     QString id;
     int     type;
@@ -19,9 +19,9 @@ typedef struct _jveProjectSourcesItemStruct
     QString absolutePath;
     QString name;
     QString baseName;
-} jveProjectSourcesItemStruct;
+} jveSourcesItemStruct;
 
 
-#endif // JVEPROJECTSOURCESITEMSTRUCT_H
+#endif // JVESOURCESITEMSTRUCT_H
 
 

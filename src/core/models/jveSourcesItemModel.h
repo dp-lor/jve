@@ -10,7 +10,7 @@
 #include <QString>
 
 
-#include "../structures/jveProjectSourcesItemStruct.h"
+#include "../structures/jveSourcesItemStruct.h"
 
 
 class jveSourcesItemModel : public jveBaseModel
@@ -32,7 +32,7 @@ class jveSourcesItemModel : public jveBaseModel
         int     type(void) const;
         int     status(void) const;
     public:
-        jveProjectSourcesItemStruct itemStruct(void) const;
+        jveSourcesItemStruct itemStruct(void) const;
     public:
         void setId(const QString &id);
         void setCheckSum(const QString &checkSum);

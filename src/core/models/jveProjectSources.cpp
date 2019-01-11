@@ -132,7 +132,7 @@ jveProjectSources::slotAddItems(const QStringList &itemsList)
 
     foreach (const QString &itemPath, itemsList) {
 
-        jveProjectSourcesItemStruct itemStruct;
+        jveSourcesItemStruct itemStruct;
 
         info.setFile(itemPath);
 

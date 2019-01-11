@@ -52,10 +52,10 @@ jveSourcesItemModel::status(void) const
     return mp_status;
 }
 
-jveProjectSourcesItemStruct
+jveSourcesItemStruct
 jveSourcesItemModel::itemStruct(void) const
 {
-    jveProjectSourcesItemStruct itemStruct;
+    jveSourcesItemStruct itemStruct;
 
     itemStruct.id           = mp_id;
     itemStruct.type         = mp_type;

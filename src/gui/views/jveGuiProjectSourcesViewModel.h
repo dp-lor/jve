@@ -7,7 +7,7 @@
 #include <QAbstractListModel>
 
 
-#include "../../core/structures/jveProjectSourcesItemStruct.h"
+#include "../../core/structures/jveSourcesItemStruct.h"
 
 
 class QMimeData;
@@ -31,11 +31,11 @@ class jveGuiProjectSourcesViewModel : public QAbstractListModel
         Qt::ItemFlags   flags(const QModelIndex &index) const;
         QMimeData     * mimeData(const QModelIndexList &indexes) const;
     private slots:
-        void slotAddSourceItem(const jveProjectSourcesItemStruct &itemStruct);
+        void slotAddSourceItem(const jveSourcesItemStruct &itemStruct);
         void slotRemoveSourceItem(const QString &itemId);
     private:
         // members
-        QVector<jveProjectSourcesItemStruct> mp_items;
+        QVector<jveSourcesItemStruct> mp_items;
 };
 
 

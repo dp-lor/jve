@@ -19,9 +19,9 @@ jveGuiProjectSourcesViewModel::jveGuiProjectSourcesViewModel(QObject *parent)
     // slot add source item
     connect(
         &jveProjectSourcesSignals,
-        SIGNAL(itemAdded(jveProjectSourcesItemStruct)),
+        SIGNAL(itemAdded(jveSourcesItemStruct)),
         this,
-        SLOT(slotAddSourceItem(jveProjectSourcesItemStruct)),
+        SLOT(slotAddSourceItem(jveSourcesItemStruct)),
         Qt::QueuedConnection
     );
     // slot remove source item
@@ -120,7 +120,7 @@ jveGuiProjectSourcesViewModel::mimeData(const QModelIndexList &indexes) const
     foreach (const QModelIndex &index, indexes) {
         if (index.isValid()) {
 
-            jveProjectSourcesItemStruct item = mp_items.at(index.row());
+            jveSourcesItemStruct item = mp_items.at(index.row());
 
             stream
                 << item.type
@@ -137,7 +137,7 @@ jveGuiProjectSourcesViewModel::mimeData(const QModelIndexList &indexes) const
 
 void
 jveGuiProjectSourcesViewModel::slotAddSourceItem(
-    const jveProjectSourcesItemStruct &itemStruct
+    const jveSourcesItemStruct &itemStruct
 )
 {
     int newSize = mp_items.size();

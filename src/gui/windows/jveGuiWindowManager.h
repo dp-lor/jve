@@ -9,7 +9,7 @@
 
 
 #include "../../core/application/jveReport.h"
-#include "../../core/structures/jveProjectSourcesItemStruct.h"
+#include "../../core/structures/jveSourcesItemStruct.h"
 
 
 class jveGuiMainWindow;
@@ -40,7 +40,7 @@ class jveGuiWindowManager : public QObject
         void slotShowAddProjectSourcesMediaItemsDialog(void);
         void slotShowAddProjectSourcesImagesSequenceItemDialog(void);
         void slotShowProjectSourcesItemPropertiesDialog(
-            const jveProjectSourcesItemStruct &itemStruct
+            const jveSourcesItemStruct &itemStruct
         );
         void slotShowPreferencesDialog(void);
         void slotShowKeyboardShortcutsInfo(void);

@@ -13,7 +13,7 @@
 
 #include "../core/localization/jveLocalization.h"
 
-#include "../core/structures/jveProjectSourcesItemStruct.h"
+#include "../core/structures/jveSourcesItemStruct.h"
 
 #include "../core/utils/jveOptionsParser.h"
 #include "../core/utils/jveXmlValidator.h"
@@ -32,7 +32,7 @@ main(int argc, char *argv[])
     qRegisterMetaType
         <jveReport>("jveReport");
     qRegisterMetaType
-        <jveProjectSourcesItemStruct>("jveProjectSourcesItemStruct");
+        <jveSourcesItemStruct>("jveSourcesItemStruct");
 
     // jve identificators
     QApplication::setOrganizationName  (JVE_ORG_NAME);

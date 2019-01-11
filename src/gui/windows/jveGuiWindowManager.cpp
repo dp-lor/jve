@@ -132,13 +132,9 @@ jveGuiWindowManager::populateGui(void)
     // slot show project sources item properties dialog
     connect(
         &jveProjectSourcesSignals,
-        SIGNAL(wantShowItemPropertiesDialog(jveProjectSourcesItemStruct)),
+        SIGNAL(wantShowItemPropertiesDialog(jveSourcesItemStruct)),
         this,
-        SLOT(
-            slotShowProjectSourcesItemPropertiesDialog(
-                jveProjectSourcesItemStruct
-            )
-        ),
+        SLOT(slotShowProjectSourcesItemPropertiesDialog(jveSourcesItemStruct)),
         Qt::DirectConnection
     );
 
@@ -372,7 +368,7 @@ jveGuiWindowManager::slotShowAddProjectSourcesImagesSequenceItemDialog(void)
 
 void
 jveGuiWindowManager::slotShowProjectSourcesItemPropertiesDialog(
-    const jveProjectSourcesItemStruct &itemStruct
+    const jveSourcesItemStruct &itemStruct
 )
 {
     QPointer<jveGuiProjectSourcesItemPropertiesDialog>

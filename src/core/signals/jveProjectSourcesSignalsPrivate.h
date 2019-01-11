@@ -9,7 +9,7 @@
 #include <QString>
 
 
-#include "../structures/jveProjectSourcesItemStruct.h"
+#include "../structures/jveSourcesItemStruct.h"
 
 
 class jveProjectSourcesSignalsPrivate : public QObject
@@ -26,17 +26,17 @@ class jveProjectSourcesSignalsPrivate : public QObject
         void wantAddItems(const QStringList &itemsList);
         void wantAddImagesSequenceItem(const QStringList &imagesList);
 
-        void wantModifyItem(const jveProjectSourcesItemStruct &itemStruct);
+        void wantModifyItem(const jveSourcesItemStruct &itemStruct);
         void wantRemoveItem(const QString &itemId);
         void wantRemoveUnusedItems(void);
 
-        void itemAdded(const jveProjectSourcesItemStruct &itemStruct);
+        void itemAdded(const jveSourcesItemStruct &itemStruct);
         void itemRemoved(const QString &itemId);
 
         void wantShowAddMediaItemsDialog(void);
         void wantShowAddImagesSequenceItemDialog(void);
         void wantShowItemPropertiesDialog(
-            const jveProjectSourcesItemStruct &itemStruct
+            const jveSourcesItemStruct &itemStruct
         );
 };
 

@@ -9,7 +9,7 @@
 #include <QHBoxLayout>
 
 
-#include "../../core/structures/jveProjectSourcesItemStruct.h"
+#include "../../core/structures/jveSourcesItemStruct.h"
 
 #include "../elements/jveGuiButton.h"
 
@@ -22,8 +22,8 @@ class jveGuiProjectSourcesItemPropertiesDialog : public QDialog
     Q_OBJECT
     public:
         explicit jveGuiProjectSourcesItemPropertiesDialog(
-                  QWidget                     *parent,
-            const jveProjectSourcesItemStruct &item
+                  QWidget              *parent,
+            const jveSourcesItemStruct &item
         );
         virtual ~jveGuiProjectSourcesItemPropertiesDialog(void);
     protected:
@@ -32,7 +32,7 @@ class jveGuiProjectSourcesItemPropertiesDialog : public QDialog
         void updateTranslations(void);
     private:
         // members
-        jveProjectSourcesItemStruct mp_item;
+        jveSourcesItemStruct mp_item;
     private:
         // members
         QVBoxLayout  mp_layout;
