@@ -19,7 +19,7 @@ jveProjectSourcesSingleResourceItemModel
               jveApplication *app,
               QDomElement     domNode,
         const int             type
-    ) : jveProjectSourcesItemModel(app, domNode, type)
+    ) : jveSourcesItemModel(app, domNode, type)
 {
 }
 

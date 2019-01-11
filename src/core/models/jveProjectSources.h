@@ -12,7 +12,7 @@
 #include <QStringList>
 
 
-class jveProjectSourcesItemModel;
+class jveSourcesItemModel;
 
 
 class jveProjectSources : public jveBaseModel
@@ -28,13 +28,13 @@ class jveProjectSources : public jveBaseModel
         void setUp(void);
         void upSet(void);
     private:
-        void attachSourceItem(jveProjectSourcesItemModel *item);
+        void attachSourceItem(jveSourcesItemModel *item);
     private slots:
         void slotAddItems(const QStringList &itemsList);
         void slotAddImagesSequenceItem(const QStringList &imagesList);
     private:
         // members
-        QHash<QString, jveProjectSourcesItemModel *> mp_items;
+        QHash<QString, jveSourcesItemModel *> mp_items;
 };
 
 

@@ -4,14 +4,13 @@
 #define JVEPROJECTSOURCESMULTIPLERESOURCESITEMMODEL_H
 
 
-#include "jveProjectSourcesItemModel.h"
+#include "jveSourcesItemModel.h"
 
 
 #include <QStringList>
 
 
-class jveProjectSourcesMultipleResourcesItemModel
-    : public jveProjectSourcesItemModel
+class jveProjectSourcesMultipleResourcesItemModel : public jveSourcesItemModel
 {
     Q_OBJECT
     public:

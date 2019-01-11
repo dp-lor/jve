@@ -1,7 +1,7 @@
 
 
-#ifndef JVEPROJECTSOURCESITEMMODEL_H
-#define JVEPROJECTSOURCESITEMMODEL_H
+#ifndef JVESOURCESITEMMODEL_H
+#define JVESOURCESITEMMODEL_H
 
 
 #include "jveBaseModel.h"
@@ -13,16 +13,16 @@
 #include "../structures/jveProjectSourcesItemStruct.h"
 
 
-class jveProjectSourcesItemModel : public jveBaseModel
+class jveSourcesItemModel : public jveBaseModel
 {
     Q_OBJECT
     public:
-        explicit jveProjectSourcesItemModel(
+        explicit jveSourcesItemModel(
                   jveApplication *app,
                   QDomElement     domNode,
             const int             type = jveProjectSourcesItemType::Undefined
         );
-        virtual ~jveProjectSourcesItemModel(void);
+        virtual ~jveSourcesItemModel(void);
     public:
         void setUp(void);
         void upSet(void);
@@ -48,6 +48,6 @@ class jveProjectSourcesItemModel : public jveBaseModel
 };
 
 
-#endif // JVEPROJECTSOURCESITEMMODEL_H
+#endif // JVESOURCESITEMMODEL_H
 
 

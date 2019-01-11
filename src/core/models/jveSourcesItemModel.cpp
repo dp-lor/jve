@@ -1,9 +1,9 @@
 
 
-#include "jveProjectSourcesItemModel.h"
+#include "jveSourcesItemModel.h"
 
 
-jveProjectSourcesItemModel::jveProjectSourcesItemModel(
+jveSourcesItemModel::jveSourcesItemModel(
           jveApplication *app,
           QDomElement     domNode,
     const int             type
@@ -14,46 +14,46 @@ jveProjectSourcesItemModel::jveProjectSourcesItemModel(
 {
 }
 
-jveProjectSourcesItemModel::~jveProjectSourcesItemModel(void)
+jveSourcesItemModel::~jveSourcesItemModel(void)
 {
 }
 
 void
-jveProjectSourcesItemModel::setUp(void)
+jveSourcesItemModel::setUp(void)
 {
 }
 
 void
-jveProjectSourcesItemModel::upSet(void)
+jveSourcesItemModel::upSet(void)
 {
 }
 
 QString
-jveProjectSourcesItemModel::id(void) const
+jveSourcesItemModel::id(void) const
 {
     return mp_id;
 }
 
 QString
-jveProjectSourcesItemModel::checkSum(void) const
+jveSourcesItemModel::checkSum(void) const
 {
     return mp_checkSum;
 }
 
 int
-jveProjectSourcesItemModel::type(void) const
+jveSourcesItemModel::type(void) const
 {
     return mp_type;
 }
 
 int
-jveProjectSourcesItemModel::status(void) const
+jveSourcesItemModel::status(void) const
 {
     return mp_status;
 }
 
 jveProjectSourcesItemStruct
-jveProjectSourcesItemModel::itemStruct(void) const
+jveSourcesItemModel::itemStruct(void) const
 {
     jveProjectSourcesItemStruct itemStruct;
 
@@ -68,14 +68,14 @@ jveProjectSourcesItemModel::itemStruct(void) const
 }
 
 void
-jveProjectSourcesItemModel::setId(const QString &id)
+jveSourcesItemModel::setId(const QString &id)
 {
     mp_id = id;
     mp_domNode.setAttribute("id", mp_id);
 }
 
 void
-jveProjectSourcesItemModel::setCheckSum(const QString &checkSum)
+jveSourcesItemModel::setCheckSum(const QString &checkSum)
 {
     mp_checkSum = checkSum;
     mp_domNode.setAttribute("checkSum", mp_checkSum);

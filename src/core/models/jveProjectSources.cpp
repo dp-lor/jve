@@ -101,7 +101,7 @@ jveProjectSources::setUp(void)
         mp_children.at(i)->setUp();
     }
     // send signals about all exists sources items
-    foreach (const jveProjectSourcesItemModel *item, mp_items) {
+    foreach (const jveSourcesItemModel *item, mp_items) {
         emit jveProjectSourcesSignals.itemAdded(item->itemStruct());
     }
 }
@@ -117,7 +117,7 @@ jveProjectSources::upSet(void)
 }
 
 void
-jveProjectSources::attachSourceItem(jveProjectSourcesItemModel *item)
+jveProjectSources::attachSourceItem(jveSourcesItemModel *item)
 {
     jveIdProvider.addExternal(item->id());
     mp_items.insert(item->id(), item);
