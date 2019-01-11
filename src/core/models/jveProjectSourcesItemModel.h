@@ -38,7 +38,6 @@ class jveProjectSourcesItemModel : public jveBaseModel
         void setId(const QString &id);
         void setCheckSum(const QString &checkSum);
     protected:
-        void initEnvironmentBySingleSourceFile(const QString &sourcePath);
         void initEnvironmentBySourceFilesSequence(const QStringList &sources);
     protected:
         // members

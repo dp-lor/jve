@@ -6,7 +6,7 @@
 jveProjectSourcesAudioItem::jveProjectSourcesAudioItem(
     jveApplication *app,
     QDomElement     domNode
-) : jveProjectSourcesItemModel(
+) : jveProjectSourcesSingleResourceItemModel(
         app,
         domNode,
         jveProjectSourcesItemType::Audio
@@ -14,7 +14,7 @@ jveProjectSourcesAudioItem::jveProjectSourcesAudioItem(
         mp_audioDomElement(domNode.childNodes().at(0).toElement()),
         mp_audioPath(mp_audioDomElement.attribute("path"))
 {
-    initEnvironmentBySingleSourceFile(mp_audioPath);
+    initResource(mp_audioPath);
 }
 
 jveProjectSourcesAudioItem::~jveProjectSourcesAudioItem(void)

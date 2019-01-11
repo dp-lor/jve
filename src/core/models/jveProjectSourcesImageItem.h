@@ -4,10 +4,11 @@
 #define JVEPROJECTSOURCESIMAGEITEM_H
 
 
-#include "jveProjectSourcesItemModel.h"
+#include "jveProjectSourcesSingleResourceItemModel.h"
 
 
-class jveProjectSourcesImageItem : public jveProjectSourcesItemModel
+class jveProjectSourcesImageItem
+    : public jveProjectSourcesSingleResourceItemModel
 {
     Q_OBJECT
     public:

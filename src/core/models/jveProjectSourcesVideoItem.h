@@ -4,13 +4,11 @@
 #define JVEPROJECTSOURCESVIDEOITEM_H
 
 
-#include "jveProjectSourcesItemModel.h"
+#include "jveProjectSourcesSingleResourceItemModel.h"
 
 
-//#include "../av/jveAVItem.h"
-
-
-class jveProjectSourcesVideoItem : public jveProjectSourcesItemModel
+class jveProjectSourcesVideoItem
+    : public jveProjectSourcesSingleResourceItemModel
 {
     Q_OBJECT
     public:
@@ -23,7 +21,6 @@ class jveProjectSourcesVideoItem : public jveProjectSourcesItemModel
         // members
         QDomElement mp_videoDomElement;
         QString     mp_videoPath;
-        //jveAVItem   mp_avItem;
 };
 
 
