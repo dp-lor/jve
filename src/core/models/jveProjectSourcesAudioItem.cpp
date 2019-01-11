@@ -14,7 +14,7 @@ jveProjectSourcesAudioItem::jveProjectSourcesAudioItem(
         mp_audioDomElement(domNode.childNodes().at(0).toElement()),
         mp_audioPath(mp_audioDomElement.attribute("path"))
 {
-    initResource(mp_audioPath);
+    initByResource(mp_audioPath);
 }
 
 jveProjectSourcesAudioItem::~jveProjectSourcesAudioItem(void)

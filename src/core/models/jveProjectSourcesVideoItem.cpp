@@ -14,7 +14,7 @@ jveProjectSourcesVideoItem::jveProjectSourcesVideoItem(
         mp_videoDomElement(mp_domNode.childNodes().at(0).toElement()),
         mp_videoPath(mp_videoDomElement.attribute("path"))
 {
-    initResource(mp_videoPath);
+    initByResource(mp_videoPath);
 }
 
 jveProjectSourcesVideoItem::~jveProjectSourcesVideoItem(void)

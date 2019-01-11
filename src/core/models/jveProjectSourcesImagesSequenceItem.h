@@ -4,10 +4,11 @@
 #define JVEPROJECTSOURCESIMAGESSEQUENCEITEM_H
 
 
-#include "jveProjectSourcesItemModel.h"
+#include "jveProjectSourcesMultipleResourcesItemModel.h"
 
 
-class jveProjectSourcesImagesSequenceItem : public jveProjectSourcesItemModel
+class jveProjectSourcesImagesSequenceItem
+    : public jveProjectSourcesMultipleResourcesItemModel
 {
     Q_OBJECT
     public:
@@ -18,7 +19,7 @@ class jveProjectSourcesImagesSequenceItem : public jveProjectSourcesItemModel
         virtual ~jveProjectSourcesImagesSequenceItem(void);
     private:
         // members
-        QStringList mp_sequencePaths;
+        QStringList mp_sequenceList;
 };
 
 

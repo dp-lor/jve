@@ -8,7 +8,6 @@
 
 
 #include <QString>
-#include <QStringList>
 
 
 #include "../structures/jveProjectSourcesItemStruct.h"
@@ -37,8 +36,6 @@ class jveProjectSourcesItemModel : public jveBaseModel
     public:
         void setId(const QString &id);
         void setCheckSum(const QString &checkSum);
-    protected:
-        void initEnvironmentBySourceFilesSequence(const QStringList &sources);
     protected:
         // members
         QString mp_id;

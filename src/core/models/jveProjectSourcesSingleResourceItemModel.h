@@ -19,7 +19,7 @@ class jveProjectSourcesSingleResourceItemModel
         );
         virtual ~jveProjectSourcesSingleResourceItemModel(void);
     protected:
-        void initResource(const QString &resourcePath);
+        void initByResource(const QString &resourcePath);
 };
 
 

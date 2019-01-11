@@ -14,7 +14,7 @@ jveProjectSourcesImageItem::jveProjectSourcesImageItem(
         mp_imageDomElement(domNode.childNodes().at(0).toElement()),
         mp_imagePath(mp_imageDomElement.attribute("path"))
 {
-    initResource(mp_imagePath);
+    initByResource(mp_imagePath);
 }
 
 jveProjectSourcesImageItem::~jveProjectSourcesImageItem(void)
