@@ -6,8 +6,7 @@
 #include <QEvent>
 
 
-#include "../../core/definitions/jveProjectFileDefines.h"
-#include "../../core/definitions/jveProjectSourcesItemFileDefines.h"
+#include "../../core/definitions/jveProjectSourcesFileExtensionsDefines.h"
 
 #include "../definitions/jveGuiWindowsSettingsDefines.h"
 #include "../../core/application/jveSettings.h"
@@ -84,41 +83,41 @@ jveGuiAddProjectSourcesMediaItemsDialog::updateTranslations(void)
                 .append(
                     " "
                     "("
-                        JVE_PROJECT_SOURCES_ITEM_VIDEO_FILE_EXTENSIONS_LIST
+                        JVE_SOURCES_VIDEO_FILE_EXTENSIONS_LIST
                         " "
-                        JVE_PROJECT_SOURCES_ITEM_IMAGE_FILE_EXTENSIONS_LIST
+                        JVE_SOURCES_IMAGE_FILE_EXTENSIONS_LIST
                         " "
-                        JVE_PROJECT_SOURCES_ITEM_AUDIO_FILE_EXTENSIONS_LIST
+                        JVE_SOURCES_AUDIO_FILE_EXTENSIONS_LIST
                         " "
-                        JVE_PROJECT_SOURCES_ITEM_TEXT_FILE_EXTENSIONS_LIST
+                        JVE_SOURCES_TEXT_FILE_EXTENSIONS_LIST
                     ")"
                 )
             << tr("gui_add_project_sources_media_items_dialog_filter_video")
                 .append(
                     " "
                     "("
-                        JVE_PROJECT_SOURCES_ITEM_VIDEO_FILE_EXTENSIONS_LIST
+                        JVE_SOURCES_VIDEO_FILE_EXTENSIONS_LIST
                     ")"
                 )
             << tr("gui_add_project_sources_media_items_dialog_filter_images")
                 .append(
                     " "
                     "("
-                        JVE_PROJECT_SOURCES_ITEM_IMAGE_FILE_EXTENSIONS_LIST
+                        JVE_SOURCES_IMAGE_FILE_EXTENSIONS_LIST
                     ")"
                 )
             << tr("gui_add_project_sources_media_items_dialog_filter_audio")
                 .append(
                     " "
                     "("
-                        JVE_PROJECT_SOURCES_ITEM_AUDIO_FILE_EXTENSIONS_LIST
+                        JVE_SOURCES_AUDIO_FILE_EXTENSIONS_LIST
                     ")"
                 )
             << tr("gui_add_project_sources_media_items_dialog_filter_texts")
                 .append(
                     " "
                     "("
-                        JVE_PROJECT_SOURCES_ITEM_TEXT_FILE_EXTENSIONS_LIST
+                        JVE_SOURCES_TEXT_FILE_EXTENSIONS_LIST
                     ")"
                 )
             << tr("gui_add_project_sources_media_items_dialog_filter_all_files")

@@ -6,8 +6,7 @@
 #include <QEvent>
 
 
-#include "../../core/definitions/jveProjectFileDefines.h"
-#include "../../core/definitions/jveProjectSourcesItemFileDefines.h"
+#include "../../core/definitions/jveProjectSourcesFileExtensionsDefines.h"
 
 #include "../definitions/jveGuiWindowsSettingsDefines.h"
 #include "../../core/application/jveSettings.h"
@@ -85,7 +84,7 @@ jveGuiAddProjectSourcesImagesSequenceItemDialog::updateTranslations(void)
                 .append(
                     " "
                     "("
-                        JVE_PROJECT_SOURCES_ITEM_IMAGE_FILE_EXTENSIONS_LIST
+                        JVE_SOURCES_IMAGE_FILE_EXTENSIONS_LIST
                     ")"
                 )
             << tr("gui_add_project_sources_images_sequence_item_dialog_filter_all_files")

@@ -40,17 +40,17 @@
 <context>
     <name>jveGuiAddProjectSourcesImagesSequenceItemDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesImagesSequenceItemDialog.cpp" line="78"/>
+        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesImagesSequenceItemDialog.cpp" line="77"/>
         <source>gui_add_project_sources_images_sequence_item_dialog_title</source>
         <translation>Добавить секвенцию изображений</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesImagesSequenceItemDialog.cpp" line="84"/>
+        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesImagesSequenceItemDialog.cpp" line="83"/>
         <source>gui_add_project_sources_images_sequence_item_dialog_filter_images</source>
         <translation>Изображения</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesImagesSequenceItemDialog.cpp" line="91"/>
+        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesImagesSequenceItemDialog.cpp" line="90"/>
         <source>gui_add_project_sources_images_sequence_item_dialog_filter_all_files</source>
         <translation>Все файлы</translation>
     </message>
@@ -58,37 +58,37 @@
 <context>
     <name>jveGuiAddProjectSourcesMediaItemsDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="77"/>
+        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="76"/>
         <source>gui_add_project_sources_media_items_dialog_title</source>
         <translation>Добавить новый источник</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="83"/>
+        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="82"/>
         <source>gui_add_project_sources_media_items_dialog_filter_all_formats</source>
         <translation>Все поддерживаемые форматы</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="96"/>
+        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="95"/>
         <source>gui_add_project_sources_media_items_dialog_filter_video</source>
         <translation>Видео</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="103"/>
+        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="102"/>
         <source>gui_add_project_sources_media_items_dialog_filter_images</source>
         <translation>Изображения</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="110"/>
+        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="109"/>
         <source>gui_add_project_sources_media_items_dialog_filter_audio</source>
         <translation>Аудио</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="117"/>
+        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="116"/>
         <source>gui_add_project_sources_media_items_dialog_filter_texts</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="124"/>
+        <location filename="../../src/gui/dialogs/jveGuiAddProjectSourcesMediaItemsDialog.cpp" line="123"/>
         <source>gui_add_project_sources_media_items_dialog_filter_all_files</source>
         <translation>Все файлы</translation>
     </message>
