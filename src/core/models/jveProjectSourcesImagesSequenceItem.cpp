@@ -6,7 +6,7 @@
 jveProjectSourcesImagesSequenceItem::jveProjectSourcesImagesSequenceItem(
     jveApplication *app,
     QDomElement     domNode
-) : jveProjectSourcesMultipleResourcesItemModel(
+) : jveMultipleResourcesItemModel(
         app,
         domNode,
         jveProjectSourcesItemType::ImagesSequence

@@ -6,7 +6,7 @@
 jveProjectSourcesAudioItem::jveProjectSourcesAudioItem(
     jveApplication *app,
     QDomElement     domNode
-) : jveProjectSourcesSingleResourceItemModel(
+) : jveSingleResourceItemModel(
         app,
         domNode,
         jveProjectSourcesItemType::Audio

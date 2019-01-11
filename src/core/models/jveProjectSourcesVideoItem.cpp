@@ -6,7 +6,7 @@
 jveProjectSourcesVideoItem::jveProjectSourcesVideoItem(
     jveApplication *app,
     QDomElement     domNode
-) : jveProjectSourcesSingleResourceItemModel(
+) : jveSingleResourceItemModel(
         app,
         domNode,
         jveProjectSourcesItemType::Video

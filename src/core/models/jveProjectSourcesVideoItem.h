@@ -4,11 +4,10 @@
 #define JVEPROJECTSOURCESVIDEOITEM_H
 
 
-#include "jveProjectSourcesSingleResourceItemModel.h"
+#include "jveSingleResourceItemModel.h"
 
 
-class jveProjectSourcesVideoItem
-    : public jveProjectSourcesSingleResourceItemModel
+class jveProjectSourcesVideoItem : public jveSingleResourceItemModel
 {
     Q_OBJECT
     public:

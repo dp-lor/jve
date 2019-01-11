@@ -1,6 +1,6 @@
 
 
-#include "jveProjectSourcesSingleResourceItemModel.h"
+#include "jveMultipleResourcesItemModel.h"
 
 
 #include <QFile>
@@ -14,8 +14,7 @@
 #include "../utils/jveFsUtils.h"
 
 
-jveProjectSourcesSingleResourceItemModel
-    ::jveProjectSourcesSingleResourceItemModel(
+jveMultipleResourcesItemModel::jveMultipleResourcesItemModel(
               jveApplication *app,
               QDomElement     domNode,
         const int             type
@@ -23,17 +22,54 @@ jveProjectSourcesSingleResourceItemModel
 {
 }
 
-jveProjectSourcesSingleResourceItemModel
-    ::~jveProjectSourcesSingleResourceItemModel(void)
+jveMultipleResourcesItemModel::~jveMultipleResourcesItemModel(void)
 {
 }
 
 void
-jveProjectSourcesSingleResourceItemModel::initByResource(
-    const QString &resourcePath
-)
+jveMultipleResourcesItemModel::initByResources(const QStringList &resourcesList)
 {
-    mp_absolutePath = jveFsUtils.absolutePathOverDirectory(
+    // empty
+    if (0 == resourcesList.size()) {
+
+        mp_status       = jveProjectSourcesItemStatus::EmptySequence;
+        mp_absolutePath = "";
+        mp_name         = "";
+        mp_baseName     = "";
+
+    // not empty
+    } else {
+
+        mp_absolutePath = jveFsUtils.parentPath(
+            jveFsUtils.absolutePathOverDirectory(
+                mp_app->projectDirPath(),
+                resourcesList.at(0)
+            )
+        );
+
+        if (1 == resourcesList.size()) {
+            mp_name = jveFsUtils.name(mp_absolutePath)
+                + " (..."
+                + jveFsUtils.name(resourcesList.at(0))
+                + "...)";
+        } else {
+            mp_name = jveFsUtils.name(mp_absolutePath)
+                + " ("
+                + jveFsUtils.name(resourcesList.first())
+                + "..."
+                + jveFsUtils.name(resourcesList.last())
+                + ")";
+        }
+
+        mp_baseName = jveFsUtils.name(mp_absolutePath);
+
+        foreach (const QString &resourcePath, resourcesList) {
+            mp_baseName += jveFsUtils.baseName(resourcePath);
+        }
+
+    }
+
+    /*mp_absolutePath = jveFsUtils.absolutePathOverDirectory(
         mp_app->projectDirPath(),
         resourcePath
     );
@@ -79,7 +115,7 @@ jveProjectSourcesSingleResourceItemModel::initByResource(
         } else {
             mp_status = jveProjectSourcesItemStatus::NotExists;
         }
-    }
+    }*/
 }
 
 

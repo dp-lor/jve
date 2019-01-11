@@ -4,11 +4,10 @@
 #define JVEPROJECTSOURCESAUDIOITEM_H
 
 
-#include "jveProjectSourcesSingleResourceItemModel.h"
+#include "jveSingleResourceItemModel.h"
 
 
-class jveProjectSourcesAudioItem
-    : public jveProjectSourcesSingleResourceItemModel
+class jveProjectSourcesAudioItem : public jveSingleResourceItemModel
 {
     Q_OBJECT
     public:

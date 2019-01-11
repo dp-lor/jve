@@ -4,11 +4,10 @@
 #define JVEPROJECTSOURCESIMAGESSEQUENCEITEM_H
 
 
-#include "jveProjectSourcesMultipleResourcesItemModel.h"
+#include "jveMultipleResourcesItemModel.h"
 
 
-class jveProjectSourcesImagesSequenceItem
-    : public jveProjectSourcesMultipleResourcesItemModel
+class jveProjectSourcesImagesSequenceItem : public jveMultipleResourcesItemModel
 {
     Q_OBJECT
     public:

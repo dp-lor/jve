@@ -6,7 +6,7 @@
 jveProjectSourcesImageItem::jveProjectSourcesImageItem(
     jveApplication *app,
     QDomElement     domNode
-) : jveProjectSourcesSingleResourceItemModel(
+) : jveSingleResourceItemModel(
         app,
         domNode,
         jveProjectSourcesItemType::Image
