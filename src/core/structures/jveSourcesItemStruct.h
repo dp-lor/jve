@@ -7,8 +7,8 @@
 #include <QString>
 
 
-#include "../definitions/jveProjectSourcesItemType.h"
-#include "../definitions/jveProjectSourcesItemStatus.h"
+#include "../definitions/jveSourcesItemType.h"
+#include "../definitions/jveSourcesItemStatus.h"
 
 
 typedef struct _jveSourcesItemStruct

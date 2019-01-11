@@ -9,7 +9,7 @@ jveProjectSourcesImagesSequenceItem::jveProjectSourcesImagesSequenceItem(
 ) : jveMultipleResourcesItemModel(
         app,
         domNode,
-        jveProjectSourcesItemType::ImagesSequence
+        jveSourcesItemType::ImagesSequence
     ),
         mp_sequenceList()
 {

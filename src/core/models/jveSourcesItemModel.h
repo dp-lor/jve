@@ -20,7 +20,7 @@ class jveSourcesItemModel : public jveBaseModel
         explicit jveSourcesItemModel(
                   jveApplication *app,
                   QDomElement     domNode,
-            const int             type = jveProjectSourcesItemType::Undefined
+            const int             type = jveSourcesItemType::Undefined
         );
         virtual ~jveSourcesItemModel(void);
     public:

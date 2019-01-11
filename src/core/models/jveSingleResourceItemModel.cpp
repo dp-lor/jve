@@ -46,34 +46,34 @@ jveSingleResourceItemModel::initByResource(const QString &resourcePath)
     switch (status) {
         // not exists
         case jveFsCheckStatus::NotExists:
-            mp_status = jveProjectSourcesItemStatus::NotExists;
+            mp_status = jveSourcesItemStatus::NotExists;
         break;
         // not a file
         case jveFsCheckStatus::NotFile:
-            mp_status = jveProjectSourcesItemStatus::NotFile;
+            mp_status = jveSourcesItemStatus::NotFile;
         break;
         // not readable
         case jveFsCheckStatus::NotReadable:
-            mp_status = jveProjectSourcesItemStatus::NotReadable;
+            mp_status = jveSourcesItemStatus::NotReadable;
         break;
         // ok
         default:
-            mp_status = jveProjectSourcesItemStatus::Ok;
+            mp_status = jveSourcesItemStatus::Ok;
         break;
     }
 
     // validate checksum
-    if (jveProjectSourcesItemStatus::Ok == mp_status) {
+    if (jveSourcesItemStatus::Ok == mp_status) {
         QFile checksumFile(mp_absolutePath);
         if (checksumFile.open(QFile::ReadOnly)) {
             QCryptographicHash hash(QCryptographicHash::Md5);
             hash.addData(&checksumFile);
             if (mp_checkSum != hash.result().toHex()) {
-                mp_status = jveProjectSourcesItemStatus::Replaced;
+                mp_status = jveSourcesItemStatus::Replaced;
             }
             checksumFile.close();
         } else {
-            mp_status = jveProjectSourcesItemStatus::NotExists;
+            mp_status = jveSourcesItemStatus::NotExists;
         }
     }
 }

@@ -1,10 +1,10 @@
 
 
-#ifndef JVEPROJECTSOURCESITEMSTATUS_H
-#define JVEPROJECTSOURCESITEMSTATUS_H
+#ifndef JVESOURCESITEMSTATUS_H
+#define JVESOURCESITEMSTATUS_H
 
 
-class jveProjectSourcesItemStatus
+class jveSourcesItemStatus
 {
     public:
         enum Statuses {
@@ -22,6 +22,6 @@ class jveProjectSourcesItemStatus
 };
 
 
-#endif // JVEPROJECTSOURCESITEMSTATUS_H
+#endif // JVESOURCESITEMSTATUS_H
 
 

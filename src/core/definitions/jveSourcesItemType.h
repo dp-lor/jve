@@ -1,10 +1,10 @@
 
 
-#ifndef JVEPROJECTSOURCESITEMTYPE_H
-#define JVEPROJECTSOURCESITEMTYPE_H
+#ifndef JVESOURCESITEMTYPE_H
+#define JVESOURCESITEMTYPE_H
 
 
-class jveProjectSourcesItemType
+class jveSourcesItemType
 {
     public:
         enum Types {
@@ -17,6 +17,6 @@ class jveProjectSourcesItemType
 };
 
 
-#endif // JVEPROJECTSOURCESITEMTYPE_H
+#endif // JVESOURCESITEMTYPE_H
 
 
