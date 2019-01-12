@@ -8,9 +8,13 @@
 
 
 #include <QString>
+#include <QVector>
 
 
 #include "../structures/jveSourcesItemStruct.h"
+#include "../structures/jveSourceResourceStruct.h"
+
+#include "../source-streams/jveSourceStream.h"
 
 
 class jveSourcesItemModel : public jveBaseModel
@@ -27,6 +31,8 @@ class jveSourcesItemModel : public jveBaseModel
         void setUp(void);
         void upSet(void);
     public:
+        QVector<jveSourceStream *> streams(void) const;
+    public:
         QString id(void) const;
         QString checkSum(void) const;
         int     type(void) const;
@@ -36,6 +42,10 @@ class jveSourcesItemModel : public jveBaseModel
     public:
         void setId(const QString &id);
         void setCheckSum(const QString &checkSum);
+    protected:
+        // members
+        QVector<jveSourceResourceStruct> mp_resourcesStructList;
+        QVector<jveSourceStream *>       mp_streams;
     protected:
         // members
         QString mp_id;

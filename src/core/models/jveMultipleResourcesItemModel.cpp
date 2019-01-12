@@ -5,6 +5,7 @@
 
 #include <QFile>
 #include <QCryptographicHash>
+#include <QDebug>
 
 
 #include "../definitions/jveFsCheckOption.h"
@@ -27,95 +28,92 @@ jveMultipleResourcesItemModel::~jveMultipleResourcesItemModel(void)
 }
 
 void
-jveMultipleResourcesItemModel::initByResources(const QStringList &resourcesList)
+jveMultipleResourcesItemModel::initByResources(
+    const QString     &resourcesDirPath,
+    const QStringList &resourcesList
+)
 {
-    // empty
-    if (0 == resourcesList.size()) {
+    QCryptographicHash checkSumHash(QCryptographicHash::Md5);
+    QFile              checkSumFile;
 
-        mp_status       = jveSourcesItemStatus::EmptySequence;
-        mp_absolutePath = "";
-        mp_name         = "";
-        mp_baseName     = "";
-
-    // not empty
-    } else {
-
-        mp_absolutePath = jveFsUtils.parentPath(
-            jveFsUtils.absolutePathOverDirectory(
-                mp_app->projectDirPath(),
-                resourcesList.at(0)
-            )
-        );
-
-        if (1 == resourcesList.size()) {
-            mp_name = jveFsUtils.name(mp_absolutePath)
-                + " (..."
-                + jveFsUtils.name(resourcesList.at(0))
-                + "...)";
-        } else {
-            mp_name = jveFsUtils.name(mp_absolutePath)
-                + " ("
-                + jveFsUtils.name(resourcesList.first())
-                + "..."
-                + jveFsUtils.name(resourcesList.last())
-                + ")";
-        }
-
-        mp_baseName = jveFsUtils.name(mp_absolutePath);
-
-        foreach (const QString &resourcePath, resourcesList) {
-            mp_baseName += jveFsUtils.baseName(resourcePath);
-        }
-
-    }
-
-    /*mp_absolutePath = jveFsUtils.absolutePathOverDirectory(
+    mp_absolutePath = jveFsUtils.absolutePathOverDirectory(
         mp_app->projectDirPath(),
-        resourcePath
+        resourcesDirPath
     );
     mp_name     = jveFsUtils.name(mp_absolutePath);
-    mp_baseName = jveFsUtils.baseName(mp_absolutePath);
+    mp_baseName = jveFsUtils.name(mp_absolutePath);
+    // TODO ??? mp_baseName = jveFsUtils.baseName(mp_absolutePath);
 
-    // ckeck source file
-    int status = jveFsUtils.checkFile(
-        mp_absolutePath,
-        jveFsCheckOption::IsExists | jveFsCheckOption::IsReadable
-    );
+    // empty
+    if (resourcesList.empty()) {
+        mp_status |= jveSourcesItemStatus::EmptyResourcesList;
+        mp_name   += " (...)";
+    // one
+    } else if (1 == resourcesList.size()) {
+        mp_name += " (...";
+        mp_name += jveFsUtils.name(resourcesList.at(0));
+        mp_name += "...)";
+    // many
+    } else {
+        mp_name += " (";
+        mp_name += jveFsUtils.name(resourcesList.first());
+        mp_name += "...";
+        mp_name += jveFsUtils.name(resourcesList.last());
+        mp_name += ")";
+    }
 
-    // set source status
-    switch (status) {
-        // not exists
-        case jveFsCheckStatus::NotExists:
-            mp_status = jveSourcesItemStatus::NotExists;
-        break;
-        // not a file
-        case jveFsCheckStatus::NotFile:
-            mp_status = jveSourcesItemStatus::NotFile;
-        break;
-        // not readable
-        case jveFsCheckStatus::NotReadable:
-            mp_status = jveSourcesItemStatus::NotReadable;
-        break;
-        // ok
-        default:
-            mp_status = jveSourcesItemStatus::Ok;
-        break;
+    // check resources
+    foreach (const QString &resourcePath, resourcesList) {
+        jveSourceResourceStruct resourceStruct;
+
+        // fill resource struct
+        resourceStruct.absolutePath = jveFsUtils.absolutePathOverDirectory(
+            mp_absolutePath,
+            jveFsUtils.name(resourcePath)
+        );
+        resourceStruct.status = jveFsUtils.checkFile(
+            resourceStruct.absolutePath,
+            jveFsCheckOption::IsExists | jveFsCheckOption::IsReadable
+        );
+
+        // fill sources item status by resource status
+        switch (resourceStruct.status) {
+            // not exists
+            case jveFsCheckStatus::NotExists:
+                mp_status |= jveSourcesItemStatus::ResourceNotExists;
+            break;
+            // not a file
+            case jveFsCheckStatus::NotFile:
+                mp_status |= jveSourcesItemStatus::ResourceNotFile;
+            break;
+            // not readable
+            case jveFsCheckStatus::NotReadable:
+                mp_status |= jveSourcesItemStatus::ResourceNotReadable;
+            break;
+        }
+
+        // add resource file data to checksum
+        if (jveFsCheckStatus::Ok == resourceStruct.status) {
+            checkSumFile.close();
+            checkSumFile.setFileName(resourceStruct.absolutePath);
+            if (checkSumFile.open(QFile::ReadOnly)) {
+                checkSumHash.addData(&checkSumFile);
+                checkSumFile.close();
+            } else {
+                mp_status |= jveSourcesItemStatus::ResourceNotExists;
+            }
+        }
+
+        // append resource struct to list
+        mp_resourcesStructList.append(resourceStruct);
+        // append names for search
+        mp_baseName += jveFsUtils.baseName(resourcePath);
     }
 
     // validate checksum
-    if (jveSourcesItemStatus::Ok == mp_status) {
-        QFile checksumFile(mp_absolutePath);
-        if (checksumFile.open(QFile::ReadOnly)) {
-            QCryptographicHash hash(QCryptographicHash::Md5);
-            hash.addData(&checksumFile);
-            if (mp_checkSum != hash.result().toHex()) {
-                mp_status = jveSourcesItemStatus::Replaced;
-            }
-            checksumFile.close();
-        } else {
-            mp_status = jveSourcesItemStatus::NotExists;
-        }
-    }*/
+    if (mp_checkSum != checkSumHash.result().toHex()) {
+        mp_status |= jveSourcesItemStatus::ResourceReplaced;
+    }
 }
 
 

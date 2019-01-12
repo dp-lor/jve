@@ -18,7 +18,10 @@ class jveProjectSourcesImagesSequenceItem : public jveMultipleResourcesItemModel
         virtual ~jveProjectSourcesImagesSequenceItem(void);
     private:
         // members
-        QStringList mp_sequenceList;
+        QDomElement          mp_sequenceDomElement;
+        QString              mp_sequencePath;
+        QVector<QDomElement> mp_sequenceItemsDomElements;
+        QStringList          mp_sequenceItemsList;
 };
 
 

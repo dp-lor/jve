@@ -46,15 +46,15 @@ jveSingleResourceItemModel::initByResource(const QString &resourcePath)
     switch (status) {
         // not exists
         case jveFsCheckStatus::NotExists:
-            mp_status = jveSourcesItemStatus::NotExists;
+            mp_status = jveSourcesItemStatus::ResourceNotExists;
         break;
         // not a file
         case jveFsCheckStatus::NotFile:
-            mp_status = jveSourcesItemStatus::NotFile;
+            mp_status = jveSourcesItemStatus::ResourceNotFile;
         break;
         // not readable
         case jveFsCheckStatus::NotReadable:
-            mp_status = jveSourcesItemStatus::NotReadable;
+            mp_status = jveSourcesItemStatus::ResourceNotReadable;
         break;
         // ok
         default:
@@ -69,11 +69,11 @@ jveSingleResourceItemModel::initByResource(const QString &resourcePath)
             QCryptographicHash hash(QCryptographicHash::Md5);
             hash.addData(&checksumFile);
             if (mp_checkSum != hash.result().toHex()) {
-                mp_status = jveSourcesItemStatus::Replaced;
+                mp_status = jveSourcesItemStatus::ResourceReplaced;
             }
             checksumFile.close();
         } else {
-            mp_status = jveSourcesItemStatus::NotExists;
+            mp_status = jveSourcesItemStatus::ResourceNotExists;
         }
     }
 }

@@ -8,6 +8,8 @@ jveSourcesItemModel::jveSourcesItemModel(
           QDomElement     domNode,
     const int             type
 ) : jveBaseModel(app, domNode),
+        mp_resourcesStructList(),
+        mp_streams(),
         mp_id(domNode.attribute("id")),
         mp_checkSum(domNode.attribute("checkSum")),
         mp_type(type)
@@ -26,6 +28,12 @@ jveSourcesItemModel::setUp(void)
 void
 jveSourcesItemModel::upSet(void)
 {
+}
+
+QVector<jveSourceStream *>
+jveSourcesItemModel::streams(void) const
+{
+    return mp_streams;
 }
 
 QString

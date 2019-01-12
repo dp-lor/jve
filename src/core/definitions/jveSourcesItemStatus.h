@@ -8,16 +8,12 @@ class jveSourcesItemStatus
 {
     public:
         enum Statuses {
-            Ok,
-            NotExists,
-            NotFile,
-            NotReadable,
-            Replaced,
-            EmptySequence,
-            OneOrMoreNotExists,
-            OneOrMoreNotFile,
-            OneOrMoreNotReadable,
-            OneOrMoreReplaced
+            Ok                  = 0,
+            EmptyResourcesList  = 1,
+            ResourceNotExists   = 1 << 1,
+            ResourceNotFile     = 1 << 2,
+            ResourceNotReadable = 1 << 3,
+            ResourceReplaced    = 1 << 4
         };
 };
 

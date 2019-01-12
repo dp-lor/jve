@@ -8,6 +8,7 @@
 
 
 #include <QStringList>
+#include <QVector>
 
 
 class jveMultipleResourcesItemModel : public jveSourcesItemModel
@@ -21,7 +22,10 @@ class jveMultipleResourcesItemModel : public jveSourcesItemModel
         );
         virtual ~jveMultipleResourcesItemModel(void);
     protected:
-        void initByResources(const QStringList &resourcesList);
+        void initByResources(
+                const QString     &resourcesDirPath,
+                const QStringList &resourcesList
+        );
 };
 
 

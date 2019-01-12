@@ -161,11 +161,14 @@
                             minOccurs="1"
                             maxOccurs="unbounded"/>
         </xsd:sequence>
+        <xsd:attribute name="path"
+                        type="xsd:anyURI"
+                        use="required"/>
     </xsd:complexType>
 
     <!-- jveProject -> sources -> sourceItem -> imagesSequence -> sequenceItem -->
     <xsd:complexType name="jveProjectSourceItemImagesSequenceItemType">
-        <xsd:attribute name="path"
+        <xsd:attribute name="fileName"
                         type="xsd:anyURI"
                         use="required"/>
     </xsd:complexType>
