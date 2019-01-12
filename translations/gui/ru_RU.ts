@@ -758,11 +758,96 @@
 <context>
     <name>jveGuiProjectSourcesViewModel</name>
     <message>
-        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="91"/>
-        <source>Type: %1
-Location: %2
-Status: %3</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="146"/>
+        <source>gui_project_sources_view_model_item_tool_tip%1%2%3</source>
+        <translation>Тип: %1
+Расположение: %2
+Статус: %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="151"/>
+        <source>gui_project_sources_view_model_item_type_undefined</source>
+        <translation>Неизвестно</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="156"/>
+        <source>gui_project_sources_view_model_item_type_image</source>
+        <translation>Изображение</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="161"/>
+        <source>gui_project_sources_view_model_item_type_images_sequence</source>
+        <translation>Секвенция изображений</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="166"/>
+        <source>gui_project_sources_view_model_item_type_audio</source>
+        <translation>Аудио</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="171"/>
+        <source>gui_project_sources_view_model_item_type_video</source>
+        <translation>Видео</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="177"/>
+        <source>gui_project_sources_view_model_item_status_ok</source>
+        <translation>Ok</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="182"/>
+        <source>gui_project_sources_view_model_item_status_resource_not_exists</source>
+        <translation>Файл источника не найден</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="187"/>
+        <source>gui_project_sources_view_model_item_status_resource_not_file</source>
+        <translation>Источник не является файлом</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="192"/>
+        <source>gui_project_sources_view_model_item_status_resource_not_readable</source>
+        <translation>Файл не читается</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="197"/>
+        <source>gui_project_sources_view_model_item_status_error_read_resource</source>
+        <translation>Ошибка чтения файла</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="202"/>
+        <source>gui_project_sources_view_model_item_status_resource_replaced</source>
+        <translation>Файл источника был заменён</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="207"/>
+        <source>gui_project_sources_view_model_item_status_empty_resources_list</source>
+        <translation>Список ресурсов пуст</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="212"/>
+        <source>gui_project_sources_view_model_item_status_several_resources_not_exists</source>
+        <translation>Найдены не все ресурсы</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="217"/>
+        <source>gui_project_sources_view_model_item_status_several_resources_not_file</source>
+        <translation>Некоторые ресурсы не являются файлом</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="222"/>
+        <source>gui_project_sources_view_model_item_status_several_resources_not_readable</source>
+        <translation>Некоторые файлы ресурсов не читаются</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="227"/>
+        <source>gui_project_sources_view_model_item_status_error_read_several_resources</source>
+        <translation>Некоторые файлы ресурсов прочитать не удалось</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="232"/>
+        <source>gui_project_sources_view_model_item_status_several_resources_replaced</source>
+        <translation>Некоторые файлы ресурсов были заменены</translation>
     </message>
 </context>
 <context>

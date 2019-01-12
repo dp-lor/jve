@@ -14,7 +14,10 @@
 
 jveGuiProjectSourcesViewModel::jveGuiProjectSourcesViewModel(QObject *parent)
     : QAbstractListModel(parent),
-        mp_items()
+        mp_items(),
+        mp_itemToolTip(),
+        mp_itemToolTipTypes(jveSourcesItemType::Reserved),
+        mp_itemToolTipStatuses(jveSourcesItemStatus::Reserved)
 {
     // slot add source item
     connect(
@@ -82,24 +85,16 @@ jveGuiProjectSourcesViewModel::data(const QModelIndex &index, int role) const
             return mp_items.at(row).searchHaystack;
         break;
         case Qt::DisplayRole:
-            return mp_items.at(row).name;
+            return mp_items.at(row).displayName;
         break;
         case Qt::DecorationRole:
             return QIcon(JVE_GUI_IMAGE_GRAY_SHARPEN_LOGO);
         break;
         case Qt::ToolTipRole:
-            return tr("Type: %1\nLocation: %2\nStatus: %3")
-                    .arg(mp_items.at(row).type)
+            return mp_itemToolTip
+                    .arg(mp_itemToolTipTypes.at(mp_items.at(row).type))
                     .arg(mp_items.at(row).absolutePath)
-                    .arg(
-                            QString()
-                                + (jveSourcesItemStatus::Ok == mp_items.at(row).status ? "Ok" : "")
-                                + (jveSourcesItemStatus::EmptyResourcesList  & mp_items.at(row).status ? "EmptyResourcesList, "  : "")
-                                + (jveSourcesItemStatus::ResourceNotExists   & mp_items.at(row).status ? "ResourceNotExists, "   : "")
-                                + (jveSourcesItemStatus::ResourceNotFile     & mp_items.at(row).status ? "ResourceNotFile, "     : "")
-                                + (jveSourcesItemStatus::ResourceNotReadable & mp_items.at(row).status ? "ResourceNotReadable, " : "")
-                                + (jveSourcesItemStatus::ResourceReplaced    & mp_items.at(row).status ? "ResourceReplaced, "    : "")
-                    );
+                    .arg(mp_itemToolTipStatuses.at(mp_items.at(row).status));
         break;
     }
 
@@ -134,7 +129,7 @@ jveGuiProjectSourcesViewModel::mimeData(const QModelIndexList &indexes) const
             stream
                 << item.type
                 << item.absolutePath
-                << item.name
+                << item.displayName
                 << item.searchHaystack;
 
         }
@@ -142,6 +137,100 @@ jveGuiProjectSourcesViewModel::mimeData(const QModelIndexList &indexes) const
     mimeData->setData("application/jve-project-sources-items", data);
 
     return mimeData;
+}
+
+void
+jveGuiProjectSourcesViewModel::updateTranslations(void)
+{
+    // tool tip placeholder
+    mp_itemToolTip = tr("gui_project_sources_view_model_item_tool_tip%1%2%3");
+
+    // undefined item type
+    mp_itemToolTipTypes.replace(
+        jveSourcesItemType::Undefined,
+        tr("gui_project_sources_view_model_item_type_undefined")
+    );
+    // image item type
+    mp_itemToolTipTypes.replace(
+        jveSourcesItemType::Image,
+        tr("gui_project_sources_view_model_item_type_image")
+    );
+    // images sequence item type
+    mp_itemToolTipTypes.replace(
+        jveSourcesItemType::ImagesSequence,
+        tr("gui_project_sources_view_model_item_type_images_sequence")
+    );
+    // audio item type
+    mp_itemToolTipTypes.replace(
+        jveSourcesItemType::Audio,
+        tr("gui_project_sources_view_model_item_type_audio")
+    );
+    // video item type
+    mp_itemToolTipTypes.replace(
+        jveSourcesItemType::Video,
+        tr("gui_project_sources_view_model_item_type_video")
+    );
+
+    // item status ok
+    mp_itemToolTipStatuses.replace(
+        jveSourcesItemStatus::Ok,
+        tr("gui_project_sources_view_model_item_status_ok")
+    );
+    // resource not exists
+    mp_itemToolTipStatuses.replace(
+        jveSourcesItemStatus::ResourceNotExists,
+        tr("gui_project_sources_view_model_item_status_resource_not_exists")
+    );
+    // resource not a file
+    mp_itemToolTipStatuses.replace(
+        jveSourcesItemStatus::ResourceNotFile,
+        tr("gui_project_sources_view_model_item_status_resource_not_file")
+    );
+    // resource not readable
+    mp_itemToolTipStatuses.replace(
+        jveSourcesItemStatus::ResourceNotReadable,
+        tr("gui_project_sources_view_model_item_status_resource_not_readable")
+    );
+    // error read resource
+    mp_itemToolTipStatuses.replace(
+        jveSourcesItemStatus::ErrorReadResource,
+        tr("gui_project_sources_view_model_item_status_error_read_resource")
+    );
+    // resource replaced
+    mp_itemToolTipStatuses.replace(
+        jveSourcesItemStatus::ResourceReplaced,
+        tr("gui_project_sources_view_model_item_status_resource_replaced")
+    );
+    // empty resources list
+    mp_itemToolTipStatuses.replace(
+        jveSourcesItemStatus::EmptyResourcesList,
+        tr("gui_project_sources_view_model_item_status_empty_resources_list")
+    );
+    // several resources not exists
+    mp_itemToolTipStatuses.replace(
+        jveSourcesItemStatus::SeveralResourcesNotExists,
+        tr("gui_project_sources_view_model_item_status_several_resources_not_exists")
+    );
+    // several resources not a file
+    mp_itemToolTipStatuses.replace(
+        jveSourcesItemStatus::SeveralResourcesNotFile,
+        tr("gui_project_sources_view_model_item_status_several_resources_not_file")
+    );
+    // several resources not readable
+    mp_itemToolTipStatuses.replace(
+        jveSourcesItemStatus::SeveralResourcesNotReadable,
+        tr("gui_project_sources_view_model_item_status_several_resources_not_readable")
+    );
+    // error read several resources
+    mp_itemToolTipStatuses.replace(
+        jveSourcesItemStatus::ErrorReadSeveralResources,
+        tr("gui_project_sources_view_model_item_status_error_read_several_resources")
+    );
+    // several resources replaced
+    mp_itemToolTipStatuses.replace(
+        jveSourcesItemStatus::SeveralResourcesReplaced,
+        tr("gui_project_sources_view_model_item_status_several_resources_replaced")
+    );
 }
 
 void

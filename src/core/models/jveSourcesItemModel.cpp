@@ -76,7 +76,7 @@ jveSourcesItemModel::itemStruct(void) const
     itemStruct.status         = mp_status;
     itemStruct.id             = mp_id;
     itemStruct.absolutePath   = mp_absolutePath;
-    itemStruct.name           = mp_name;
+    itemStruct.displayName    = mp_displayName;
     itemStruct.searchHaystack = mp_searchHaystack;
 
     return itemStruct;

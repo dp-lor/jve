@@ -6,13 +6,14 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QString>
 
 
 #include "jveGuiProjectSourcesViewBar.h"
 #include "jveGuiProjectSourcesViewArea.h"
 
 
-#include <QString>
+class QEvent;
 
 
 class jveGuiProjectSourcesView : public QWidget
@@ -21,6 +22,10 @@ class jveGuiProjectSourcesView : public QWidget
     public:
         explicit  jveGuiProjectSourcesView(QWidget *parent);
         virtual  ~jveGuiProjectSourcesView(void);
+    protected:
+        void changeEvent(QEvent *event);
+    private:
+        void updateTranslations(void);
     private slots:
         void slotStateChanged(const int state);
         void slotResetView(void);

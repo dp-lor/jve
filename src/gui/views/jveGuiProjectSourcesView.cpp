@@ -3,6 +3,9 @@
 #include "jveGuiProjectSourcesView.h"
 
 
+#include <QEvent>
+
+
 #include "../../core/definitions/jveState.h"
 #include "../../core/signals/jveGlobalSignals.h"
 #include "../../core/signals/jveProjectSourcesSignals.h"
@@ -34,6 +37,9 @@ jveGuiProjectSourcesView::jveGuiProjectSourcesView(QWidget *parent)
     slotStateChanged(jveState::None);
     slotResetView();
 
+    // initial translate
+    updateTranslations();
+
     // slot state changed
     connect(
         &jveGlobalSignals,
@@ -64,6 +70,21 @@ jveGuiProjectSourcesView::jveGuiProjectSourcesView(QWidget *parent)
 
 jveGuiProjectSourcesView::~jveGuiProjectSourcesView()
 {
+}
+
+void
+jveGuiProjectSourcesView::changeEvent(QEvent *event)
+{
+    if (QEvent::LanguageChange == event->type()) {
+        updateTranslations();
+    }
+    QWidget::changeEvent(event);
+}
+
+void
+jveGuiProjectSourcesView::updateTranslations(void)
+{
+    mp_area.viewModel.updateTranslations();
 }
 
 void

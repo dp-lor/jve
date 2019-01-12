@@ -54,7 +54,7 @@ class jveSourcesItemModel : public jveBaseModel
         QString mp_id;
         QString mp_checkSum;
         QString mp_absolutePath;
-        QString mp_name;
+        QString mp_displayName;
         QString mp_searchHaystack;
 };
 

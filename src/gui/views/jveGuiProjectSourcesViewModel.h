@@ -5,6 +5,7 @@
 
 
 #include <QAbstractListModel>
+#include <QVector>
 
 
 #include "../../core/structures/jveSourcesItemStruct.h"
@@ -30,12 +31,19 @@ class jveGuiProjectSourcesViewModel : public QAbstractListModel
     public:
         Qt::ItemFlags   flags(const QModelIndex &index) const;
         QMimeData     * mimeData(const QModelIndexList &indexes) const;
+    public:
+        void updateTranslations(void);
     private slots:
         void slotAddSourceItem(const jveSourcesItemStruct &itemStruct);
         void slotRemoveSourceItem(const QString &itemId);
     private:
         // members
         QVector<jveSourcesItemStruct> mp_items;
+    private:
+        // members
+        QString          mp_itemToolTip;
+        QVector<QString> mp_itemToolTipTypes;
+        QVector<QString> mp_itemToolTipStatuses;
 };
 
 

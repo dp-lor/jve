@@ -35,7 +35,7 @@ jveSingleResourceItemModel::initByResource(const QString &resourcePath)
         mp_app->projectDirPath(),
         resourcePath
     );
-    mp_name           = jveFsUtils.name(mp_absolutePath);
+    mp_displayName    = jveFsUtils.name(mp_absolutePath);
     mp_searchHaystack = jveFsUtils.baseName(mp_absolutePath);
     if (0 == mp_searchHaystack.size()) {
         mp_searchHaystack = jveFsUtils.name(mp_absolutePath);
@@ -48,19 +48,19 @@ jveSingleResourceItemModel::initByResource(const QString &resourcePath)
     );
     resourceStruct.absolutePath = mp_absolutePath;
 
-    // fill sources item status by resource status
+    // set sources item status by resource status
     switch (resourceStruct.status) {
         // not exists
         case jveFsCheckStatus::NotExists:
-            mp_status |= jveSourcesItemStatus::ResourceNotExists;
+            mp_status = jveSourcesItemStatus::ResourceNotExists;
         break;
         // not a file
         case jveFsCheckStatus::NotFile:
-            mp_status |= jveSourcesItemStatus::ResourceNotFile;
+            mp_status = jveSourcesItemStatus::ResourceNotFile;
         break;
         // not readable
         case jveFsCheckStatus::NotReadable:
-            mp_status |= jveSourcesItemStatus::ResourceNotReadable;
+            mp_status = jveSourcesItemStatus::ResourceNotReadable;
         break;
     }
 
@@ -71,11 +71,11 @@ jveSingleResourceItemModel::initByResource(const QString &resourcePath)
             QCryptographicHash checkSumHash(QCryptographicHash::Md5);
             checkSumHash.addData(&checkSumFile);
             if (mp_checkSum != checkSumHash.result().toHex()) {
-                mp_status |= jveSourcesItemStatus::ResourceReplaced;
+                mp_status = jveSourcesItemStatus::ResourceReplaced;
             }
             checkSumFile.close();
         } else {
-            mp_status |= jveSourcesItemStatus::ResourceNotExists;
+            mp_status = jveSourcesItemStatus::ErrorReadResource;
         }
     }
 

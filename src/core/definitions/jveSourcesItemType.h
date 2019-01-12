@@ -12,7 +12,8 @@ class jveSourcesItemType
             Image,
             ImagesSequence,
             Audio,
-            Video
+            Video,
+            Reserved
         };
 };
 

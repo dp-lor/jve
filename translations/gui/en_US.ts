@@ -758,11 +758,96 @@
 <context>
     <name>jveGuiProjectSourcesViewModel</name>
     <message>
-        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="91"/>
-        <source>Type: %1
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="146"/>
+        <source>gui_project_sources_view_model_item_tool_tip%1%2%3</source>
+        <translation>Type: %1
 Location: %2
-Status: %3</source>
-        <translation type="unfinished"></translation>
+Status: %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="151"/>
+        <source>gui_project_sources_view_model_item_type_undefined</source>
+        <translation>Undefined</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="156"/>
+        <source>gui_project_sources_view_model_item_type_image</source>
+        <translation>Image</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="161"/>
+        <source>gui_project_sources_view_model_item_type_images_sequence</source>
+        <translation>Images sequence</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="166"/>
+        <source>gui_project_sources_view_model_item_type_audio</source>
+        <translation>Audio</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="171"/>
+        <source>gui_project_sources_view_model_item_type_video</source>
+        <translation>Video</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="177"/>
+        <source>gui_project_sources_view_model_item_status_ok</source>
+        <translation>Ok</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="182"/>
+        <source>gui_project_sources_view_model_item_status_resource_not_exists</source>
+        <translation>Source file not exists</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="187"/>
+        <source>gui_project_sources_view_model_item_status_resource_not_file</source>
+        <translation>Source is not a file</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="192"/>
+        <source>gui_project_sources_view_model_item_status_resource_not_readable</source>
+        <translation>File not readable</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="197"/>
+        <source>gui_project_sources_view_model_item_status_error_read_resource</source>
+        <translation>Error read file</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="202"/>
+        <source>gui_project_sources_view_model_item_status_resource_replaced</source>
+        <translation>Source file was replaced</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="207"/>
+        <source>gui_project_sources_view_model_item_status_empty_resources_list</source>
+        <translation>Empty resources list</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="212"/>
+        <source>gui_project_sources_view_model_item_status_several_resources_not_exists</source>
+        <translation>Several resources not exists</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="217"/>
+        <source>gui_project_sources_view_model_item_status_several_resources_not_file</source>
+        <translation>Several resources not a files</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="222"/>
+        <source>gui_project_sources_view_model_item_status_several_resources_not_readable</source>
+        <translation>Several resources not readable</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="227"/>
+        <source>gui_project_sources_view_model_item_status_error_read_several_resources</source>
+        <translation>Error read several resources</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="232"/>
+        <source>gui_project_sources_view_model_item_status_several_resources_replaced</source>
+        <translation>Several resources was replaced</translation>
     </message>
 </context>
 <context>

@@ -140,7 +140,7 @@ jveProjectSources::slotAddItems(const QStringList &itemsList)
         itemStruct.status         = 0;
         itemStruct.id             = jveIdProvider.generate();
         itemStruct.absolutePath   = info.filePath();
-        itemStruct.name           = info.fileName();
+        itemStruct.displayName    = info.fileName();
         itemStruct.searchHaystack = info.baseName();
 
         jveIdProvider.addExternal(itemStruct.id);

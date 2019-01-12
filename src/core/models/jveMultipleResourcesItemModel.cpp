@@ -39,7 +39,7 @@ jveMultipleResourcesItemModel::initByResources(
         mp_app->projectDirPath(),
         resourcesDirPath
     );
-    mp_name           = jveFsUtils.name(mp_absolutePath);
+    mp_displayName    = jveFsUtils.name(mp_absolutePath);
     mp_searchHaystack = jveFsUtils.baseName(mp_absolutePath);
     if (0 == mp_searchHaystack.size()) {
         mp_searchHaystack = jveFsUtils.name(mp_absolutePath);
@@ -47,20 +47,25 @@ jveMultipleResourcesItemModel::initByResources(
 
     // empty
     if (0 == resourcesList.size()) {
-        mp_status |= jveSourcesItemStatus::EmptyResourcesList;
-        mp_name   += " (...)";
+        mp_status       = jveSourcesItemStatus::EmptyResourcesList;
+        mp_displayName += " (...)";
     // one
     } else if (1 == resourcesList.size()) {
-        mp_name += " (...";
-        mp_name += jveFsUtils.name(resourcesList.at(0));
-        mp_name += "...)";
+        mp_displayName += " (...";
+        mp_displayName += jveFsUtils.name(resourcesList.at(0));
+        mp_displayName += "...)";
     // many
     } else {
-        mp_name += " (";
-        mp_name += jveFsUtils.name(resourcesList.first());
-        mp_name += "...";
-        mp_name += jveFsUtils.name(resourcesList.last());
-        mp_name += ")";
+        mp_displayName += " (";
+        mp_displayName += jveFsUtils.name(resourcesList.first());
+        mp_displayName += "...";
+        mp_displayName += jveFsUtils.name(resourcesList.last());
+        mp_displayName += ")";
+    }
+
+    // when empty resources list
+    if (jveSourcesItemStatus::Ok != mp_status) {
+        return;
     }
 
     // check resources
@@ -77,31 +82,39 @@ jveMultipleResourcesItemModel::initByResources(
             jveFsCheckOption::IsExists | jveFsCheckOption::IsReadable
         );
 
-        // fill sources item status by resource status
-        switch (resourceStruct.status) {
-            // not exists
-            case jveFsCheckStatus::NotExists:
-                mp_status |= jveSourcesItemStatus::ResourceNotExists;
-            break;
-            // not a file
-            case jveFsCheckStatus::NotFile:
-                mp_status |= jveSourcesItemStatus::ResourceNotFile;
-            break;
-            // not readable
-            case jveFsCheckStatus::NotReadable:
-                mp_status |= jveSourcesItemStatus::ResourceNotReadable;
-            break;
+        if (jveSourcesItemStatus::Ok == mp_status) {
+            // set sources item status by resource status
+            switch (resourceStruct.status) {
+                // not exists
+                case jveFsCheckStatus::NotExists:
+                    mp_status
+                        = jveSourcesItemStatus::SeveralResourcesNotExists;
+                break;
+                // not a file
+                case jveFsCheckStatus::NotFile:
+                    mp_status
+                        = jveSourcesItemStatus::SeveralResourcesNotFile;
+                break;
+                // not readable
+                case jveFsCheckStatus::NotReadable:
+                    mp_status
+                        = jveSourcesItemStatus::SeveralResourcesNotReadable;
+                break;
+            }
         }
 
         // add resource file data to checksum
-        if (jveFsCheckStatus::Ok == resourceStruct.status) {
+        if (
+            jveSourcesItemStatus::Ok == mp_status
+                && jveFsCheckStatus::Ok == resourceStruct.status
+        ) {
             checkSumFile.close();
             checkSumFile.setFileName(resourceStruct.absolutePath);
             if (checkSumFile.open(QFile::ReadOnly)) {
                 checkSumHash.addData(&checkSumFile);
                 checkSumFile.close();
             } else {
-                mp_status |= jveSourcesItemStatus::ResourceNotExists;
+                mp_status = jveSourcesItemStatus::ErrorReadSeveralResources;
             }
         }
 
@@ -115,9 +128,14 @@ jveMultipleResourcesItemModel::initByResources(
         mp_searchHaystack += resourceName;
     }
 
+    // when one or more resources not ok
+    if (jveSourcesItemStatus::Ok != mp_status) {
+        return;
+    }
+
     // validate checksum
     if (mp_checkSum != checkSumHash.result().toHex()) {
-        mp_status |= jveSourcesItemStatus::ResourceReplaced;
+        mp_status = jveSourcesItemStatus::SeveralResourcesReplaced;
     }
 }
 

@@ -17,7 +17,7 @@ typedef struct _jveSourcesItemStruct
     int     status;
     QString id;
     QString absolutePath;
-    QString name;
+    QString displayName;
     QString searchHaystack;
 } jveSourcesItemStruct;
 
