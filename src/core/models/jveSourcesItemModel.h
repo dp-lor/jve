@@ -31,7 +31,8 @@ class jveSourcesItemModel : public jveBaseModel
         void setUp(void);
         void upSet(void);
     public:
-        QVector<jveSourceStream *> streams(void) const;
+        QVector<jveSourceResourceStruct> resourcesStructList(void) const;
+        QVector<jveSourceStream *>       streams(void) const;
     public:
         QString id(void) const;
         QString checkSum(void) const;
@@ -48,13 +49,13 @@ class jveSourcesItemModel : public jveBaseModel
         QVector<jveSourceStream *>       mp_streams;
     protected:
         // members
-        QString mp_id;
-        QString mp_checkSum;
         int     mp_type;
         int     mp_status;
+        QString mp_id;
+        QString mp_checkSum;
         QString mp_absolutePath;
         QString mp_name;
-        QString mp_baseName;
+        QString mp_searchHaystack;
 };
 
 

@@ -13,12 +13,12 @@
 
 typedef struct _jveSourcesItemStruct
 {
-    QString id;
     int     type;
     int     status;
+    QString id;
     QString absolutePath;
     QString name;
-    QString baseName;
+    QString searchHaystack;
 } jveSourcesItemStruct;
 
 

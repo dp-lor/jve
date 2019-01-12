@@ -10,9 +10,10 @@ jveSourcesItemModel::jveSourcesItemModel(
 ) : jveBaseModel(app, domNode),
         mp_resourcesStructList(),
         mp_streams(),
+        mp_type(type),
+        mp_status(jveSourcesItemStatus::Ok),
         mp_id(domNode.attribute("id")),
-        mp_checkSum(domNode.attribute("checkSum")),
-        mp_type(type)
+        mp_checkSum(domNode.attribute("checkSum"))
 {
 }
 
@@ -28,6 +29,12 @@ jveSourcesItemModel::setUp(void)
 void
 jveSourcesItemModel::upSet(void)
 {
+}
+
+QVector<jveSourceResourceStruct>
+jveSourcesItemModel::resourcesStructList(void) const
+{
+    return mp_resourcesStructList;
 }
 
 QVector<jveSourceStream *>
@@ -65,12 +72,12 @@ jveSourcesItemModel::itemStruct(void) const
 {
     jveSourcesItemStruct itemStruct;
 
-    itemStruct.id           = mp_id;
-    itemStruct.type         = mp_type;
-    itemStruct.status       = mp_status;
-    itemStruct.absolutePath = mp_absolutePath;
-    itemStruct.name         = mp_name;
-    itemStruct.baseName     = mp_baseName;
+    itemStruct.type           = mp_type;
+    itemStruct.status         = mp_status;
+    itemStruct.id             = mp_id;
+    itemStruct.absolutePath   = mp_absolutePath;
+    itemStruct.name           = mp_name;
+    itemStruct.searchHaystack = mp_searchHaystack;
 
     return itemStruct;
 }

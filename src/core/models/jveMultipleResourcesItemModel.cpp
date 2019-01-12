@@ -40,12 +40,14 @@ jveMultipleResourcesItemModel::initByResources(
         mp_app->projectDirPath(),
         resourcesDirPath
     );
-    mp_name     = jveFsUtils.name(mp_absolutePath);
-    mp_baseName = jveFsUtils.name(mp_absolutePath);
-    // TODO ??? mp_baseName = jveFsUtils.baseName(mp_absolutePath);
+    mp_name           = jveFsUtils.name(mp_absolutePath);
+    mp_searchHaystack = jveFsUtils.baseName(mp_absolutePath);
+    if (0 == mp_searchHaystack.size()) {
+        mp_searchHaystack = jveFsUtils.name(mp_absolutePath);
+    }
 
     // empty
-    if (resourcesList.empty()) {
+    if (0 == resourcesList.size()) {
         mp_status |= jveSourcesItemStatus::EmptyResourcesList;
         mp_name   += " (...)";
     // one
@@ -107,7 +109,11 @@ jveMultipleResourcesItemModel::initByResources(
         // append resource struct to list
         mp_resourcesStructList.append(resourceStruct);
         // append names for search
-        mp_baseName += jveFsUtils.baseName(resourcePath);
+        QString resourceName = jveFsUtils.baseName(resourceStruct.absolutePath);
+        if (0 == resourceName.size()) {
+            resourceName = jveFsUtils.name(resourceStruct.absolutePath);
+        }
+        mp_searchHaystack += resourceName;
     }
 
     // validate checksum

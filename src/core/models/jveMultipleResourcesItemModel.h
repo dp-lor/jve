@@ -8,7 +8,6 @@
 
 
 #include <QStringList>
-#include <QVector>
 
 
 class jveMultipleResourcesItemModel : public jveSourcesItemModel

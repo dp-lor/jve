@@ -79,7 +79,7 @@ jveGuiProjectSourcesViewModel::data(const QModelIndex &index, int role) const
 
     switch(role) {
         case Qt::UserRole:
-            return mp_items.at(row).baseName;
+            return mp_items.at(row).searchHaystack;
         break;
         case Qt::DisplayRole:
             return mp_items.at(row).name;
@@ -126,7 +126,7 @@ jveGuiProjectSourcesViewModel::mimeData(const QModelIndexList &indexes) const
                 << item.type
                 << item.absolutePath
                 << item.name
-                << item.baseName;
+                << item.searchHaystack;
 
         }
     }
