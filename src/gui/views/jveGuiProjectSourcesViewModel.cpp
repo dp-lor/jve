@@ -88,9 +88,18 @@ jveGuiProjectSourcesViewModel::data(const QModelIndex &index, int role) const
             return QIcon(JVE_GUI_IMAGE_GRAY_SHARPEN_LOGO);
         break;
         case Qt::ToolTipRole:
-            return tr("Type: %1\nLocation: %2")
+            return tr("Type: %1\nLocation: %2\nStatus: %3")
                     .arg(mp_items.at(row).type)
-                    .arg(mp_items.at(row).absolutePath);
+                    .arg(mp_items.at(row).absolutePath)
+                    .arg(
+                            QString()
+                                + (jveSourcesItemStatus::Ok == mp_items.at(row).status ? "Ok" : "")
+                                + (jveSourcesItemStatus::EmptyResourcesList  & mp_items.at(row).status ? "EmptyResourcesList, "  : "")
+                                + (jveSourcesItemStatus::ResourceNotExists   & mp_items.at(row).status ? "ResourceNotExists, "   : "")
+                                + (jveSourcesItemStatus::ResourceNotFile     & mp_items.at(row).status ? "ResourceNotFile, "     : "")
+                                + (jveSourcesItemStatus::ResourceNotReadable & mp_items.at(row).status ? "ResourceNotReadable, " : "")
+                                + (jveSourcesItemStatus::ResourceReplaced    & mp_items.at(row).status ? "ResourceReplaced, "    : "")
+                    );
         break;
     }
 

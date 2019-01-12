@@ -760,7 +760,8 @@
     <message>
         <location filename="../../src/gui/views/jveGuiProjectSourcesViewModel.cpp" line="91"/>
         <source>Type: %1
-Location: %2</source>
+Location: %2
+Status: %3</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
