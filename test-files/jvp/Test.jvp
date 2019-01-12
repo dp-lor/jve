@@ -1,16 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jveProject>
   <!-- TODO add CDATA plain text comment -->
-  <settings rangeEnd="110764" rangeStart="2">
-    <video size="1920x1080" fps="23.976023976"/>
+  <settings rangeStart="2" rangeEnd="110764">
+    <video fps="23.976023976" size="1920x1080"/>
     <audio sampleRate="48000" channels="2"/>
   </settings>
-  <state videoMonitorQuality="100" playheadPosition="1439"/>
+  <state playheadPosition="1439" videoMonitorQuality="100"/>
   <sources>
-    <sourceItem id="f3b14e56704a7324dd427ab2d305151b5cead8f3" checkSum="fe5cbbd3a94a81c4c08cb19ba673d391e987982f">
+    <sourceItem id="f3b14e56704a7324dd427ab2d305151b5cead8f3" checkSum="7b39783dc4b47d66f51da4d7c6f7fbb2">
       <image path="../../test-files/jm.jpg"/>
     </sourceItem>
-    <sourceItem id="1b5cef3b1430515e56724dd427ab2d3ad8f304a7" checkSum="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3">
+    <sourceItem id="1b5cef3b1430515e56724dd427ab2d3ad8f304a7" checkSum="ebc4b066815a8b585a6e6a8b8771c874">
       <imagesSequence path="../../test-files/seq/trumpet">
         <sequenceItem fileName="001.png"/>
         <sequenceItem fileName="002.png"/>
@@ -22,17 +22,17 @@
         <sequenceItem fileName="008.png"/>
       </imagesSequence>
     </sourceItem>
-    <sourceItem id="05151b5cef3b14e56724dd427ab2d3ad8f304a73" checkSum="73d391e987982fbbd3a94a8fe5ccb19ba61c4c08">
+    <sourceItem id="05151b5cef3b14e56724dd427ab2d3ad8f304a73" checkSum="df02347a835f1799c3c859ffd077ac5f">
       <audio path="../../test-files/cinematic-impact.wav"/>
     </sourceItem>
-    <sourceItem id="2d3ad8f304a7305151b5cef3b14e56724dd427ab" checkSum="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3">
+    <sourceItem id="2d3ad8f304a7305151b5cef3b14e56724dd427ab" checkSum="4b1b4a29567694896ec2d2b57026d8c7">
       <video path="../../test-files/big-buck-bunny.mp4"/>
     </sourceItem>
   </sources>
   <tree>
     <treeNode>
       <data>
-        <region length="3568" streamOffset="0" sourceId="2d3ad8f304a7305151b5cef3b14e56724dd427ab" offset="200" streamIndex="0"/>
+        <region streamOffset="0" length="3568" offset="200" sourceId="2d3ad8f304a7305151b5cef3b14e56724dd427ab" streamIndex="0"/>
       </data>
       <childNodes/>
     </treeNode>

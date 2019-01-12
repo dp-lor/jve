@@ -5,7 +5,6 @@
 
 #include <QFile>
 #include <QCryptographicHash>
-#include <QDebug>
 
 
 #include "../definitions/jveFsCheckOption.h"
