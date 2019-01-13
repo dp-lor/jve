@@ -5,15 +5,15 @@
 
 jveSourcesItemModel::jveSourcesItemModel(
           jveApplication *app,
-          QDomElement     domNode,
+          QDomElement     domElement,
     const int             type
-) : jveBaseModel(app, domNode),
-        mp_resourcesStructList(),
-        mp_streams(),
-        mp_type(type),
-        mp_status(jveSourcesItemStatus::Ok),
-        mp_id(domNode.attribute("id")),
-        mp_checkSum(domNode.attribute("checkSum"))
+) : jveBaseModel(app, domElement),
+        mp_itemStruct(
+            type,
+            domElement.attribute("id"),
+            domElement.attribute("checkSum")
+        ),
+        mp_streams()
 {
 }
 
@@ -31,69 +31,42 @@ jveSourcesItemModel::upSet(void)
 {
 }
 
-QVector<jveSourceResourceStruct>
-jveSourcesItemModel::resourcesStructList(void) const
+QString
+jveSourcesItemModel::id(void) const
 {
-    return mp_resourcesStructList;
+    return mp_itemStruct.id;
+}
+
+QString
+jveSourcesItemModel::checkSum(void) const
+{
+    return mp_itemStruct.checkSum;
+}
+
+jveSourcesItemStruct
+jveSourcesItemModel::itemStructCopy(void)
+{
+    return jveSourcesItemStruct(mp_itemStruct);
+}
+
+void
+jveSourcesItemModel::setId(const QString &id)
+{
+    mp_itemStruct.id = id;
+    mp_domNode.setAttribute("id", mp_itemStruct.id);
+}
+
+void
+jveSourcesItemModel::setCheckSum(const QString &checkSum)
+{
+    mp_itemStruct.checkSum = checkSum;
+    mp_domNode.setAttribute("checkSum", mp_itemStruct.checkSum);
 }
 
 QVector<jveSourceStream *>
 jveSourcesItemModel::streams(void) const
 {
     return mp_streams;
-}
-
-QString
-jveSourcesItemModel::id(void) const
-{
-    return mp_id;
-}
-
-QString
-jveSourcesItemModel::checkSum(void) const
-{
-    return mp_checkSum;
-}
-
-int
-jveSourcesItemModel::type(void) const
-{
-    return mp_type;
-}
-
-int
-jveSourcesItemModel::status(void) const
-{
-    return mp_status;
-}
-
-jveSourcesItemStruct
-jveSourcesItemModel::itemStruct(void) const
-{
-    jveSourcesItemStruct itemStruct;
-
-    itemStruct.type           = mp_type;
-    itemStruct.status         = mp_status;
-    itemStruct.id             = mp_id;
-    itemStruct.absolutePath   = mp_absolutePath;
-    itemStruct.displayName    = mp_displayName;
-    itemStruct.searchHaystack = mp_searchHaystack;
-
-    return itemStruct;
-}
-
-void
-jveSourcesItemModel::setId(const QString &id)
-{
-    mp_id = id;
-    mp_domNode.setAttribute("id", mp_id);
-}
-
-void
-jveSourcesItemModel::setCheckSum(const QString &checkSum)
-{
-    mp_checkSum = checkSum;
-    mp_domNode.setAttribute("checkSum", mp_checkSum);
 }
 
 

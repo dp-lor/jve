@@ -30,7 +30,7 @@ class jveProjectSourcesSignalsPrivate : public QObject
         void wantRemoveItem(const QString &itemId);
         void wantRemoveUnusedItems(void);
 
-        void itemAdded(const jveSourcesItemStruct &itemStruct);
+        void itemAdded(jveSourcesItemStruct itemStruct);
         void itemRemoved(const QString &itemId);
 
         void wantShowAddMediaItemsDialog(void);

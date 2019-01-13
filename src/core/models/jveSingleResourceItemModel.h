@@ -13,7 +13,7 @@ class jveSingleResourceItemModel : public jveSourcesItemModel
     public:
         explicit jveSingleResourceItemModel(
                   jveApplication *app,
-                  QDomElement     domNode,
+                  QDomElement     domElement,
             const int             type
         );
         virtual ~jveSingleResourceItemModel(void);

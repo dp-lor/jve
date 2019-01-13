@@ -10,11 +10,38 @@
 #include "../definitions/jveFsCheckStatus.h"
 
 
-typedef struct _jveSourceResourceStruct
+struct jveSourceResourceStruct
 {
     QString absolutePath;
     int     status;
-} jveSourceResourceStruct;
+
+    // empty constructor
+    jveSourceResourceStruct(void) :
+
+        absolutePath ( /*  empty string  */ ),
+        status       ( jveFsCheckStatus::Ok )
+
+    {
+    }
+
+    // default constructor
+    jveSourceResourceStruct(const QString &absolutePath, const int status) :
+
+        absolutePath ( absolutePath ),
+        status       ( status       )
+
+    {
+    }
+
+    // copy constructor
+    jveSourceResourceStruct(const jveSourceResourceStruct &other) :
+
+        absolutePath ( other.absolutePath ),
+        status       ( other.status       )
+
+    {
+    }
+};
 
 
 #endif // JVESOURCERESOURCESTRUCT_H

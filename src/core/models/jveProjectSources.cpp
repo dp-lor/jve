@@ -101,8 +101,8 @@ jveProjectSources::setUp(void)
         mp_children.at(i)->setUp();
     }
     // send signals about all exists sources items
-    foreach (const jveSourcesItemModel *item, mp_items) {
-        emit jveProjectSourcesSignals.itemAdded(item->itemStruct());
+    foreach (jveSourcesItemModel *item, mp_items) {
+        emit jveProjectSourcesSignals.itemAdded(item->itemStructCopy());
     }
 }
 
