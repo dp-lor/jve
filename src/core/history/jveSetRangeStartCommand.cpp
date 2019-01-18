@@ -3,16 +3,16 @@
 #include "jveSetRangeStartCommand.h"
 #include "jveSetRangeStartCommandInfo.h"
 
-#include "../models/jveProjectSettings.h"
+#include "../models/jveSettingsModel.h"
 
 
 jveSetRangeStartCommand::jveSetRangeStartCommand(
-          jveProjectSettings *settings,
-    const int                 oldRangeStart,
-    const int                 newRangeStart,
-          jveUndoCommand     *parent
+          jveSettingsModel *settingsModel,
+    const int               oldRangeStart,
+    const int               newRangeStart,
+          jveUndoCommand   *parent
 ) : jveUndoCommand(jveUndoCommandType::SetRangeStart, parent),
-        mp_settings(settings),
+        mp_settingsModel(settingsModel),
         mp_oldRangeStart(oldRangeStart),
         mp_newRangeStart(newRangeStart)
 {
@@ -37,13 +37,13 @@ jveSetRangeStartCommand::newRangeStart(void) const
 void
 jveSetRangeStartCommand::undo(void)
 {
-    mp_settings->setRangeStart(mp_oldRangeStart, mp_lockItself);
+    mp_settingsModel->setRangeStart(mp_oldRangeStart, mp_lockItself);
 }
 
 void
 jveSetRangeStartCommand::redo(void)
 {
-    mp_settings->setRangeStart(mp_newRangeStart, mp_lockItself);
+    mp_settingsModel->setRangeStart(mp_newRangeStart, mp_lockItself);
 }
 
 bool

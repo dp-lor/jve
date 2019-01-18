@@ -1,34 +1,34 @@
 
 
-#include "jveProjectSettings.h"
+#include "jveSettingsModel.h"
 
 
 #include "../definitions/jveLimits.h"
 #include "../mutexes/jveProjectMutex.h"
-#include "../application/jveApplication.h"
-
-#include "jveProjectState.h"
-
 #include "../signals/jveProjectSettingsSignals.h"
+
+#include "jveStateModel.h"
+#include "../application/jveProject.h"
 
 #include "../history/jveHistory.h"
 #include "../history/jveSetRangeStartCommand.h"
 #include "../history/jveSetRangeEndCommand.h"
 
 
-jveProjectSettings::jveProjectSettings(
-    jveApplication *app,
-    QDomElement     domNode
-) : jveBaseModel(app, domNode),
+jveSettingsModel::jveSettingsModel(
+    jveProject  *project,
+    QDomElement  domElement
+) : jveBaseModel(domElement),
+        mp_project(project),
         mp_rangeStart(JVE_UNSIGNED_FRAME_NUMBER_MIN),
         mp_rangeEnd(JVE_UNSIGNED_FRAME_NUMBER_MAX)
 {
-    // set self to application
-    mp_app->setProjectSettings(this);
+    // share self to project
+    mp_project->setSettingsModel(this);
 
     // range
-    int rangeStart = mp_domNode.attribute("rangeStart").toInt();
-    int rangeEnd   = mp_domNode.attribute("rangeEnd"  ).toInt();
+    int rangeStart = mp_domElement.attribute("rangeStart").toInt();
+    int rangeEnd   = mp_domElement.attribute("rangeEnd"  ).toInt();
 
     if (rangeStart < mp_rangeStart) {
         rangeStart = mp_rangeStart;
@@ -46,16 +46,16 @@ jveProjectSettings::jveProjectSettings(
     mp_rangeStart = rangeStart;
     mp_rangeEnd   = rangeEnd;
 
-    mp_domNode.setAttribute("rangeStart", mp_rangeStart);
-    mp_domNode.setAttribute("rangeEnd",   mp_rangeEnd  );
+    mp_domElement.setAttribute("rangeStart", mp_rangeStart);
+    mp_domElement.setAttribute("rangeEnd",   mp_rangeEnd  );
 }
 
-jveProjectSettings::~jveProjectSettings(void)
+jveSettingsModel::~jveSettingsModel(void)
 {
 }
 
 void
-jveProjectSettings::setUp(void)
+jveSettingsModel::setUp(void)
 {
     // slot set range start
     connect(
@@ -79,25 +79,25 @@ jveProjectSettings::setUp(void)
 }
 
 void
-jveProjectSettings::upSet(void)
+jveSettingsModel::upSet(void)
 {
     emit jveProjectSettingsSignals.wantResetView();
 }
 
 int
-jveProjectSettings::rangeStart(void) const
+jveSettingsModel::rangeStart(void) const
 {
     return mp_rangeStart;
 }
 
 int
-jveProjectSettings::rangeEnd(void) const
+jveSettingsModel::rangeEnd(void) const
 {
     return mp_rangeEnd;
 }
 
 void
-jveProjectSettings::setRangeStart(
+jveSettingsModel::setRangeStart(
     const int  rangeStart,
     const bool locked
 )
@@ -109,13 +109,13 @@ jveProjectSettings::setRangeStart(
     }
 
     mp_rangeStart = rangeStart;
-    mp_domNode.setAttribute("rangeStart", mp_rangeStart);
+    mp_domElement.setAttribute("rangeStart", mp_rangeStart);
 
     emit jveProjectSettingsSignals.rangeStartChanged(mp_rangeStart);
 
     // fix playhead position
-    if (mp_app->projectState()->playheadPosition() < mp_rangeStart) {
-        mp_app->projectState()->setPlayheadPosition(
+    if (mp_project->stateModel()->playheadPosition() < mp_rangeStart) {
+        mp_project->stateModel()->setPlayheadPosition(
             mp_rangeStart,
             locked ?: lockItself
         );
@@ -127,7 +127,7 @@ jveProjectSettings::setRangeStart(
 }
 
 void
-jveProjectSettings::setRangeEnd(
+jveSettingsModel::setRangeEnd(
     const int  rangeEnd,
     const bool locked
 )
@@ -139,13 +139,13 @@ jveProjectSettings::setRangeEnd(
     }
 
     mp_rangeEnd = rangeEnd;
-    mp_domNode.setAttribute("rangeEnd", mp_rangeEnd);
+    mp_domElement.setAttribute("rangeEnd", mp_rangeEnd);
 
     emit jveProjectSettingsSignals.rangeEndChanged(mp_rangeEnd);
 
     // fix playhead position
-    if (mp_app->projectState()->playheadPosition() > mp_rangeEnd) {
-        mp_app->projectState()->setPlayheadPosition(
+    if (mp_project->stateModel()->playheadPosition() > mp_rangeEnd) {
+        mp_project->stateModel()->setPlayheadPosition(
             mp_rangeEnd,
             locked ?: lockItself
         );
@@ -157,7 +157,7 @@ jveProjectSettings::setRangeEnd(
 }
 
 void
-jveProjectSettings::slotSetRangeStart(const int rangeStart)
+jveSettingsModel::slotSetRangeStart(const int rangeStart)
 {
     jveProjectMutex.lock();
 
@@ -170,7 +170,7 @@ jveProjectSettings::slotSetRangeStart(const int rangeStart)
     }
 
     if (newRangeStart != mp_rangeStart) {
-        mp_app->history()->appendUndoCommand(
+        mp_project->history()->appendUndoCommand(
             new jveSetRangeStartCommand(
                 this,
                 mp_rangeStart,
@@ -185,7 +185,7 @@ jveProjectSettings::slotSetRangeStart(const int rangeStart)
 }
 
 void
-jveProjectSettings::slotSetRangeEnd(const int rangeEnd)
+jveSettingsModel::slotSetRangeEnd(const int rangeEnd)
 {
     jveProjectMutex.lock();
 
@@ -198,7 +198,7 @@ jveProjectSettings::slotSetRangeEnd(const int rangeEnd)
     }
 
     if (newRangeEnd != mp_rangeEnd) {
-        mp_app->history()->appendUndoCommand(
+        mp_project->history()->appendUndoCommand(
             new jveSetRangeEndCommand(
                 this,
                 mp_rangeEnd,

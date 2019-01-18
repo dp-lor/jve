@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jveProject>
+    <!-- TODO add CDATA plain text comment -->
+    <settings rangeEnd="1"
+                rangeStart="1">
+        <video size="1920x1080"
+                fps="30.0"/>
+        <audio sampleRate="48000"
+                channels="2"/>
+    </settings>
+    <state videoMonitorQuality="100"
+            playheadPosition="1"/>
+  <sources/>
+  <tree/>
+</jveProject>

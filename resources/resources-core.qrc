@@ -6,5 +6,6 @@
     </qresource>
     <qresource prefix="/xml">
         <file alias="jve-project-1.0.xsd">xml/jve-project-1.0.xsd</file>
+        <file alias="jve-project-1.0.xml">xml/jve-project-1.0.xml</file>
     </qresource>
 </RCC>

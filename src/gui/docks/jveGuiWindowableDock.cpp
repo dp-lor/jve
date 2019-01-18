@@ -19,9 +19,6 @@ jveGuiWindowableDock::jveGuiWindowableDock(
         mp_window(window),
         mp_toggleWindowAction(mp_window->toggleAction())
 {
-    // fix window visibility state
-    mp_window->fixVisibilityState(mp_toggleViewAction->isChecked());
-
     // wrapper
     mp_protectedWrapper.setFocusPolicy(Qt::NoFocus);
     mp_protectedWrapper.setSizePolicy(
@@ -34,7 +31,7 @@ jveGuiWindowableDock::jveGuiWindowableDock(
     mp_protectedWrapperLayout.setMargin(0);
     mp_protectedWrapperLayout.setSpacing(0);
 
-    // toggle view
+    // slot toggle view
     connect(
         mp_toggleViewAction,
         SIGNAL(triggered(bool)),
@@ -42,7 +39,7 @@ jveGuiWindowableDock::jveGuiWindowableDock(
         SLOT(slotViewTogglerTriggered(bool)),
         Qt::DirectConnection
     );
-    // toggle window
+    // slot toggle window
     connect(
         mp_toggleWindowAction,
         SIGNAL(triggered(bool)),
@@ -50,7 +47,7 @@ jveGuiWindowableDock::jveGuiWindowableDock(
         SLOT(slotWindowTogglerTriggered(bool)),
         Qt::DirectConnection
     );
-    // close window
+    // slot window closed without toggler
     connect(
         mp_window,
         SIGNAL(closedWithoutToggler()),
@@ -68,28 +65,30 @@ void
 jveGuiWindowableDock::setView(QWidget *view)
 {
     mp_protectedView = view;
+}
+
+void
+jveGuiWindowableDock::setUp(void)
+{
+    // fix window visibility state
+    mp_window->fixVisibleBySettings(mp_toggleViewAction->isChecked());
 
     if (Q_NULLPTR != mp_protectedView) {
-        if (mp_window->isVisibleFromSettings()) {
+        if (mp_window->isVisibleBySettings()) {
             mp_window->attachView(mp_protectedView);
         } else {
             mp_protectedWrapperLayout.addWidget(mp_protectedView);
         }
     }
-}
 
-void
-jveGuiWindowableDock::initialShow(void)
-{
-    if (mp_window->isVisibleFromSettings()) {
+    if (mp_window->isVisibleBySettings()) {
         mp_window->show();
     }
 }
 
 void
-jveGuiWindowableDock::finalClose(void)
+jveGuiWindowableDock::upSet(void)
 {
-    mp_window->saveSettings();
     mp_window->setForcedClosing(true);
     mp_window->close();
 }
@@ -123,7 +122,7 @@ jveGuiWindowableDock::slotViewTogglerTriggered(const bool toVisible)
 {
     if (toVisible && mp_toggleWindowAction->isChecked()) {
         mp_toggleWindowAction->setChecked(false);
-        mp_window->setVisible(false);
+        mp_window->hide();
         attachViewToSelf();
     }
 }
@@ -136,9 +135,9 @@ jveGuiWindowableDock::slotWindowTogglerTriggered(const bool toVisible)
             mp_toggleViewAction->trigger();
         }
         attachViewToWindow();
-        mp_window->setVisible(true);
+        mp_window->show();
     } else {
-        mp_window->setVisible(false);
+        mp_window->hide();
         attachViewToSelf();
     }
 }

@@ -10,15 +10,15 @@
 #include "../definitions/jveFsCheckOption.h"
 #include "../definitions/jveFsCheckStatus.h"
 
-#include "../application/jveApplication.h"
+#include "../application/jveProject.h"
 #include "../utils/jveFsUtils.h"
 
 
 jveSingleResourceItemModel::jveSingleResourceItemModel(
-              jveApplication *app,
-              QDomElement     domElement,
-        const int             type
-    ) : jveSourcesItemModel(app, domElement, type)
+              jveProject  *project,
+              QDomElement  domElement,
+        const int          type
+    ) : jveSourcesItemModel(project, domElement, type)
 {
 }
 
@@ -31,7 +31,7 @@ jveSingleResourceItemModel::initByResource(const QString &resourcePath)
 {
     // absolute path
     mp_itemStruct.absolutePath = jveFsUtils.absolutePathOverDirectory(
-        mp_app->projectDirPath(),
+        mp_project->parentDirPath(),
         resourcePath
     );
     // display name

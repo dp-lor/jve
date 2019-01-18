@@ -4,10 +4,11 @@
 
 
 jveSourcesItemModel::jveSourcesItemModel(
-          jveApplication *app,
-          QDomElement     domElement,
-    const int             type
-) : jveBaseModel(app, domElement),
+          jveProject  *project,
+          QDomElement  domElement,
+    const int          type
+) : jveBaseModel(domElement),
+        mp_project(project),
         mp_itemStruct(
             type,
             domElement.attribute("id"),
@@ -53,14 +54,14 @@ void
 jveSourcesItemModel::setId(const QString &id)
 {
     mp_itemStruct.id = id;
-    mp_domNode.setAttribute("id", mp_itemStruct.id);
+    mp_domElement.setAttribute("id", mp_itemStruct.id);
 }
 
 void
 jveSourcesItemModel::setCheckSum(const QString &checkSum)
 {
     mp_itemStruct.checkSum = checkSum;
-    mp_domNode.setAttribute("checkSum", mp_itemStruct.checkSum);
+    mp_domElement.setAttribute("checkSum", mp_itemStruct.checkSum);
 }
 
 QVector<jveSourceStream *>

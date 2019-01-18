@@ -14,8 +14,8 @@
 jveGuiVideoMonitorWindow::jveGuiVideoMonitorWindow(QWidget *parent)
     : jveGuiDockableWindow(
         parent,
+        JVE_GUI_SETTINGS_VIDEO_MONITOR_WINDOW_VISIBLE,
         JVE_GUI_SETTINGS_VIDEO_MONITOR_WINDOW_GEOMETRY,
-        JVE_GUI_SETTINGS_VIDEO_MONITOR_WINDOW_STATE,
         JVE_GUI_SETTINGS_VIDEO_MONITOR_WINDOW_EXTRA
     )
 {

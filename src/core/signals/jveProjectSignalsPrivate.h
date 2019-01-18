@@ -18,8 +18,11 @@ class jveProjectSignalsPrivate : public QObject
     signals:
 
         // global
-        void projectNameChanged(const QString &projectName);
-        void wantAddProjectUrlToRecentItems(const QString &recentProjectUrl);
+        void nameChanged(const QString &projectName);
+        void stateChanged(const int state);
+
+        // recent
+        void wantAddToRecentItems(const QString &filePath);
 
         // project dialogs
         void wantShowModifiedProjectWarning(

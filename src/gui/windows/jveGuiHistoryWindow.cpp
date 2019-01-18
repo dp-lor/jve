@@ -14,8 +14,8 @@
 jveGuiHistoryWindow::jveGuiHistoryWindow(QWidget *parent)
     : jveGuiDockableWindow(
         parent,
+        JVE_GUI_SETTINGS_HISTORY_WINDOW_VISIBLE,
         JVE_GUI_SETTINGS_HISTORY_WINDOW_GEOMETRY,
-        JVE_GUI_SETTINGS_HISTORY_WINDOW_STATE,
         JVE_GUI_SETTINGS_HISTORY_WINDOW_EXTRA
     )
 {

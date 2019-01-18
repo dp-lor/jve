@@ -18,12 +18,15 @@ class jveGlobalSignalsPrivate : public QObject
         explicit  jveGlobalSignalsPrivate(void);
         virtual  ~jveGlobalSignalsPrivate(void);
     signals:
+
         // report
         void wantShowReport(const jveReport &report);
+
         // exit/quit
         void wantExit(void);
         void wantRejectQuit(void);
         void wantAcceptQuit(void);
+
         // states
         void stateChanged(const int state);
         void guiStateChanged(const int state);

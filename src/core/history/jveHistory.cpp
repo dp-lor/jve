@@ -6,8 +6,7 @@
 #include "../signals/jveHistorySignals.h"
 
 #include "../mutexes/jveProjectMutex.h"
-
-#include "../application/jveApplication.h"
+#include "../application/jveProject.h"
 
 #include "jveUndoCommand.h"
 
@@ -22,8 +21,9 @@
 #include "jveSetRangeEndCommandInfo.h"
 
 
-jveHistory::jveHistory(void)
+jveHistory::jveHistory(jveProject *project)
     : QObject(Q_NULLPTR),
+        mp_project(project),
         mp_undoStackCurrentIndex(-1),
         mp_undoStackCleanIndex(-1),
         mp_undoStack()
@@ -41,12 +41,6 @@ jveHistory::jveHistory(void)
 jveHistory::~jveHistory(void)
 {
     mp_undoStack.clear();
-}
-
-void
-jveHistory::setApplication(jveApplication *app)
-{
-    mp_app = app;
 }
 
 void
@@ -91,7 +85,7 @@ jveHistory::setUndoStackClean(void)
 {
     if (mp_undoStackCleanIndex != mp_undoStackCurrentIndex) {
         mp_undoStackCleanIndex = mp_undoStackCurrentIndex;
-        mp_app->setProjectModified(false);
+        mp_project->setModified(false);
         emit jveHistorySignals.undoStackChanged(
             mp_undoStack.size(),
             mp_undoStackCurrentIndex,
@@ -133,7 +127,7 @@ jveHistory::appendUndoCommandWithModifiedState(
             }
             if (mp_undoStackCleanIndex > (mp_undoStack.size() - 1)) {
                 mp_undoStackCleanIndex = -1;
-                mp_app->setProjectModified(modified);
+                mp_project->setModified(modified);
             }
 
         }
@@ -150,7 +144,7 @@ jveHistory::appendUndoCommandWithModifiedState(
         mp_undoStackCurrentIndex = nextCommandIndex;
         undoCommandInfo          = undoCommand->info();
 
-        mp_app->setProjectModified(modified);
+        mp_project->setModified(modified);
     }
 
     // always something changed
@@ -220,7 +214,7 @@ jveHistory::slotSetUndoStackCurrentIndex(const int index)
 
         mp_undoStackCurrentIndex = index;
 
-        mp_app->setProjectModified(
+        mp_project->setModified(
             mp_undoStackCleanIndex != mp_undoStackCurrentIndex
         );
         emit jveHistorySignals.undoStackChanged(

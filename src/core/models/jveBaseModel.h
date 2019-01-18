@@ -9,18 +9,12 @@
 #include <QVector>
 
 
-class jveApplication;
-
-
 class jveBaseModel : public QObject
 {
     Q_OBJECT
     public:
-        explicit jveBaseModel(
-            jveApplication *app,
-            QDomElement     domNode
-        );
-        virtual ~jveBaseModel(void);
+        explicit  jveBaseModel(QDomElement domElement);
+        virtual  ~jveBaseModel(void);
     public:
         void deleteChild(jveBaseModel *child);
         void clear(void);
@@ -33,29 +27,29 @@ class jveBaseModel : public QObject
         );
     public:
         jveBaseModel * parent(void);
-        jveBaseModel * child(jveBaseModel *maybeChild);
+        int            level(void) const;
         jveBaseModel * previousSibling(void);
         jveBaseModel * nextSibling(void);
-        int            level(void) const;
+        jveBaseModel * child(jveBaseModel *maybeChild);
     public:
         void setParent(jveBaseModel *parent);
+        void setLevel(const int level);
         void setPreviousSibling(jveBaseModel *sibling);
         void setNextSibling(jveBaseModel *sibling);
-        void setLevel(const int level);
-        void appendDomNodeToNewParentDomNode(QDomElement parentDomNode);
-        void removeDomNodeFromParentDomNode(void);
+    public:
+        void appendDomToNewParentDom(QDomElement parentDomElement);
+        void removeDomFromParentDom(void);
     public:
         virtual void setUp(void);
         virtual void upSet(void);
     protected:
         // members
-        jveApplication          *mp_app;
+        QDomElement              mp_domElement;
         jveBaseModel            *mp_parent;
+        int                      mp_level;
         jveBaseModel            *mp_previousSibling;
         jveBaseModel            *mp_nextSibling;
-        int                      mp_level;
         QVector<jveBaseModel *>  mp_children;
-        QDomElement              mp_domNode;
 };
 
 

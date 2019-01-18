@@ -1,21 +1,24 @@
 
 
-#ifndef JVEPROJECTSETTINGS_H
-#define JVEPROJECTSETTINGS_H
+#ifndef JVESETTINGSMODEL_H
+#define JVESETTINGSMODEL_H
 
 
 #include "jveBaseModel.h"
 
 
-class jveProjectSettings : public jveBaseModel
+class jveProject;
+
+
+class jveSettingsModel : public jveBaseModel
 {
     Q_OBJECT
     public:
-        explicit jveProjectSettings(
-            jveApplication *app,
-            QDomElement     domNode
+        explicit jveSettingsModel(
+            jveProject  *project,
+            QDomElement  domElement
         );
-        virtual ~jveProjectSettings(void);
+        virtual ~jveSettingsModel(void);
     public:
         void setUp(void);
         void upSet(void);
@@ -30,11 +33,12 @@ class jveProjectSettings : public jveBaseModel
         void slotSetRangeEnd(const int rangeEnd);
     private:
         // members
-        int mp_rangeStart;
-        int mp_rangeEnd;
+        jveProject *mp_project;
+        int         mp_rangeStart;
+        int         mp_rangeEnd;
 };
 
 
-#endif // JVEPROJECTSETTINGS_H
+#endif // JVESETTINGSMODEL_H
 
 

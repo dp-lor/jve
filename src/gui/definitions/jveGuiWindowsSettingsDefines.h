@@ -10,23 +10,23 @@
 #define JVE_GUI_SETTINGS_MAIN_WINDOW_SHOW_STATUS_BAR  "mainWindow/showStatusBar"
 
 // project settings window
+#define JVE_GUI_SETTINGS_PROJECT_SETTINGS_WINDOW_VISIBLE   "projectSettingsWindow/visible"
 #define JVE_GUI_SETTINGS_PROJECT_SETTINGS_WINDOW_GEOMETRY  "projectSettingsWindow/geometry"
-#define JVE_GUI_SETTINGS_PROJECT_SETTINGS_WINDOW_STATE     "projectSettingsWindow/state"
 #define JVE_GUI_SETTINGS_PROJECT_SETTINGS_WINDOW_EXTRA     "projectSettingsWindow/extra"
 
 // video minitor window
+#define JVE_GUI_SETTINGS_VIDEO_MONITOR_WINDOW_VISIBLE   "videoMonitorWindow/visible"
 #define JVE_GUI_SETTINGS_VIDEO_MONITOR_WINDOW_GEOMETRY  "videoMonitorWindow/geometry"
-#define JVE_GUI_SETTINGS_VIDEO_MONITOR_WINDOW_STATE     "videoMonitorWindow/state"
 #define JVE_GUI_SETTINGS_VIDEO_MONITOR_WINDOW_EXTRA     "videoMonitorWindow/extra"
 
 // project sources window
+#define JVE_GUI_SETTINGS_PROJECT_SOURCES_WINDOW_VISIBLE   "projectSourcesWindow/visible"
 #define JVE_GUI_SETTINGS_PROJECT_SOURCES_WINDOW_GEOMETRY  "projectSourcesWindow/geometry"
-#define JVE_GUI_SETTINGS_PROJECT_SOURCES_WINDOW_STATE     "projectSourcesWindow/state"
 #define JVE_GUI_SETTINGS_PROJECT_SOURCES_WINDOW_EXTRA     "projectSourcesWindow/extra"
 
 // history window
+#define JVE_GUI_SETTINGS_HISTORY_WINDOW_VISIBLE   "historyWindow/visible"
 #define JVE_GUI_SETTINGS_HISTORY_WINDOW_GEOMETRY  "historyWindow/geometry"
-#define JVE_GUI_SETTINGS_HISTORY_WINDOW_STATE     "historyWindow/state"
 #define JVE_GUI_SETTINGS_HISTORY_WINDOW_EXTRA     "historyWindow/extra"
 
 

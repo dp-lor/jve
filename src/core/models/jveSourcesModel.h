@@ -1,7 +1,7 @@
 
 
-#ifndef JVEPROJECTSOURCES_H
-#define JVEPROJECTSOURCES_H
+#ifndef JVESOURCESMODEL_H
+#define JVESOURCESMODEL_H
 
 
 #include "jveBaseModel.h"
@@ -12,18 +12,16 @@
 #include <QStringList>
 
 
+class jveProject;
 class jveSourcesItemModel;
 
 
-class jveProjectSources : public jveBaseModel
+class jveSourcesModel : public jveBaseModel
 {
     Q_OBJECT
     public:
-        explicit jveProjectSources(
-            jveApplication *app,
-            QDomElement     domNode
-        );
-        virtual ~jveProjectSources(void);
+        explicit  jveSourcesModel(jveProject *project, QDomElement domElement);
+        virtual  ~jveSourcesModel(void);
     public:
         void setUp(void);
         void upSet(void);
@@ -34,10 +32,11 @@ class jveProjectSources : public jveBaseModel
         void slotAddImagesSequenceItem(const QStringList &imagesList);
     private:
         // members
-        QHash<QString, jveSourcesItemModel *> mp_items;
+        jveProject                            *mp_project;
+        QHash<QString, jveSourcesItemModel *>  mp_items;
 };
 
 
-#endif // JVEPROJECTSOURCES_H
+#endif // JVESOURCESMODEL_H
 
 

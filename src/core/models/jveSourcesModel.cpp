@@ -1,35 +1,37 @@
 
 
-#include "jveProjectSources.h"
+#include "jveSourcesModel.h"
 
 
 #include <QFileInfo>
 #include <QDebug>
 
 
-#include "jveProjectSourcesImageItem.h"
-#include "jveProjectSourcesImagesSequenceItem.h"
-#include "jveProjectSourcesAudioItem.h"
-#include "jveProjectSourcesVideoItem.h"
+#include "../application/jveProject.h"
+
+#include "jveImageItemModel.h"
+#include "jveImagesSequenceItemModel.h"
+#include "jveAudioItemModel.h"
+#include "jveVideoItemModel.h"
 
 #include "../utils/jveIdProvider.h"
 //#include "../mutexes/jveProjectMutex.h"
-#include "../application/jveApplication.h"
 
 #include "../signals/jveProjectSourcesSignals.h"
 
 
-jveProjectSources::jveProjectSources(
-    jveApplication *app,
-    QDomElement     domNode
-) : jveBaseModel(app, domNode),
-    mp_items()
+jveSourcesModel::jveSourcesModel(
+    jveProject  *project,
+    QDomElement  domElement
+) : jveBaseModel(domElement),
+        mp_project(project),
+        mp_items()
 {
-    // share self to application
-    mp_app->setProjectSources(this);
+    // share self to project
+    mp_project->setSourcesModel(this);
 
     // items
-    QDomNodeList sources = mp_domNode.childNodes();
+    QDomNodeList sources = mp_domElement.childNodes();
     for (int i = 0; i < sources.length(); i += 1) {
 
         QDomElement siDomElement = sources.at(i).toElement();
@@ -37,47 +39,32 @@ jveProjectSources::jveProjectSources(
 
         // image
         if ("image" == itemType) {
-            attachSourceItem(
-                new jveProjectSourcesImageItem(
-                    app,
-                    siDomElement
-                )
-            );
+            attachSourceItem(new jveImageItemModel(project, siDomElement));
         // images sequence
         } else if ("imagesSequence" == itemType) {
             attachSourceItem(
-                new jveProjectSourcesImagesSequenceItem(
-                    app,
+                new jveImagesSequenceItemModel(
+                    project,
                     siDomElement
                 )
             );
         // audio
         } else if ("audio" == itemType) {
-            attachSourceItem(
-                new jveProjectSourcesAudioItem(
-                    app,
-                    siDomElement
-                )
-            );
+            attachSourceItem(new jveAudioItemModel(project, siDomElement));
         // video
         } else if ("video" == itemType) {
-            attachSourceItem(
-                new jveProjectSourcesVideoItem(
-                    app,
-                    siDomElement
-                )
-            );
+            attachSourceItem(new jveVideoItemModel(project, siDomElement));
         }
 
     }
 }
 
-jveProjectSources::~jveProjectSources(void)
+jveSourcesModel::~jveSourcesModel(void)
 {
 }
 
 void
-jveProjectSources::setUp(void)
+jveSourcesModel::setUp(void)
 {
     // slot add items
     connect(
@@ -107,7 +94,7 @@ jveProjectSources::setUp(void)
 }
 
 void
-jveProjectSources::upSet(void)
+jveSourcesModel::upSet(void)
 {
     for (int i = 0; i < mp_children.size(); i += 1) {
         mp_children.at(i)->upSet();
@@ -117,7 +104,7 @@ jveProjectSources::upSet(void)
 }
 
 void
-jveProjectSources::attachSourceItem(jveSourcesItemModel *item)
+jveSourcesModel::attachSourceItem(jveSourcesItemModel *item)
 {
     jveIdProvider.addExternal(item->id());
     mp_items.insert(item->id(), item);
@@ -126,7 +113,7 @@ jveProjectSources::attachSourceItem(jveSourcesItemModel *item)
 }
 
 void
-jveProjectSources::slotAddItems(const QStringList &itemsList)
+jveSourcesModel::slotAddItems(const QStringList &itemsList)
 {
     QFileInfo info;
 
@@ -150,7 +137,7 @@ jveProjectSources::slotAddItems(const QStringList &itemsList)
 }
 
 void
-jveProjectSources::slotAddImagesSequenceItem(const QStringList &imagesList)
+jveSourcesModel::slotAddImagesSequenceItem(const QStringList &imagesList)
 {
     foreach (const QString &imagePath, imagesList) {
         qDebug() << imagePath;

@@ -1,50 +1,49 @@
 
 
-#include "jveProjectState.h"
+#include "jveStateModel.h"
 
 
 #include "../definitions/jveLimits.h"
-
 #include "../mutexes/jveProjectMutex.h"
-#include "../application/jveApplication.h"
-
 #include "../signals/jveProjectStateSignals.h"
 
-#include "jveProjectSettings.h"
+#include "jveSettingsModel.h"
+#include "../application/jveProject.h"
 
 
-jveProjectState::jveProjectState(
-    jveApplication *app,
-    QDomElement     domNode
-) : jveBaseModel(app, domNode)
+jveStateModel::jveStateModel(
+    jveProject  *project,
+    QDomElement  domElement
+) : jveBaseModel(domElement),
+        mp_project(project)
 {
-    // set self to application
-    mp_app->setProjectState(this);
+    // share self to project
+    mp_project->setStateModel(this);
 
     // playhead position
-    int rangeStart = mp_app->projectSettings()->rangeStart();
-    int rangeEnd   = mp_app->projectSettings()->rangeEnd();
+    int rangeStart = mp_project->settingsModel()->rangeStart();
+    int rangeEnd   = mp_project->settingsModel()->rangeEnd();
 
-    mp_playheadPosition = mp_domNode.attribute("playheadPosition").toInt();
+    mp_playheadPosition = mp_domElement.attribute("playheadPosition").toInt();
     if (mp_playheadPosition < rangeStart) {
         mp_playheadPosition = rangeStart;
     }
     if (mp_playheadPosition > rangeEnd) {
         mp_playheadPosition = rangeEnd;
     }
-    mp_domNode.setAttribute("playheadPosition", mp_playheadPosition);
+    mp_domElement.setAttribute("playheadPosition", mp_playheadPosition);
 
     // video monitor quality
     mp_videoMonitorQuality
-            = mp_domNode.attribute("videoMonitorQuality").toInt();
+            = mp_domElement.attribute("videoMonitorQuality").toInt();
 }
 
-jveProjectState::~jveProjectState(void)
+jveStateModel::~jveStateModel(void)
 {
 }
 
 void
-jveProjectState::setUp(void)
+jveStateModel::setUp(void)
 {
     // slot set playhead position
     connect(
@@ -70,19 +69,19 @@ jveProjectState::setUp(void)
 }
 
 void
-jveProjectState::upSet(void)
+jveStateModel::upSet(void)
 {
     emit jveProjectStateSignals.wantResetView();
 }
 
 int
-jveProjectState::playheadPosition(void) const
+jveStateModel::playheadPosition(void) const
 {
     return mp_playheadPosition;
 }
 
 void
-jveProjectState::setPlayheadPosition(
+jveStateModel::setPlayheadPosition(
     const int  position,
     const bool locked
 )
@@ -94,9 +93,9 @@ jveProjectState::setPlayheadPosition(
     }
 
     mp_playheadPosition = position;
-    mp_domNode.setAttribute("playheadPosition", mp_playheadPosition);
+    mp_domElement.setAttribute("playheadPosition", mp_playheadPosition);
 
-    mp_app->setProjectHiddenModified(true);
+    mp_project->setHiddenModified(true);
     emit jveProjectStateSignals.playheadPositionChanged(mp_playheadPosition);
 
     if (lockItself) {
@@ -105,7 +104,7 @@ jveProjectState::setPlayheadPosition(
 }
 
 void
-jveProjectState::setVideoMonitorQuality(
+jveStateModel::setVideoMonitorQuality(
     const int  quality,
     const bool locked
 )
@@ -117,9 +116,9 @@ jveProjectState::setVideoMonitorQuality(
     }
 
     mp_videoMonitorQuality = quality;
-    mp_domNode.setAttribute("videoMonitorQuality", mp_videoMonitorQuality);
+    mp_domElement.setAttribute("videoMonitorQuality", mp_videoMonitorQuality);
 
-    mp_app->setProjectHiddenModified(true);
+    mp_project->setHiddenModified(true);
     emit jveProjectStateSignals
                 .videoMonitorQualityChanged(mp_videoMonitorQuality);
 
@@ -129,13 +128,13 @@ jveProjectState::setVideoMonitorQuality(
 }
 
 void
-jveProjectState::slotSetPlayheadPosition(const int position)
+jveStateModel::slotSetPlayheadPosition(const int position)
 {
     jveProjectMutex.lock();
 
     int newPosition = position;
-    int rangeStart  = mp_app->projectSettings()->rangeStart();
-    int rangeEnd    = mp_app->projectSettings()->rangeEnd();
+    int rangeStart  = mp_project->settingsModel()->rangeStart();
+    int rangeEnd    = mp_project->settingsModel()->rangeEnd();
 
     if (newPosition < rangeStart) {
         newPosition = rangeStart;
@@ -153,7 +152,7 @@ jveProjectState::slotSetPlayheadPosition(const int position)
 }
 
 void
-jveProjectState::slotSetVideoMonitorQuality(const int quality)
+jveStateModel::slotSetVideoMonitorQuality(const int quality)
 {
     jveProjectMutex.lock();
 

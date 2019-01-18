@@ -74,13 +74,15 @@ jveGuiWindowManager::populateGui(void)
 {
     // main window
     mp_mainWindow = new jveGuiMainWindow;
-    mp_mainWindow->restoreSettings();
     mp_mainWindow->show();
+    mp_mainWindow->restoreSettings();
 
     // windowable docks (can be show as dockable windows)
-    QList<jveGuiWindowableDock *> wds = mp_mainWindow->windowableDocks();
-    for (int i = 0; i < wds.size(); i += 1) {
-        wds.at(i)->initialShow();
+    foreach (
+        jveGuiWindowableDock *dock,
+        mp_mainWindow->windowableDocks()
+    ) {
+        dock->setUp();
     }
 
     // activate main window
@@ -177,9 +179,11 @@ jveGuiWindowManager::depopulateGui(void)
         mp_isPopulated = false;
 
         // windowable docks
-        QList<jveGuiWindowableDock *> wds = mp_mainWindow->windowableDocks();
-        for (int i = 0; i < wds.size(); i += 1) {
-            wds.at(i)->finalClose();
+        foreach (
+            jveGuiWindowableDock *dock,
+            mp_mainWindow->windowableDocks()
+        ) {
+            dock->upSet();
         }
 
         // main window

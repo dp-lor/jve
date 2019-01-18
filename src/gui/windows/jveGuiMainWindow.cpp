@@ -3,6 +3,12 @@
 #include "jveGuiMainWindow.h"
 
 
+#include <QEvent>
+#include <QCloseEvent>
+#include <QKeyEvent>
+#include <QMenuBar>
+
+
 #include "../../core/definitions/jveDefines.h"
 #include "../definitions/jveGuiAppearanceDefines.h"
 #include "../definitions/jveGuiInteractiveDefines.h"
@@ -11,6 +17,7 @@
 
 #include "../../core/definitions/jveOption.h"
 #include "../../core/definitions/jveState.h"
+#include "../../core/definitions/jveProjectState.h"
 
 #include "../../core/signals/jveGlobalSignals.h"
 #include "../../core/signals/jveProjectSignals.h"
@@ -22,7 +29,7 @@ jveGuiMainWindow::jveGuiMainWindow(void)
     : QMainWindow(Q_NULLPTR),
         // boolean flags
         mp_wantExitSignalSent(false),
-        mp_isMaximizedBeforeFullScreen(false),
+        mp_maximizedBeforeFullScreen(false),
         // conventional elements
         mp_menuFile(menuBar()),
         mp_menuEdit(menuBar()),
@@ -56,13 +63,12 @@ jveGuiMainWindow::jveGuiMainWindow(void)
     /*** CONVENTIONAL ELEMENTS ********************************************/
 
     // main menu
-    mp_menuBar = menuBar();
-    mp_menuBar->addAction( mp_menuFile     .menuAction() );
-    mp_menuBar->addAction( mp_menuEdit     .menuAction() );
-    mp_menuBar->addAction( mp_menuView     .menuAction() );
-    mp_menuBar->addAction( mp_menuWindow   .menuAction() );
-    mp_menuBar->addAction( mp_menuHelp     .menuAction() );
-    mp_menuBar->addAction( mp_menuLanguage .menuAction() );
+    menuBar()->addAction( mp_menuFile     .menuAction() );
+    menuBar()->addAction( mp_menuEdit     .menuAction() );
+    menuBar()->addAction( mp_menuView     .menuAction() );
+    menuBar()->addAction( mp_menuWindow   .menuAction() );
+    menuBar()->addAction( mp_menuHelp     .menuAction() );
+    menuBar()->addAction( mp_menuLanguage .menuAction() );
 
     // status bar
     mp_statusBar.setSizeGripEnabled(false);
@@ -146,20 +152,20 @@ jveGuiMainWindow::jveGuiMainWindow(void)
         Qt::QueuedConnection
     );
 
-    // slot state changed
-    connect(
-        &jveGlobalSignals,
-        SIGNAL(stateChanged(int)),
-        this,
-        SLOT(slotStateChanged(int)),
-        Qt::QueuedConnection
-    );
     // slot set window title
     connect(
         &jveProjectSignals,
-        SIGNAL(projectNameChanged(QString)),
+        SIGNAL(nameChanged(QString)),
         this,
         SLOT(slotSetWindowTitle(QString)),
+        Qt::QueuedConnection
+    );
+    // slot project state changed
+    connect(
+        &jveProjectSignals,
+        SIGNAL(stateChanged(int)),
+        this,
+        SLOT(slotProjectStateChanged(int)),
         Qt::QueuedConnection
     );
 
@@ -239,20 +245,6 @@ jveGuiMainWindow::restoreSettings(void)
 {
     jveSettings.lock();
 
-    if (jveSettings.contains(JVE_GUI_SETTINGS_MAIN_WINDOW_STATE)) {
-        restoreState(
-            jveSettings.value(
-                JVE_GUI_SETTINGS_MAIN_WINDOW_STATE
-            ).toByteArray()
-        );
-    }
-    if (jveSettings.contains(JVE_GUI_SETTINGS_MAIN_WINDOW_GEOMETRY)) {
-        restoreGeometry(
-            jveSettings.value(
-                JVE_GUI_SETTINGS_MAIN_WINDOW_GEOMETRY
-            ).toByteArray()
-        );
-    }
     if (jveSettings.contains(JVE_GUI_SETTINGS_MAIN_WINDOW_SHOW_STATUS_BAR)) {
         mp_statusBar.setVisible(
             jveSettings.value(
@@ -260,17 +252,6 @@ jveGuiMainWindow::restoreSettings(void)
             ).toBool()
         );
     }
-
-    jveSettings.unlock();
-
-    // docks visibility state
-    QList<jveGuiDock *> docks = findChildren<jveGuiDock *>();
-    for (int i = 0; i < docks.size(); i += 1) {
-        jveGuiDock *dock = docks.at(i);
-        dock->toggleTabifiedMode(0 < tabifiedDockWidgets(dock).size());
-    }
-
-    // status bar state
     if (!mp_statusBar.isHidden()) {
         setContentsMargins(
             JVE_GUI_MARGIN_SIZE,
@@ -278,7 +259,6 @@ jveGuiMainWindow::restoreSettings(void)
             JVE_GUI_MARGIN_SIZE,
             0
         );
-        emit jveGlobalSignals.wantSetUpStatusBarToggler(true);
     } else {
         setContentsMargins(
             JVE_GUI_MARGIN_SIZE,
@@ -286,11 +266,35 @@ jveGuiMainWindow::restoreSettings(void)
             JVE_GUI_MARGIN_SIZE,
             JVE_GUI_MARGIN_SIZE
         );
-        emit jveGlobalSignals.wantSetUpStatusBarToggler(false);
     }
 
+    if (jveSettings.contains(JVE_GUI_SETTINGS_MAIN_WINDOW_GEOMETRY)) {
+        restoreGeometry(
+            jveSettings.value(
+                JVE_GUI_SETTINGS_MAIN_WINDOW_GEOMETRY
+            ).toByteArray()
+        );
+    }
+    if (jveSettings.contains(JVE_GUI_SETTINGS_MAIN_WINDOW_STATE)) {
+        restoreState(
+            jveSettings.value(
+                JVE_GUI_SETTINGS_MAIN_WINDOW_STATE
+            ).toByteArray()
+        );
+    }
+
+    jveSettings.unlock();
+
+    // docks visibility state
+    foreach (jveGuiDock *dock, findChildren<jveGuiDock *>()) {
+        dock->toggleTabifiedMode(0 < tabifiedDockWidgets(dock).size());
+    }
+    // status bar state
+    emit jveGlobalSignals
+            .wantSetUpStatusBarToggler(mp_statusBar.isVisible());
     // fullscreen state
-    emit jveGlobalSignals.wantSetUpFullScreenToggler(isFullScreen());
+    emit jveGlobalSignals
+            .wantSetUpFullScreenToggler(isFullScreen());
 }
 
 void
@@ -299,16 +303,16 @@ jveGuiMainWindow::saveSettings(void)
     jveSettings.lock();
 
     jveSettings.setValue(
-        JVE_GUI_SETTINGS_MAIN_WINDOW_STATE,
-        saveState()
+        JVE_GUI_SETTINGS_MAIN_WINDOW_SHOW_STATUS_BAR,
+        mp_statusBar.isVisible()
     );
     jveSettings.setValue(
         JVE_GUI_SETTINGS_MAIN_WINDOW_GEOMETRY,
         saveGeometry()
     );
     jveSettings.setValue(
-        JVE_GUI_SETTINGS_MAIN_WINDOW_SHOW_STATUS_BAR,
-        !mp_statusBar.isHidden()
+        JVE_GUI_SETTINGS_MAIN_WINDOW_STATE,
+        saveState()
     );
 
     jveSettings.sync();
@@ -337,9 +341,9 @@ jveGuiMainWindow::slotRejectExitSignalSent(void)
 }
 
 void
-jveGuiMainWindow::slotStateChanged(const int state)
+jveGuiMainWindow::slotProjectStateChanged(const int state)
 {
-    setWindowModified(state & jveState::ProjectModified);
+    setWindowModified(state & jveProjectState::Modified);
 }
 
 void
@@ -383,10 +387,10 @@ void
 jveGuiMainWindow::slotToggleFullScreen(const bool enabled)
 {
     if (enabled) {
-        mp_isMaximizedBeforeFullScreen = isMaximized();
+        mp_maximizedBeforeFullScreen = isMaximized();
         showFullScreen();
     } else {
-        mp_isMaximizedBeforeFullScreen
+        mp_maximizedBeforeFullScreen
             ? showMaximized()
             : showNormal();
     }

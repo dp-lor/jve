@@ -11,14 +11,17 @@
 #include "../source-streams/jveSourceStream.h"
 
 
+class jveProject;
+
+
 class jveSourcesItemModel : public jveBaseModel
 {
     Q_OBJECT
     public:
         explicit jveSourcesItemModel(
-                  jveApplication *app,
-                  QDomElement     domElement,
-            const int             type
+                  jveProject  *project,
+                  QDomElement  domElement,
+            const int          type
         );
         virtual ~jveSourcesItemModel(void);
     public:
@@ -36,8 +39,9 @@ class jveSourcesItemModel : public jveBaseModel
         QVector<jveSourceStream *> streams(void) const;
     protected:
         // members
-        jveSourcesItemStruct       mp_itemStruct;
-        QVector<jveSourceStream *> mp_streams;
+        jveProject                 *mp_project;
+        jveSourcesItemStruct        mp_itemStruct;
+        QVector<jveSourceStream *>  mp_streams;
 };
 
 

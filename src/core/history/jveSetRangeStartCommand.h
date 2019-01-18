@@ -7,17 +7,17 @@
 #include "jveUndoCommand.h"
 
 
-class jveProjectSettings;
+class jveSettingsModel;
 
 
 class jveSetRangeStartCommand : public jveUndoCommand
 {
     public:
         explicit jveSetRangeStartCommand(
-                  jveProjectSettings *settings,
-            const int                 oldRangeStart,
-            const int                 newRangeStart,
-                  jveUndoCommand     *parent = Q_NULLPTR
+                  jveSettingsModel *settingsModel,
+            const int               oldRangeStart,
+            const int               newRangeStart,
+                  jveUndoCommand   *parent = Q_NULLPTR
         );
         virtual ~jveSetRangeStartCommand(void);
     public:
@@ -30,9 +30,9 @@ class jveSetRangeStartCommand : public jveUndoCommand
         jveUndoCommandInfo * info(void);
     private:
         // members
-        jveProjectSettings *mp_settings;
-        int                 mp_oldRangeStart;
-        int                 mp_newRangeStart;
+        jveSettingsModel *mp_settingsModel;
+        int               mp_oldRangeStart;
+        int               mp_newRangeStart;
 };
 
 

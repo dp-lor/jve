@@ -15,9 +15,9 @@ class jveMultipleResourcesItemModel : public jveSourcesItemModel
     Q_OBJECT
     public:
         explicit jveMultipleResourcesItemModel(
-                  jveApplication *app,
-                  QDomElement     domElement,
-            const int             type
+                  jveProject  *project,
+                  QDomElement  domElement,
+            const int          type
         );
         virtual ~jveMultipleResourcesItemModel(void);
     protected:

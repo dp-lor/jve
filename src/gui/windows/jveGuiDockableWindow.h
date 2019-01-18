@@ -6,13 +6,14 @@
 
 #include <QWidget>
 #include <QString>
+#include <QByteArray>
 #include <QVBoxLayout>
 
 
-class QShowEvent;
-class QHideEvent;
+#include "../elements/jveGuiAction.h"
+
+
 class QCloseEvent;
-class QAction;
 
 
 class jveGuiDockableWindow : public QWidget
@@ -21,43 +22,48 @@ class jveGuiDockableWindow : public QWidget
     public:
         explicit jveGuiDockableWindow(
                   QWidget *parent,
+            const QString &visibleSettingsKey,
             const QString &geometrySettingsKey,
-            const QString &stateSettingsKey,
             const QString &extraSettingsKey
         );
         virtual ~jveGuiDockableWindow(void);
     protected:
-        void showEvent(QShowEvent *event);
-        void hideEvent(QHideEvent *event);
         void closeEvent(QCloseEvent *event);
-    public:
-        QAction * toggleAction(void);
-        bool      isVisibleFromSettings(void) const;
-    public:
-        void fixVisibilityState(const bool isDockVisible);
-        void setForcedClosing(const bool state);
-    public:
-        void attachView(QWidget *view);
-        void detachView(QWidget *view);
-    public:
-        void restoreSettings(void);
-        void saveSettings(void);
     signals:
         void closedWithoutToggler(void);
+    public:
+        QAction * toggleAction(void);
+    public:
+        bool isVisibleBySettings(void) const;
+    public:
+        void fixVisibleBySettings(const bool isDockVisible);
+        void setForcedClosing(const bool forced);
+    public:
+        void show(void);
+        void hide(void);
+        void attachView(QWidget *view);
+        void detachView(QWidget *view);
     protected:
-        void       restoreState(const QByteArray &state);
-        QByteArray saveState(void) const;
-        void       restoreExtra(const QByteArray &data);
-        QByteArray saveExtra(void) const;
+        void readAllSettings(void);
+        void restoreVisibleState(void);
     protected:
+        void updateSettingsForShow(void);
+        void updateSettingsForHide(const bool forcedClosing = false);
+        void saveAllSettings(void);
+    protected:
+        // forced close flag
+        bool mp_closeForced;
+        // settings keys
+        QString mp_visibleSettingsKey;
+        QString mp_geometrySettingsKey;
+        QString mp_extraSettingsKey;
+        // settings
+        bool             mp_visible;
+        QByteArray       mp_geometry;
+        Qt::WindowStates mp_state;
         // members
-        bool        mp_forcedClosing;
-        bool        mp_isVisibleFromSettings;
-        QString     mp_geometrySettingsKey;
-        QString     mp_stateSettingsKey;
-        QString     mp_extraSettingsKey;
-        QAction    *mp_toggleAction;
-        QVBoxLayout mp_layout;
+        jveGuiAction *mp_toggleAction;
+        QVBoxLayout   mp_layout;
 };
 
 

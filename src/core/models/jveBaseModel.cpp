@@ -1,20 +1,16 @@
 
 
 #include "jveBaseModel.h"
-#include "../application/jveApplication.h"
 
 
-jveBaseModel::jveBaseModel(
-    jveApplication *app,
-    QDomElement     domNode
-) : QObject(Q_NULLPTR),
-        mp_app(app),
+jveBaseModel::jveBaseModel(QDomElement domElement)
+    : QObject(Q_NULLPTR),
+        mp_domElement(domElement),
         mp_parent(Q_NULLPTR),
+        mp_level(0),
         mp_previousSibling(Q_NULLPTR),
         mp_nextSibling(Q_NULLPTR),
-        mp_level(0),
-        mp_children(),
-        mp_domNode(domNode)
+        mp_children()
 {
 }
 
@@ -69,7 +65,7 @@ jveBaseModel::removeChild(jveBaseModel *child)
         child->setParent(Q_NULLPTR);
         child->setPreviousSibling(Q_NULLPTR);
         child->setNextSibling(Q_NULLPTR);
-        child->removeDomNodeFromParentDomNode();
+        child->removeDomFromParentDom();
 
     }
 
@@ -99,7 +95,7 @@ jveBaseModel::attachChild(
     child->setNextSibling(Q_NULLPTR);
     mp_children.append(child);
     if (appendMode) {
-        child->appendDomNodeToNewParentDomNode(mp_domNode);
+        child->appendDomToNewParentDom(mp_domElement);
     }
 
     return child;
@@ -111,14 +107,10 @@ jveBaseModel::parent(void)
     return mp_parent;
 }
 
-jveBaseModel *
-jveBaseModel::child(jveBaseModel *maybeChild)
+int
+jveBaseModel::level(void) const
 {
-    int childIndex = mp_children.lastIndexOf(maybeChild);
-
-    return (-1 < childIndex)
-        ? mp_children.at(childIndex)
-        : Q_NULLPTR;
+    return mp_level;
 }
 
 jveBaseModel *
@@ -133,10 +125,14 @@ jveBaseModel::nextSibling(void)
     return mp_nextSibling;
 }
 
-int
-jveBaseModel::level(void) const
+jveBaseModel *
+jveBaseModel::child(jveBaseModel *maybeChild)
 {
-    return mp_level;
+    int childIndex = mp_children.lastIndexOf(maybeChild);
+
+    return (-1 < childIndex)
+        ? mp_children.at(childIndex)
+        : Q_NULLPTR;
 }
 
 void
@@ -145,6 +141,16 @@ jveBaseModel::setParent(jveBaseModel *parent)
     mp_parent = parent;
 
     setLevel(Q_NULLPTR != mp_parent ? (mp_parent->level() + 1) : 0);
+}
+
+void
+jveBaseModel::setLevel(const int level)
+{
+    mp_level = level;
+
+    for (int i = 0; i < mp_children.size(); i += 1) {
+        mp_children.at(i)->setLevel(mp_level + 1);
+    }
 }
 
 void
@@ -160,25 +166,16 @@ jveBaseModel::setNextSibling(jveBaseModel *sibling)
 }
 
 void
-jveBaseModel::setLevel(const int level)
+jveBaseModel::appendDomToNewParentDom(QDomElement parentDomElement)
 {
-    mp_level = level;
-
-    for (int i = 0; i < mp_children.size(); i += 1) {
-        mp_children.at(i)->setLevel(mp_level + 1);
-    }
+    mp_domElement = parentDomElement.appendChild(mp_domElement).toElement();
 }
 
 void
-jveBaseModel::appendDomNodeToNewParentDomNode(QDomElement parentDomNode)
+jveBaseModel::removeDomFromParentDom(void)
 {
-    mp_domNode = parentDomNode.appendChild(mp_domNode).toElement();
-}
-
-void
-jveBaseModel::removeDomNodeFromParentDomNode(void)
-{
-    mp_domNode = mp_domNode.parentNode().removeChild(mp_domNode).toElement();
+    mp_domElement
+        = mp_domElement.parentNode().removeChild(mp_domElement).toElement();
 }
 
 void

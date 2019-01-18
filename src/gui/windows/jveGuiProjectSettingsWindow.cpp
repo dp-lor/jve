@@ -14,8 +14,8 @@
 jveGuiProjectSettingsWindow::jveGuiProjectSettingsWindow(QWidget *parent)
     : jveGuiDockableWindow(
         parent,
+        JVE_GUI_SETTINGS_PROJECT_SETTINGS_WINDOW_VISIBLE,
         JVE_GUI_SETTINGS_PROJECT_SETTINGS_WINDOW_GEOMETRY,
-        JVE_GUI_SETTINGS_PROJECT_SETTINGS_WINDOW_STATE,
         JVE_GUI_SETTINGS_PROJECT_SETTINGS_WINDOW_EXTRA
     )
 {

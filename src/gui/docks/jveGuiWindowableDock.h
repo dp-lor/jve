@@ -24,8 +24,8 @@ class jveGuiWindowableDock : public jveGuiDock
         virtual ~jveGuiWindowableDock(void);
     public:
         void setView(QWidget *view);
-        void initialShow(void);
-        void finalClose(void);
+        void setUp(void);
+        void upSet(void);
     public:
         QAction * toggleWindowAction(void);
     protected:

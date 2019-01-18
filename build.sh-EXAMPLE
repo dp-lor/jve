@@ -2,6 +2,7 @@
 
 
 BUILD_TYPE=release
+CPP_STD="c++11"
 
 
 clear
@@ -83,6 +84,7 @@ echo "" > ./qmake-projects/jve-cli.pro
 echo "
 
 CONFIG += $BUILD_TYPE
+CONFIG += $CPP_STD
 QMAKE_CXXFLAGS_DEBUG += -Og
 
 TEMPLATE = app
@@ -127,6 +129,7 @@ echo "" > ./qmake-projects/jve.pro
 echo "
 
 CONFIG += $BUILD_TYPE
+CONFIG += $CPP_STD
 QMAKE_CXXFLAGS_DEBUG += -Og
 
 QMAKE_LFLAGS += -lxcb

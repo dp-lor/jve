@@ -84,7 +84,7 @@ jveGuiMenuRecent::jveGuiMenuRecent(QWidget *parent)
     // slot add recent item
     connect(
         &jveProjectSignals,
-        SIGNAL(wantAddProjectUrlToRecentItems(QString)),
+        SIGNAL(wantAddToRecentItems(QString)),
         this,
         SLOT(slotAddRecentItem(QString)),
         Qt::QueuedConnection

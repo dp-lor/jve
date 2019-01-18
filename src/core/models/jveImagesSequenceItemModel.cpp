@@ -1,17 +1,17 @@
 
 
-#include "jveProjectSourcesImagesSequenceItem.h"
+#include "jveImagesSequenceItemModel.h"
 
 
-jveProjectSourcesImagesSequenceItem::jveProjectSourcesImagesSequenceItem(
-    jveApplication *app,
-    QDomElement     domNode
+jveImagesSequenceItemModel::jveImagesSequenceItemModel(
+    jveProject  *project,
+    QDomElement  domElement
 ) : jveMultipleResourcesItemModel(
-        app,
-        domNode,
+        project,
+        domElement,
         jveSourcesItemType::ImagesSequence
     ),
-        mp_sequenceDomElement(domNode.childNodes().at(0).toElement()),
+        mp_sequenceDomElement(domElement.childNodes().at(0).toElement()),
         mp_sequencePath(mp_sequenceDomElement.attribute("path"))
 {
     QDomNodeList sequenceDomNodes = mp_sequenceDomElement.childNodes();
@@ -26,7 +26,7 @@ jveProjectSourcesImagesSequenceItem::jveProjectSourcesImagesSequenceItem(
     initByResources(mp_sequencePath, mp_sequenceItemsList);
 }
 
-jveProjectSourcesImagesSequenceItem::~jveProjectSourcesImagesSequenceItem(void)
+jveImagesSequenceItemModel::~jveImagesSequenceItemModel(void)
 {
 }
 

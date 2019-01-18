@@ -1,21 +1,21 @@
 
 
-#ifndef JVEPROJECTSTATE_H
-#define JVEPROJECTSTATE_H
+#ifndef JVESTATEMODEL_H
+#define JVESTATEMODEL_H
 
 
 #include "jveBaseModel.h"
 
 
-class jveProjectState : public jveBaseModel
+class jveProject;
+
+
+class jveStateModel : public jveBaseModel
 {
     Q_OBJECT
     public:
-        explicit jveProjectState(
-            jveApplication *app,
-            QDomElement     domNode
-        );
-        virtual ~jveProjectState(void);
+        explicit  jveStateModel(jveProject *project, QDomElement domElement);
+        virtual  ~jveStateModel(void);
     public:
         void setUp(void);
         void upSet(void);
@@ -35,11 +35,12 @@ class jveProjectState : public jveBaseModel
         void slotSetVideoMonitorQuality(const int quality);
     private:
         // members
-        int mp_playheadPosition;
-        int mp_videoMonitorQuality;
+        jveProject *mp_project;
+        int         mp_playheadPosition;
+        int         mp_videoMonitorQuality;
 };
 
 
-#endif // JVEPROJECTSTATE_H
+#endif // JVESTATEMODEL_H
 
 

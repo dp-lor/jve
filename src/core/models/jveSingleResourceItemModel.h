@@ -12,9 +12,9 @@ class jveSingleResourceItemModel : public jveSourcesItemModel
     Q_OBJECT
     public:
         explicit jveSingleResourceItemModel(
-                  jveApplication *app,
-                  QDomElement     domElement,
-            const int             type
+                  jveProject  *project,
+                  QDomElement  domElement,
+            const int          type
         );
         virtual ~jveSingleResourceItemModel(void);
     protected:

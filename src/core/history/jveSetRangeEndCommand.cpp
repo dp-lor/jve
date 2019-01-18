@@ -3,16 +3,16 @@
 #include "jveSetRangeEndCommand.h"
 #include "jveSetRangeEndCommandInfo.h"
 
-#include "../models/jveProjectSettings.h"
+#include "../models/jveSettingsModel.h"
 
 
 jveSetRangeEndCommand::jveSetRangeEndCommand(
-          jveProjectSettings *settings,
-    const int                 oldRangeEnd,
-    const int                 newRangeEnd,
-          jveUndoCommand     *parent
+          jveSettingsModel *settingsModel,
+    const int               oldRangeEnd,
+    const int               newRangeEnd,
+          jveUndoCommand   *parent
 ) : jveUndoCommand(jveUndoCommandType::SetRangeEnd, parent),
-        mp_settings(settings),
+        mp_settingsModel(settingsModel),
         mp_oldRangeEnd(oldRangeEnd),
         mp_newRangeEnd(newRangeEnd)
 {
@@ -37,13 +37,13 @@ jveSetRangeEndCommand::newRangeEnd(void) const
 void
 jveSetRangeEndCommand::undo(void)
 {
-    mp_settings->setRangeEnd(mp_oldRangeEnd, mp_lockItself);
+    mp_settingsModel->setRangeEnd(mp_oldRangeEnd, mp_lockItself);
 }
 
 void
 jveSetRangeEndCommand::redo(void)
 {
-    mp_settings->setRangeEnd(mp_newRangeEnd, mp_lockItself);
+    mp_settingsModel->setRangeEnd(mp_newRangeEnd, mp_lockItself);
 }
 
 bool

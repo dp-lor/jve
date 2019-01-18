@@ -12,15 +12,10 @@
 
 jveApplicationThread::jveApplicationThread(void)
     : QThread(Q_NULLPTR),
-        mp_app(),
-        mp_history()
+        mp_app()
 {
-    // set shared objects
-    mp_app.setHistory(&mp_history);
-
-    // move objects to thread
-    mp_app     .moveToThread(this);
-    mp_history .moveToThread(this);
+    // move application to thread
+    mp_app.moveToThread(this);
 
     // connect for self started
     connect(

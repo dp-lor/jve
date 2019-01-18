@@ -8,7 +8,6 @@
 
 
 #include "jveApplication.h"
-#include "../history/jveHistory.h"
 
 
 class jveApplicationThread : public QThread
@@ -24,7 +23,6 @@ class jveApplicationThread : public QThread
     private:
         // members
         jveApplication mp_app;
-        jveHistory     mp_history;
 };
 
 

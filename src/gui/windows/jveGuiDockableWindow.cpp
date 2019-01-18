@@ -3,32 +3,32 @@
 #include "jveGuiDockableWindow.h"
 
 
-#include <QHideEvent>
 #include <QCloseEvent>
-#include <QAction>
-#include <QByteArray>
 #include <QDataStream>
 
 
 #include "../definitions/jveGuiAppearanceDefines.h"
-
-
 #include "../../core/application/jveSettings.h"
 
 
 jveGuiDockableWindow::jveGuiDockableWindow(
           QWidget *parent,
+    const QString &visibleSettingsKey,
     const QString &geometrySettingsKey,
-    const QString &stateSettingsKey,
     const QString &extraSettingsKey
 ) : QWidget(parent, Qt::Window),
-        // flags
-        mp_forcedClosing(false),
-        mp_isVisibleFromSettings(false),
+        // forced close flag
+        mp_closeForced(false),
         // settings keys
+        mp_visibleSettingsKey (visibleSettingsKey),
         mp_geometrySettingsKey(geometrySettingsKey),
-        mp_stateSettingsKey   (stateSettingsKey),
         mp_extraSettingsKey   (extraSettingsKey),
+        // settings
+        mp_visible(false),
+        mp_geometry(),
+        mp_state(Qt::WindowNoState),
+        // toggle action
+        mp_toggleAction(new jveGuiAction(this)),
         // layout
         mp_layout(this)
 {
@@ -43,16 +43,14 @@ jveGuiDockableWindow::jveGuiDockableWindow(
     );
 
     // toggle action
-    mp_toggleAction = new QAction(this);
-    mp_toggleAction->setAutoRepeat(false);
     mp_toggleAction->setCheckable(true);
 
     // layout
     mp_layout.setMargin(0);
     mp_layout.setSpacing(0);
 
-    // initial restore settings
-    restoreSettings();
+    // initial read all settings
+    readAllSettings();
 }
 
 jveGuiDockableWindow::~jveGuiDockableWindow(void)
@@ -60,30 +58,21 @@ jveGuiDockableWindow::~jveGuiDockableWindow(void)
 }
 
 void
-jveGuiDockableWindow::showEvent(QShowEvent *event)
-{
-    restoreSettings();
-    QWidget::showEvent(event);
-}
-
-void
-jveGuiDockableWindow::hideEvent(QHideEvent *event)
-{
-    QWidget::hideEvent(event);
-    if (!mp_forcedClosing) {
-        saveSettings();
-    }
-}
-
-void
 jveGuiDockableWindow::closeEvent(QCloseEvent *event)
 {
-    if (mp_forcedClosing) {
+    if (mp_closeForced) {
+
+        if (mp_visible) {
+            updateSettingsForHide(true);
+            saveAllSettings();
+        }
+
         QWidget::closeEvent(event);
+
     } else {
         event->ignore();
         mp_toggleAction->setChecked(false);
-        setVisible(false);
+        hide();
         emit closedWithoutToggler();
     }
 }
@@ -95,24 +84,44 @@ jveGuiDockableWindow::toggleAction(void)
 }
 
 bool
-jveGuiDockableWindow::isVisibleFromSettings(void) const
+jveGuiDockableWindow::isVisibleBySettings(void) const
 {
-    return mp_isVisibleFromSettings;
+    return mp_visible;
 }
 
 void
-jveGuiDockableWindow::fixVisibilityState(const bool isDockVisible)
+jveGuiDockableWindow::fixVisibleBySettings(const bool isDockVisible)
 {
-    if (isDockVisible && mp_isVisibleFromSettings) {
-        mp_isVisibleFromSettings = false;
+    if (isDockVisible && mp_visible) {
+        mp_visible = false;
     }
-    mp_toggleAction->setChecked(mp_isVisibleFromSettings);
+    mp_toggleAction->setChecked(mp_visible);
 }
 
 void
-jveGuiDockableWindow::setForcedClosing(const bool state)
+jveGuiDockableWindow::setForcedClosing(const bool forced)
 {
-    mp_forcedClosing = state;
+    mp_closeForced = forced;
+}
+
+void
+jveGuiDockableWindow::show(void)
+{
+    updateSettingsForShow();
+
+    QWidget::show();
+
+    restoreVisibleState();
+    saveAllSettings();
+}
+
+void
+jveGuiDockableWindow::hide(void)
+{
+    updateSettingsForHide();
+    saveAllSettings();
+
+    QWidget::hide();
 }
 
 void
@@ -128,92 +137,108 @@ jveGuiDockableWindow::detachView(QWidget *view)
 }
 
 void
-jveGuiDockableWindow::restoreSettings(void)
+jveGuiDockableWindow::readAllSettings(void)
 {
     jveSettings.lock();
 
+    // visible
+    if (jveSettings.contains(mp_visibleSettingsKey)) {
+        mp_visible = jveSettings.value(mp_visibleSettingsKey).toBool();
+    }
+
+    // geometry
     if (jveSettings.contains(mp_geometrySettingsKey)) {
-        restoreGeometry(
-            jveSettings.value(mp_geometrySettingsKey).toByteArray()
-        );
+        mp_geometry = jveSettings.value(mp_geometrySettingsKey).toByteArray();
     }
-    if (jveSettings.contains(mp_stateSettingsKey)) {
-        restoreState(jveSettings.value(mp_stateSettingsKey).toByteArray());
-    }
+
+    // extra
     if (jveSettings.contains(mp_extraSettingsKey)) {
-        restoreExtra(jveSettings.value(mp_extraSettingsKey).toByteArray());
+        QByteArray  data = jveSettings.value(mp_extraSettingsKey).toByteArray();
+        QDataStream stream(&data, QIODevice::ReadOnly);
+
+        // state
+        stream >> ( quint32 & ) mp_state;
+
+        // TODO read screen number, viewport, workspace
+
+        // fallback
+        if (QDataStream::Ok != stream.status()) {
+            // state
+            mp_state = Qt::WindowNoState;
+
+            // TODO set screen number, viewport, workspace from main window
+
+        }
     }
 
     jveSettings.unlock();
 }
 
 void
-jveGuiDockableWindow::saveSettings(void)
+jveGuiDockableWindow::restoreVisibleState(void)
 {
     jveSettings.lock();
 
     // geometry
-    jveSettings.setValue(mp_geometrySettingsKey, saveGeometry());
+    restoreGeometry(mp_geometry);
     // state
-    jveSettings.setValue(mp_stateSettingsKey, saveState());
+    setWindowState(mp_state);
 
-    // extra
-    mp_isVisibleFromSettings = isVisible();
+    // TODO restore screen number, viewport, workspace
 
-    jveSettings.setValue(mp_extraSettingsKey, saveExtra());
-
-    jveSettings.sync();
     jveSettings.unlock();
 }
 
 void
-jveGuiDockableWindow::restoreState(const QByteArray &state)
+jveGuiDockableWindow::updateSettingsForShow(void)
 {
-    QByteArray       readingState = state;
-    QDataStream      stream(&readingState, QIODevice::ReadOnly);
-    Qt::WindowStates stateValue;
+    mp_visible = true;
 
-    stream >> ( quint32 & ) stateValue;
-    setWindowState(
-        QDataStream::Ok == stream.status()
-            ? stateValue
-            : Qt::WindowNoState
-    );
-}
-
-QByteArray
-jveGuiDockableWindow::saveState(void) const
-{
-    QByteArray  state;
-    QDataStream stream(&state, QIODevice::WriteOnly);
-
-    stream << (windowState() & ~Qt::WindowMinimized);
-
-    return state;
+    // TODO validate and fix screen number, viewport, workspace
 }
 
 void
-jveGuiDockableWindow::restoreExtra(const QByteArray &data)
+jveGuiDockableWindow::updateSettingsForHide(const bool forcedClosing)
 {
-    QByteArray  readingData = data;
-    QDataStream stream(&readingData, QIODevice::ReadOnly);
-
-    stream >> mp_isVisibleFromSettings;
-
-    if (QDataStream::Ok != stream.status()) {
-        mp_isVisibleFromSettings = false;
+    if (!forcedClosing) {
+        mp_visible  = false;
     }
+
+    mp_geometry = saveGeometry();
+    mp_state    = (windowState() & ~Qt::WindowMinimized);
+
+    // TODO set actual screen number, viewport, workspace
 }
 
-QByteArray
-jveGuiDockableWindow::saveExtra(void) const
+void
+jveGuiDockableWindow::saveAllSettings(void)
 {
+    jveSettings.lock();
+
+    // visible
+    jveSettings.setValue(
+        mp_visibleSettingsKey,
+        mp_visible
+    );
+    // geometry
+    jveSettings.setValue(
+        mp_geometrySettingsKey,
+        mp_geometry
+    );
+
+    // extra
     QByteArray  data;
     QDataStream stream(&data, QIODevice::WriteOnly);
 
-    stream << mp_isVisibleFromSettings;
+    // state
+    stream << mp_state;
 
-    return data;
+    // TODO (extra) save screen number, viewport, workspace
+
+    jveSettings.setValue(mp_extraSettingsKey, data);
+
+    jveSettings.sync();
+    jveSettings.unlock();
 }
 
 
