@@ -4,28 +4,32 @@
 #include <QCoreApplication>
 
 
-#include "../core/definitions/jveDefines.h"
-#include "../core/definitions/jveLocalizationDefines.h"
-#include "../core/definitions/jveOption.h"
+#include "../core/definitions/JveDefines.h"
+#include "../core/definitions/JveLocalizationDefines.h"
+#include "../core/definitions/JveOption.h"
 
-#include "../core/localization/jveLocalization.h"
+#include "../core/localization/JveLocalization.h"
+#include "../core/structures/JveSourcesItemStruct.h"
 
-#include "../core/utils/jveOptionsParser.h"
-#include "../core/utils/jveXmlValidator.h"
-#include "../core/application/jveReport.h"
-#include "../core/signals/jveGlobalSignals.h"
+#include "../core/utils/JveOptionsParser.h"
+#include "../core/utils/JveXmlValidator.h"
+#include "../core/application/JveReport.h"
+#include "../core/signals/JveGlobalSignals.h"
 
-#include "../core/application/jveApplicationThread.h"
-#include "jveCli.h"
+#include "../core/application/JveApplicationThread.h"
+#include "JveCli.h"
 
 
 int
 main(int argc, char *argv[])
 {
     // report metatype
-    qRegisterMetaType<jveReport>("jveReport");
+    qRegisterMetaType
+        <JveReport>("JveReport");
+    qRegisterMetaType
+        <JveSourcesItemStruct>("JveSourcesItemStruct");
 
-    // jve identificators
+    // Jve identificators
     QCoreApplication::setOrganizationName  (JVE_ORG_NAME);
     QCoreApplication::setOrganizationDomain(JVE_ORG_DOMAIN);
     QCoreApplication::setApplicationName   (JVE_VERSION_STRING);
@@ -35,30 +39,30 @@ main(int argc, char *argv[])
     QCoreApplication qtApp(argc, argv);
 
     // init localization
-    jveLocalization.initForCli();
+    JveLocalization.initForCli();
 
     // init command line interface
-    jveCli mainCli;
+    JveCli mainCli;
     // init main application thread
-    jveApplicationThread appThread;
+    JveApplicationThread appThread;
 
     try {
 
         // parse and store options (can be throw report inside)
-        jveOptionsParser.parse(
+        JveOptionsParser.parse(
             qtApp.arguments(),
-            jveOption::NonGui | jveOption::Quit
+            JveOption::NonGui | JveOption::Quit
         );
         // init required xml validator resources (can be throw inside)
-        jveXmlValidator.init();
+        JveXmlValidator.init();
 
         // run application event loop
         appThread.runApplication();
 
-    } catch (const jveReport report) {
+    } catch (const JveReport report) {
         // report here only when user interface is not populated
-        emit jveGlobalSignals.wantShowReport(report);
-        emit jveGlobalSignals.wantAcceptQuit();
+        emit JveGlobalSignals.wantShowReport(report);
+        emit JveGlobalSignals.wantAcceptQuit();
     }
 
     //run main event loop

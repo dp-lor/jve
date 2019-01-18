@@ -6,23 +6,21 @@
 #include <QIcon>
 
 
-#include "../core/definitions/jveDefines.h"
-#include "definitions/jveGuiMediaDefines.h"
-#include "../core/definitions/jveLocalizationDefines.h"
-#include "../core/definitions/jveOption.h"
+#include "../core/definitions/JveDefines.h"
+#include "../core/definitions/JveLocalizationDefines.h"
+#include "../core/definitions/JveOption.h"
+#include "definitions/JveGuiMediaDefines.h"
 
-#include "../core/localization/jveLocalization.h"
+#include "../core/localization/JveLocalization.h"
+#include "../core/structures/JveSourcesItemStruct.h"
 
-#include "../core/structures/jveSourcesItemStruct.h"
+#include "../core/utils/JveOptionsParser.h"
+#include "../core/utils/JveXmlValidator.h"
+#include "../core/application/JveReport.h"
+#include "../core/signals/JveGlobalSignals.h"
 
-#include "../core/utils/jveOptionsParser.h"
-#include "../core/utils/jveXmlValidator.h"
-#include "../core/application/jveReport.h"
-
-#include "../core/signals/jveGlobalSignals.h"
-
-#include "../core/application/jveApplicationThread.h"
-#include "windows/jveGuiWindowManager.h"
+#include "../core/application/JveApplicationThread.h"
+#include "windows/JveGuiWindowManager.h"
 
 
 int
@@ -30,11 +28,11 @@ main(int argc, char *argv[])
 {
     // metatypes
     qRegisterMetaType
-        <jveReport>("jveReport");
+        <JveReport>("JveReport");
     qRegisterMetaType
-        <jveSourcesItemStruct>("jveSourcesItemStruct");
+        <JveSourcesItemStruct>("JveSourcesItemStruct");
 
-    // jve identificators
+    // Jve identificators
     QApplication::setOrganizationName  (JVE_ORG_NAME);
     QApplication::setOrganizationDomain(JVE_ORG_DOMAIN);
     QApplication::setApplicationName   (JVE_VERSION_STRING);
@@ -52,29 +50,29 @@ main(int argc, char *argv[])
     QApplication::setWindowIcon(QIcon(JVE_GUI_ICON_JVE));
 
     // init localization
-    jveLocalization.initForGui();
+    JveLocalization.initForGui();
 
     // init user interface
-    jveGuiWindowManager windowManager;
+    JveGuiWindowManager windowManager;
     // init main application thread
-    jveApplicationThread appThread;
+    JveApplicationThread appThread;
 
     try {
 
         // parse and store options (can be throw report inside)
-        jveOptionsParser.parse(qtApp.arguments(), jveOption::None);
+        JveOptionsParser.parse(qtApp.arguments(), JveOption::None);
         // init required xml validator resources (can be throw report inside)
-        jveXmlValidator.init();
+        JveXmlValidator.init();
 
         // populate user interface
         windowManager.populateGui();
-        jveLocalization.emitLocaleChangedSignal();
+        JveLocalization.emitLocaleChangedSignal();
         // run application event loop
         appThread.runApplication();
 
-    } catch (const jveReport report) {
+    } catch (const JveReport report) {
         // report here only when user interface is not populated
-        emit jveGlobalSignals.wantShowReport(report);
+        emit JveGlobalSignals.wantShowReport(report);
     }
 
     //run main event loop
@@ -84,7 +82,7 @@ main(int argc, char *argv[])
     windowManager.depopulateGui();
 
     // save settings
-    jveLocalization.saveSettings();
+    JveLocalization.saveSettings();
 
     // shutdown
     appThread.quit();

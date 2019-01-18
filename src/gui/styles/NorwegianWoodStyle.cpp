@@ -3,7 +3,7 @@
 #include "NorwegianWoodStyle.h"
 
 NorwegianWoodStyle::NorwegianWoodStyle() :
-    QProxyStyle(Q_NULLPTR)
+    QProxyStyle(nullptr)
 {
 }
 
