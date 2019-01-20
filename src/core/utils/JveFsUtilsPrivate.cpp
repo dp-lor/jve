@@ -5,6 +5,7 @@
 
 #include "../definitions/JveFsCheckOption.h"
 #include "../definitions/JveFsCheckStatus.h"
+#include "../definitions/JveFsFileFormat.h"
 
 
 JveFsUtilsPrivate JveFsUtils;
@@ -14,7 +15,8 @@ JveFsUtilsPrivate::JveFsUtilsPrivate(void)
     : mp_simpleDir(),
         mp_simpleInfo(),
         mp_targetInfo(),
-        mp_parentInfo()
+        mp_parentInfo(),
+        mp_mimeDatabase()
 {
     mp_simpleInfo.setCaching(false);
     mp_targetInfo.setCaching(false);
@@ -96,6 +98,31 @@ JveFsUtilsPrivate::checkDirectory(
     mp_targetInfo.setFile(dirPath);
 
     return checkTarget(checkOptions, true);
+}
+
+int
+JveFsUtilsPrivate::fileFormat(const QString &filePath) const
+{
+    QString mimeTypeName = mp_mimeDatabase.mimeTypeForFile(
+        filePath,
+        QMimeDatabase::MatchContent
+    ).name();
+
+    // TODO maybe Qt::CaseSensitive ???
+
+    // image
+    if (0 == mimeTypeName.indexOf("image/", 0, Qt::CaseInsensitive)) {
+        return JveFsFileFormat::Image;
+    // audio
+    } else if (0 == mimeTypeName.indexOf("audio/", 0, Qt::CaseInsensitive)) {
+        return JveFsFileFormat::Audio;
+    // video
+    } else if (0 == mimeTypeName.indexOf("video/", 0, Qt::CaseInsensitive)) {
+        return JveFsFileFormat::Video;
+    }
+
+    // unsupported
+    return JveFsFileFormat::Unsupported;
 }
 
 int

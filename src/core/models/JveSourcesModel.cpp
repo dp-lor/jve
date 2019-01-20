@@ -115,7 +115,7 @@ JveSourcesModel::attachSourceItem(JveSourcesItemModel *item)
 void
 JveSourcesModel::slotAddItems(const QStringList &itemsList)
 {
-    QFileInfo info;
+    /*QFileInfo info;
 
     foreach (const QString &itemPath, itemsList) {
 
@@ -133,7 +133,7 @@ JveSourcesModel::slotAddItems(const QStringList &itemsList)
         JveIdProvider.addExternal(itemStruct.id);
 
         emit JveProjectSourcesSignals.itemAdded(itemStruct);
-    }
+    }*/
 }
 
 void

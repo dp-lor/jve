@@ -15,6 +15,14 @@ JveImageItemModel::JveImageItemModel(
         mp_imagePath(mp_imageDomElement.attribute("path"))
 {
     initByResource(mp_imagePath);
+
+    // check for image only format
+    if (
+        JveSourcesItemStatus::Ok == mp_itemStruct.status
+            && JveFsFileFormat::Image != mp_itemStruct.resources.at(0).format
+    ) {
+        mp_itemStruct.status = JveSourcesItemStatus::ResourceNotImage;
+    }
 }
 
 JveImageItemModel::~JveImageItemModel(void)

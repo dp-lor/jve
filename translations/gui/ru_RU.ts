@@ -798,33 +798,53 @@
     </message>
     <message>
         <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="203"/>
+        <source>gui_project_sources_view_model_item_status_resource_not_image</source>
+        <translation>Источник не является изображением</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="208"/>
+        <source>gui_project_sources_view_model_item_status_resource_not_audio</source>
+        <translation>Источник не является аудио-файлом</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="213"/>
+        <source>gui_project_sources_view_model_item_status_resource_not_video</source>
+        <translation>Источник не является видео-файлом</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="218"/>
         <source>gui_project_sources_view_model_item_status_empty_resources_list</source>
         <translation>Список ресурсов пуст</translation>
     </message>
     <message>
-        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="208"/>
+        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="223"/>
         <source>gui_project_sources_view_model_item_status_several_resources_not_exists</source>
         <translation>Найдены не все ресурсы</translation>
     </message>
     <message>
-        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="213"/>
+        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="228"/>
         <source>gui_project_sources_view_model_item_status_several_resources_not_file</source>
         <translation>Некоторые ресурсы не являются файлом</translation>
     </message>
     <message>
-        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="218"/>
+        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="233"/>
         <source>gui_project_sources_view_model_item_status_several_resources_not_readable</source>
         <translation>Некоторые файлы ресурсов не читаются</translation>
     </message>
     <message>
-        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="223"/>
+        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="238"/>
         <source>gui_project_sources_view_model_item_status_error_read_several_resources</source>
         <translation>Некоторые файлы ресурсов прочитать не удалось</translation>
     </message>
     <message>
-        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="228"/>
+        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="243"/>
         <source>gui_project_sources_view_model_item_status_several_resources_replaced</source>
         <translation>Некоторые файлы ресурсов были заменены</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/views/JveGuiProjectSourcesViewModel.cpp" line="248"/>
+        <source>gui_project_sources_view_model_item_status_several_resources_not_image</source>
+        <translation>Некоторые ресурсы не являются изображением</translation>
     </message>
 </context>
 <context>

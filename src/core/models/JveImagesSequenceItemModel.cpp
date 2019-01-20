@@ -24,6 +24,17 @@ JveImagesSequenceItemModel::JveImagesSequenceItemModel(
     }
 
     initByResources(mp_sequencePath, mp_sequenceItemsList);
+
+    // check for images only format
+    if (JveSourcesItemStatus::Ok == mp_itemStruct.status) {
+        foreach (JveSourceResourceStruct resource, mp_itemStruct.resources) {
+            if (JveFsFileFormat::Image != resource.format) {
+                mp_itemStruct.status
+                    = JveSourcesItemStatus::SeveralResourcesNotImage;
+                break;
+            }
+        }
+    }
 }
 
 JveImagesSequenceItemModel::~JveImagesSequenceItemModel(void)

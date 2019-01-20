@@ -52,8 +52,6 @@ JveSingleResourceItemModel::initByResource(const QString &resourcePath)
             JveFsCheckOption::IsExists | JveFsCheckOption::IsReadable
         )
     );
-    // append resource struct to resources list
-    mp_itemStruct.resources.append(resourceStruct);
 
     // item status by resource status
     switch (resourceStruct.status) {
@@ -71,8 +69,13 @@ JveSingleResourceItemModel::initByResource(const QString &resourcePath)
         break;
     }
 
-    // validate checksum
     if (JveSourcesItemStatus::Ok == mp_itemStruct.status) {
+
+        // detect format
+        resourceStruct.format
+            = JveFsUtils.fileFormat(resourceStruct.absolutePath);
+
+        // validate checksum
         QFile checkSumFile(resourceStruct.absolutePath);
         if (checkSumFile.open(QFile::ReadOnly)) {
             QCryptographicHash checkSumHash(QCryptographicHash::Md5);
@@ -84,7 +87,11 @@ JveSingleResourceItemModel::initByResource(const QString &resourcePath)
         } else {
             mp_itemStruct.status = JveSourcesItemStatus::ErrorReadResource;
         }
+
     }
+
+    // append resource struct to resources list
+    mp_itemStruct.resources.append(resourceStruct);
 }
 
 

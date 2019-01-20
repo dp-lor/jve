@@ -8,8 +8,8 @@
 
 
 #include <QHash>
-#include <QString>
 #include <QStringList>
+#include <QString>
 
 
 class JveProject;

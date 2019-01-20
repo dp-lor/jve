@@ -15,6 +15,14 @@ JveVideoItemModel::JveVideoItemModel(
         mp_videoPath(mp_videoDomElement.attribute("path"))
 {
     initByResource(mp_videoPath);
+
+    // check for video only format
+    if (
+        JveSourcesItemStatus::Ok == mp_itemStruct.status
+            && JveFsFileFormat::Video != mp_itemStruct.resources.at(0).format
+    ) {
+        mp_itemStruct.status = JveSourcesItemStatus::ResourceNotVideo;
+    }
 }
 
 JveVideoItemModel::~JveVideoItemModel(void)

@@ -197,6 +197,21 @@ JveGuiProjectSourcesViewModel::updateTranslations(void)
         JveSourcesItemStatus::ResourceReplaced,
         tr("gui_project_sources_view_model_item_status_resource_replaced")
     );
+    // resource is not image
+    mp_itemToolTipStatuses.replace(
+        JveSourcesItemStatus::ResourceNotImage,
+        tr("gui_project_sources_view_model_item_status_resource_not_image")
+    );
+    // resource is not audio
+    mp_itemToolTipStatuses.replace(
+        JveSourcesItemStatus::ResourceNotAudio,
+        tr("gui_project_sources_view_model_item_status_resource_not_audio")
+    );
+    // resource is not video
+    mp_itemToolTipStatuses.replace(
+        JveSourcesItemStatus::ResourceNotVideo,
+        tr("gui_project_sources_view_model_item_status_resource_not_video")
+    );
     // empty resources list
     mp_itemToolTipStatuses.replace(
         JveSourcesItemStatus::EmptyResourcesList,
@@ -226,6 +241,11 @@ JveGuiProjectSourcesViewModel::updateTranslations(void)
     mp_itemToolTipStatuses.replace(
         JveSourcesItemStatus::SeveralResourcesReplaced,
         tr("gui_project_sources_view_model_item_status_several_resources_replaced")
+    );
+    // several resources is not image
+    mp_itemToolTipStatuses.replace(
+        JveSourcesItemStatus::SeveralResourcesNotImage,
+        tr("gui_project_sources_view_model_item_status_several_resources_not_image")
     );
 }
 

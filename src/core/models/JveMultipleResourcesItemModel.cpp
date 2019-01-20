@@ -56,7 +56,7 @@ JveMultipleResourcesItemModel::initByResources(
         return;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
+    /**********************************************************/
 
     // one resource
     if (1 == resourcesList.size()) {
@@ -72,7 +72,7 @@ JveMultipleResourcesItemModel::initByResources(
         mp_itemStruct.displayName += ")";
     }
 
-    ////////////////////////////////////////////////////////////////////////////
+    /**********************************************************/
 
     QString            absoluteResourcePath;
     QString            resourceName;
@@ -95,8 +95,6 @@ JveMultipleResourcesItemModel::initByResources(
                 JveFsCheckOption::IsExists | JveFsCheckOption::IsReadable
             )
         );
-        // append resource struct to resources list
-        mp_itemStruct.resources.append(resourceStruct);
 
         // append names for search
         resourceName = JveFsUtils.baseName(resourceStruct.absolutePath);
@@ -126,11 +124,16 @@ JveMultipleResourcesItemModel::initByResources(
             }
         }
 
-        // add resource file data to checksum
         if (
             JveSourcesItemStatus::Ok == mp_itemStruct.status
                 && JveFsCheckStatus::Ok == resourceStruct.status
         ) {
+
+            // detect format
+            resourceStruct.format
+                = JveFsUtils.fileFormat(resourceStruct.absolutePath);
+
+            // add resource file data to checksum
             checkSumFile.close();
             checkSumFile.setFileName(resourceStruct.absolutePath);
             if (checkSumFile.open(QFile::ReadOnly)) {
@@ -140,7 +143,11 @@ JveMultipleResourcesItemModel::initByResources(
                 mp_itemStruct.status
                     = JveSourcesItemStatus::ErrorReadSeveralResources;
             }
+
         }
+
+        // append resource struct to resources list
+        mp_itemStruct.resources.append(resourceStruct);
     }
 
     // when several resources not ok
@@ -148,7 +155,7 @@ JveMultipleResourcesItemModel::initByResources(
         return;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
+    /**********************************************************/
 
     // validate checksum
     if (mp_itemStruct.checkSum != checkSumHash.result().toHex()) {

@@ -14,12 +14,16 @@ class JveSourcesItemStatus
             ResourceNotReadable,
             ErrorReadResource,
             ResourceReplaced,
+            ResourceNotImage,
+            ResourceNotAudio,
+            ResourceNotVideo,
             EmptyResourcesList,
             SeveralResourcesNotExists,
             SeveralResourcesNotFile,
             SeveralResourcesNotReadable,
             ErrorReadSeveralResources,
             SeveralResourcesReplaced,
+            SeveralResourcesNotImage,
             Reserved
         };
 };
