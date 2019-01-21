@@ -4,8 +4,9 @@
 
 
 JveAudioItemModel::JveAudioItemModel(
-    JveProject  *project,
-    QDomElement  domElement
+          JveProject  *project,
+          QDomElement  domElement,
+    const int          options
 ) : JveSingleResourceItemModel(
         project,
         domElement,
@@ -14,7 +15,7 @@ JveAudioItemModel::JveAudioItemModel(
         mp_audioDomElement(domElement.childNodes().at(0).toElement()),
         mp_audioPath(mp_audioDomElement.attribute("path"))
 {
-    initByResource(mp_audioPath);
+    initByResource(mp_audioPath, options);
 
     // check for audio only format
     if (

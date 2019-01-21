@@ -4,8 +4,9 @@
 
 
 JveVideoItemModel::JveVideoItemModel(
-    JveProject  *project,
-    QDomElement  domElement
+          JveProject  *project,
+          QDomElement  domElement,
+    const int          options
 ) : JveSingleResourceItemModel(
         project,
         domElement,
@@ -14,7 +15,7 @@ JveVideoItemModel::JveVideoItemModel(
         mp_videoDomElement(mp_domElement.childNodes().at(0).toElement()),
         mp_videoPath(mp_videoDomElement.attribute("path"))
 {
-    initByResource(mp_videoPath);
+    initByResource(mp_videoPath, options);
 
     // check for video only format
     if (

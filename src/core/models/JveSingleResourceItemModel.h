@@ -7,6 +7,9 @@
 #include "JveSourcesItemModel.h"
 
 
+#include "../definitions/JveSourcesItemOption.h"
+
+
 class JveSingleResourceItemModel : public JveSourcesItemModel
 {
     Q_OBJECT
@@ -25,7 +28,7 @@ class JveSingleResourceItemModel : public JveSourcesItemModel
             const QString      &resourcePath
         );
     protected:
-        void initByResource(const QString &resourcePath);
+        void initByResource(const QString &resourcePath, const int options);
 };
 
 

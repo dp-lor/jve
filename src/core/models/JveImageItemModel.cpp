@@ -4,8 +4,9 @@
 
 
 JveImageItemModel::JveImageItemModel(
-    JveProject  *project,
-    QDomElement  domElement
+          JveProject  *project,
+          QDomElement  domElement,
+    const int          options
 ) : JveSingleResourceItemModel(
         project,
         domElement,
@@ -14,7 +15,7 @@ JveImageItemModel::JveImageItemModel(
         mp_imageDomElement(domElement.childNodes().at(0).toElement()),
         mp_imagePath(mp_imageDomElement.attribute("path"))
 {
-    initByResource(mp_imagePath);
+    initByResource(mp_imagePath, options);
 
     // check for image only format
     if (

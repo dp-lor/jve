@@ -67,7 +67,10 @@ JveSingleResourceItemModel::createItemDom(
 }
 
 void
-JveSingleResourceItemModel::initByResource(const QString &resourcePath)
+JveSingleResourceItemModel::initByResource(
+    const QString &resourcePath,
+    const int      options
+)
 {
     // absolute path
     mp_itemStruct.absolutePath = JveFsUtils.absolutePathOverDirectory(
@@ -115,17 +118,19 @@ JveSingleResourceItemModel::initByResource(const QString &resourcePath)
         resourceStruct.format
             = JveFsUtils.fileFormat(resourceStruct.absolutePath);
 
-        // validate checksum
-        QFile checkSumFile(resourceStruct.absolutePath);
-        if (checkSumFile.open(QFile::ReadOnly)) {
-            QCryptographicHash checkSumHash(QCryptographicHash::Md5);
-            checkSumHash.addData(&checkSumFile);
-            if (mp_itemStruct.checkSum != checkSumHash.result().toHex()) {
-                mp_itemStruct.status = JveSourcesItemStatus::ResourceReplaced;
+        if (options & JveSourcesItemOption::ValidateCheckSum) {
+            // validate checksum
+            QFile checkSumFile(resourceStruct.absolutePath);
+            if (checkSumFile.open(QFile::ReadOnly)) {
+                QCryptographicHash checkSumHash(QCryptographicHash::Md5);
+                checkSumHash.addData(&checkSumFile);
+                if (mp_itemStruct.checkSum != checkSumHash.result().toHex()) {
+                    mp_itemStruct.status = JveSourcesItemStatus::ResourceReplaced;
+                }
+                checkSumFile.close();
+            } else {
+                mp_itemStruct.status = JveSourcesItemStatus::ErrorReadResource;
             }
-            checkSumFile.close();
-        } else {
-            mp_itemStruct.status = JveSourcesItemStatus::ErrorReadResource;
         }
 
     }

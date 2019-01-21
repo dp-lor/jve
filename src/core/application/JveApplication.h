@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QStringList>
 
 
 #include "JveProject.h"
@@ -47,6 +48,8 @@ class JveApplication : public QObject
             const QString &loadingFilePath,
             const QString &savingFilePath
         );
+    private:
+        void addSourcesItems(const QStringList &resourcesList);
     private slots:
         void watchUiChangeEventType(const int eventType);
         void slotExit(void);
@@ -63,6 +66,8 @@ class JveApplication : public QObject
                 const QString &loadingFilePath,
                 const QString &savingFilePath
         );
+    private slots:
+        void slotAddSourcesItems(const QStringList &resourcesList);
     private:
         // members
         int        mp_state;

@@ -17,6 +17,9 @@
 
 #include "../signals/JveGlobalSignals.h"
 #include "../signals/JveProjectSignals.h"
+#include "../signals/JveProjectSourcesSignals.h"
+
+#include "../models/JveSourcesModel.h"
 
 
 JveApplication::JveApplication(void)
@@ -91,6 +94,15 @@ JveApplication::JveApplication(void)
         SIGNAL(wantRouteOptions(int, QString, QString)),
         this,
         SLOT(slotRouteOptions(int, QString, QString)),
+        Qt::QueuedConnection
+    );
+
+    // slot add sources items
+    connect(
+        &JveProjectSourcesSignals,
+        SIGNAL(wantAddItems(QStringList)),
+        this,
+        SLOT(slotAddSourcesItems(QStringList)),
         Qt::QueuedConnection
     );
 }
@@ -428,6 +440,14 @@ JveApplication::routeOptions(
 }
 
 void
+JveApplication::addSourcesItems(const QStringList &resourcesList)
+{
+    emit JveGlobalSignals.stateChanged(mp_state | JveState::Busy);
+    mp_project.sourcesModel()->addItems(resourcesList);
+    emit JveGlobalSignals.stateChanged(mp_state);
+}
+
+void
 JveApplication::watchUiChangeEventType(const int eventType)
 {
     JveProjectMutex.lock();
@@ -560,6 +580,18 @@ JveApplication::slotRouteOptions(
         loadingFilePath,
         savingFilePath
     );
+
+    JveProjectMutex.unlock();
+}
+
+void
+JveApplication::slotAddSourcesItems(const QStringList &resourcesList)
+{
+    JveProjectMutex.lock();
+
+    if (isProjectOpened()) {
+        addSourcesItems(resourcesList);
+    }
 
     JveProjectMutex.unlock();
 }

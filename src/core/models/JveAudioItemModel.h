@@ -12,8 +12,9 @@ class JveAudioItemModel : public JveSingleResourceItemModel
     Q_OBJECT
     public:
         explicit JveAudioItemModel(
-            JveProject  *project,
-            QDomElement  domElement
+                  JveProject  *project,
+                  QDomElement  domElement,
+            const int          options
         );
         virtual ~JveAudioItemModel(void);
     private:

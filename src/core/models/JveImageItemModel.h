@@ -12,8 +12,9 @@ class JveImageItemModel : public JveSingleResourceItemModel
     Q_OBJECT
     public:
         explicit JveImageItemModel(
-            JveProject  *project,
-            QDomElement  domElement
+                  JveProject  *project,
+                  QDomElement  domElement,
+            const int          options
         );
         virtual ~JveImageItemModel(void);
     private:

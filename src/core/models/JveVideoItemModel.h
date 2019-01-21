@@ -12,8 +12,9 @@ class JveVideoItemModel : public JveSingleResourceItemModel
     Q_OBJECT
     public:
         explicit JveVideoItemModel(
-            JveProject  *project,
-            QDomElement  domElement
+                  JveProject  *project,
+                  QDomElement  domElement,
+            const int          options
         );
         virtual ~JveVideoItemModel(void);
     private:
