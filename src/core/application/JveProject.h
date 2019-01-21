@@ -25,9 +25,13 @@ class JveProject
         explicit  JveProject(JveApplication *app = nullptr);
         virtual  ~JveProject(void);
     public:
+        bool isMater(void) const;
+    public:
         QString parentDirPath(void) const;
         QString filePath(void) const;
         QString fileName(void) const;
+    public:
+        QDomDocument & domDocument(void);
     public:
         JveHistory * history(void);
     public:

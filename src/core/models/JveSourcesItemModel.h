@@ -31,6 +31,8 @@ class JveSourcesItemModel : public JveBaseModel
         QString id(void) const;
         QString checkSum(void) const;
     public:
+        int status(void) const;
+    public:
         JveSourcesItemStruct itemStructCopy(void);
     public:
         void setId(const QString &id);

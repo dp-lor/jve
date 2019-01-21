@@ -11,6 +11,8 @@
 #include "../definitions/JveFsCheckStatus.h"
 
 #include "../application/JveProject.h"
+
+#include "../utils/JveIdProvider.h"
 #include "../utils/JveFsUtils.h"
 
 
@@ -24,6 +26,44 @@ JveSingleResourceItemModel::JveSingleResourceItemModel(
 
 JveSingleResourceItemModel::~JveSingleResourceItemModel(void)
 {
+}
+
+QDomElement
+JveSingleResourceItemModel::createItemDom(
+          QDomDocument &domDocument,
+    const QString      &resourceTagName,
+    const QString      &projectParentDirPath,
+    const QString      &resourcePath
+)
+{
+    QDomElement itemDomEl     = domDocument.createElement("sourceItem");
+    QDomElement resourceDomEl = domDocument.createElement(resourceTagName);
+
+    QFile              checkSumFile(resourcePath);
+    QCryptographicHash checkSumHash(QCryptographicHash::Md5);
+    QString            checkSum("none");
+
+    // create checksum
+    if (checkSumFile.open(QFile::ReadOnly)) {
+        checkSumHash.addData(&checkSumFile);
+        checkSum = checkSumHash.result().toHex();
+    }
+
+    // set item element attributes
+    itemDomEl.setAttribute("id", JveIdProvider.generate());
+    itemDomEl.setAttribute("checkSum", checkSum);
+    // set resource attribute
+    resourceDomEl.setAttribute(
+        "path",
+        JveFsUtils.relativePathOverDirectory(
+            projectParentDirPath,
+            resourcePath
+        )
+    );
+    // append resource to item
+    itemDomEl.appendChild(resourceDomEl);
+
+    return itemDomEl;
 }
 
 void

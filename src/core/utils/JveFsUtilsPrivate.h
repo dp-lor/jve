@@ -19,8 +19,12 @@ class JveFsUtilsPrivate
         bool isExists(const QString &targetPath);
         QString absolutePath(const QString &targetPath);
         QString absolutePathOverDirectory(
-            const QString &dirPath,
-            const QString &relativePath
+            const QString &absoluteDirPath,
+            const QString &relativeTargetPath
+        );
+        QString relativePathOverDirectory(
+            const QString &absoluteDirPath,
+            const QString &absoluteTargetPath
         );
     public:
         QString name(const QString &targetPath);

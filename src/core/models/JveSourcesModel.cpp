@@ -3,19 +3,19 @@
 #include "JveSourcesModel.h"
 
 
-#include <QFileInfo>
 #include <QDebug>
 
 
-#include "../application/JveProject.h"
 
 #include "JveImageItemModel.h"
 #include "JveImagesSequenceItemModel.h"
 #include "JveAudioItemModel.h"
 #include "JveVideoItemModel.h"
 
+#include "../application/JveProject.h"
 #include "../utils/JveIdProvider.h"
-//#include "../mutexes/JveProjectMutex.h"
+#include "../utils/JveFsUtils.h"
+#include "../mutexes/JveProjectMutex.h"
 
 #include "../signals/JveProjectSourcesSignals.h"
 
@@ -39,21 +39,21 @@ JveSourcesModel::JveSourcesModel(
 
         // image
         if ("image" == itemType) {
-            attachSourceItem(new JveImageItemModel(project, siDomElement));
+            attachSourceItem(new JveImageItemModel(mp_project, siDomElement));
         // images sequence
         } else if ("imagesSequence" == itemType) {
             attachSourceItem(
                 new JveImagesSequenceItemModel(
-                    project,
+                    mp_project,
                     siDomElement
                 )
             );
         // audio
         } else if ("audio" == itemType) {
-            attachSourceItem(new JveAudioItemModel(project, siDomElement));
+            attachSourceItem(new JveAudioItemModel(mp_project, siDomElement));
         // video
         } else if ("video" == itemType) {
-            attachSourceItem(new JveVideoItemModel(project, siDomElement));
+            attachSourceItem(new JveVideoItemModel(mp_project, siDomElement));
         }
 
     }
@@ -87,7 +87,7 @@ JveSourcesModel::setUp(void)
     for (int i = 0; i < mp_children.size(); i++) {
         mp_children.at(i)->setUp();
     }
-    // send signals about all exists sources items
+    // send signals about sources items
     foreach (JveSourcesItemModel *item, mp_items) {
         emit JveProjectSourcesSignals.itemAdded(item->itemStructCopy());
     }
@@ -112,28 +112,84 @@ JveSourcesModel::attachSourceItem(JveSourcesItemModel *item)
     attachChild(item);
 }
 
-void
-JveSourcesModel::slotAddItems(const QStringList &itemsList)
+QDomElement
+JveSourcesModel::createSingleResourceItemDom(
+    const QString &resourceTagName,
+    const QString &resourcePath
+)
 {
-    /*QFileInfo info;
+    return JveSingleResourceItemModel::createItemDom(
+        mp_project->domDocument(),
+        resourceTagName,
+        mp_project->parentDirPath(),
+        resourcePath
+    );
+}
 
-    foreach (const QString &itemPath, itemsList) {
+void
+JveSourcesModel::slotAddItems(const QStringList &resourcesList)
+{
+    foreach (const QString &resourcePath, resourcesList) {
+        switch (JveFsUtils.fileFormat(resourcePath)) {
+            // image
+            case JveFsFileFormat::Image:
+                {
+                    JveImageItemModel *item = new JveImageItemModel(
+                        mp_project,
+                        createSingleResourceItemDom("image", resourcePath)
+                    );
 
-        JveSourcesItemStruct itemStruct;
+                    JveIdProvider.addExternal(item->id());
+                    mp_items.insert(item->id(), item);
 
-        info.setFile(itemPath);
+                    appendChild(item);
+                    item->setUp();
 
-        itemStruct.type           = 0;
-        itemStruct.status         = 0;
-        itemStruct.id             = JveIdProvider.generate();
-        itemStruct.absolutePath   = info.filePath();
-        itemStruct.displayName    = info.fileName();
-        itemStruct.searchHaystack = info.baseName();
+                    emit JveProjectSourcesSignals
+                            .itemAdded(item->itemStructCopy());
+                }
+            break;
+            // audio
+            case JveFsFileFormat::Audio:
+                {
+                    JveAudioItemModel *item = new JveAudioItemModel(
+                        mp_project,
+                        createSingleResourceItemDom("audio", resourcePath)
+                    );
 
-        JveIdProvider.addExternal(itemStruct.id);
+                    JveIdProvider.addExternal(item->id());
+                    mp_items.insert(item->id(), item);
 
-        emit JveProjectSourcesSignals.itemAdded(itemStruct);
-    }*/
+                    appendChild(item);
+                    item->setUp();
+
+                    emit JveProjectSourcesSignals
+                            .itemAdded(item->itemStructCopy());
+                }
+            break;
+            // video
+            case JveFsFileFormat::Video:
+                {
+                    JveVideoItemModel *item = new JveVideoItemModel(
+                        mp_project,
+                        createSingleResourceItemDom("video", resourcePath)
+                    );
+
+                    JveIdProvider.addExternal(item->id());
+                    mp_items.insert(item->id(), item);
+
+                    appendChild(item);
+                    item->setUp();
+
+                    emit JveProjectSourcesSignals
+                            .itemAdded(item->itemStructCopy());
+                }
+            break;
+            // unsupported
+            default:
+                continue;
+        }
+    }
 }
 
 void

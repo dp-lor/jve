@@ -17,6 +17,13 @@ class JveSingleResourceItemModel : public JveSourcesItemModel
             const int          type
         );
         virtual ~JveSingleResourceItemModel(void);
+    public:
+        static QDomElement createItemDom(
+                  QDomDocument &domDocument,
+            const QString      &resourceTagName,
+            const QString      &projectParentDirPath,
+            const QString      &resourcePath
+        );
     protected:
         void initByResource(const QString &resourcePath);
 };

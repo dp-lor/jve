@@ -44,6 +44,12 @@ JveSourcesItemModel::checkSum(void) const
     return mp_itemStruct.checkSum;
 }
 
+int
+JveSourcesItemModel::status(void) const
+{
+    return mp_itemStruct.status;
+}
+
 JveSourcesItemStruct
 JveSourcesItemModel::itemStructCopy(void)
 {

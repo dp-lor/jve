@@ -180,11 +180,6 @@ JveApplication::justCloseProject(void)
         )
     );
 
-    if (!isProjectNew()) {
-        emit JveProjectSignals
-                .wantAddToRecentItems(mp_project.filePath());
-    }
-
     mp_project.close();
     JveIdProvider.clear();
     setProjectClosedState();
@@ -204,7 +199,7 @@ JveApplication::justCloseProject(void)
 void
 JveApplication::closeProject(
     const int      options,
-    const QString &loadingProjectUrl
+    const QString &loadingFilePath
 )
 {
     bool canRouteMore = true;
@@ -219,7 +214,7 @@ JveApplication::closeProject(
             canRouteMore = false;
             emit JveProjectSignals.wantShowModifiedProjectWarning(
                 options,
-                loadingProjectUrl
+                loadingFilePath
             );
         // hidden modified
         } else if (isProjectHiddenModified()) {
@@ -279,7 +274,7 @@ JveApplication::closeProject(
     if (canRouteMore) {
         routeOptions(
             options & ~JveOption::CloseProject,
-            loadingProjectUrl,
+            loadingFilePath,
             nullptr
         );
     }
@@ -319,7 +314,7 @@ JveApplication::loadNewProject(void)
 }
 
 void
-JveApplication::loadProject(const QString &loadingProjectUrl)
+JveApplication::loadProject(const QString &loadingFilePath)
 {
     emit JveGlobalSignals.stateChanged(mp_state | JveState::Busy);
     emit JveGlobalSignals.wantShowReport(
@@ -331,11 +326,13 @@ JveApplication::loadProject(const QString &loadingProjectUrl)
 
     try {
 
-        mp_project.load(loadingProjectUrl);
+        mp_project.load(loadingFilePath);
         setProjectOpenedState();
 
         emit JveProjectSignals
                 .nameChanged(mp_project.fileName());
+        emit JveProjectSignals
+                .wantAddToRecentItems(mp_project.filePath());
 
         emit JveGlobalSignals.wantShowReport(
             JveReport(
@@ -354,14 +351,14 @@ JveApplication::loadProject(const QString &loadingProjectUrl)
 void
 JveApplication::saveProject(
     const int      options,
-    const QString &loadingProjectUrl,
-    const QString &savingProjectUrl
+    const QString &loadingFilePath,
+    const QString &savingFilePath
 )
 {
     bool canRouteMore = true;
 
     // opened and saveable
-    if (isProjectOpened() && nullptr != savingProjectUrl) {
+    if (isProjectOpened() && nullptr != savingFilePath) {
         emit JveGlobalSignals.stateChanged(mp_state | JveState::Busy);
         emit JveGlobalSignals.wantShowReport(
             JveReport(
@@ -372,11 +369,13 @@ JveApplication::saveProject(
 
         try {
 
-            mp_project.save(savingProjectUrl);
-            setNewProjectOpenedState();
+            mp_project.save(savingFilePath);
+            setProjectOpenedState();
 
             emit JveProjectSignals
                     .nameChanged(mp_project.fileName());
+            emit JveProjectSignals
+                    .wantAddToRecentItems(mp_project.filePath());
 
             emit JveGlobalSignals.wantShowReport(
                 JveReport(
@@ -397,7 +396,7 @@ JveApplication::saveProject(
     if (canRouteMore) {
         routeOptions(
             options & ~JveOption::SaveProject,
-            loadingProjectUrl,
+            loadingFilePath,
             nullptr
         );
     }
@@ -406,16 +405,16 @@ JveApplication::saveProject(
 void
 JveApplication::routeOptions(
     const int      options,
-    const QString &loadingProjectUrl,
-    const QString &savingProjectUrl
+    const QString &loadingFilePath,
+    const QString &savingFilePath
 )
 {
     // save project
     if (options & JveOption::SaveProject) {
-        saveProject(options, loadingProjectUrl, savingProjectUrl);
+        saveProject(options, loadingFilePath, savingFilePath);
     // close project
     } else if (options & JveOption::CloseProject) {
-        closeProject(options, loadingProjectUrl);
+        closeProject(options, loadingFilePath);
     // accept quit
     } else if (options & JveOption::Quit) {
         emit JveGlobalSignals.wantAcceptQuit();
@@ -424,7 +423,7 @@ JveApplication::routeOptions(
         loadNewProject();
     // load project
     } else if (options & JveOption::LoadProject) {
-        loadProject(loadingProjectUrl);
+        loadProject(loadingFilePath);
     }
 }
 
@@ -455,7 +454,7 @@ JveApplication::slotExit(void)
     routeOptions(
         JveOption::Quit
             | (
-                mp_state & JveState::ProjectOpened
+                isProjectOpened()
                     ? JveOption::CloseProject
                     : JveOption::None
             ),
@@ -494,13 +493,13 @@ JveApplication::slotLoadNewProject(void)
 }
 
 void
-JveApplication::slotLoadProject(const QString &loadingProjectUrl)
+JveApplication::slotLoadProject(const QString &loadingFilePath)
 {
     JveProjectMutex.lock();
 
     routeOptions(
         JveOption::CloseProject | JveOption::LoadProject,
-        loadingProjectUrl,
+        loadingFilePath,
         nullptr
     );
 
@@ -510,22 +509,22 @@ JveApplication::slotLoadProject(const QString &loadingProjectUrl)
 void
 JveApplication::slotSaveProject(
     const int      options,
-    const QString &loadingProjectUrl
+    const QString &loadingFilePath
 )
 {
     JveProjectMutex.lock();
 
     // new
-    if (mp_state & JveState::ProjectNew) {
+    if (isProjectNew()) {
         emit JveProjectSignals.wantShowSaveProjectDialog(
             options,
-            loadingProjectUrl
+            loadingFilePath
         );
     // exists
     } else {
         saveProject(
             options,
-            loadingProjectUrl,
+            loadingFilePath,
             mp_project.filePath()
         );
     }
@@ -534,14 +533,14 @@ JveApplication::slotSaveProject(
 }
 
 void
-JveApplication::slotSaveProjectAs(const QString &savingProjectUrl)
+JveApplication::slotSaveProjectAs(const QString &savingFilePath)
 {
     JveProjectMutex.lock();
 
     saveProject(
         JveOption::None,
         nullptr,
-        savingProjectUrl
+        savingFilePath
     );
 
     JveProjectMutex.unlock();
@@ -550,16 +549,16 @@ JveApplication::slotSaveProjectAs(const QString &savingProjectUrl)
 void
 JveApplication::slotRouteOptions(
     const int      options,
-    const QString &loadingProjectUrl,
-    const QString &savingProjectUrl
+    const QString &loadingFilePath,
+    const QString &savingFilePath
 )
 {
     JveProjectMutex.lock();
 
     routeOptions(
         options,
-        loadingProjectUrl,
-        savingProjectUrl
+        loadingFilePath,
+        savingFilePath
     );
 
     JveProjectMutex.unlock();

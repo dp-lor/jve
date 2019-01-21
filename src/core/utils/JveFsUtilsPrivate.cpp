@@ -45,13 +45,25 @@ JveFsUtilsPrivate::absolutePath(const QString &targetPath)
 
 QString
 JveFsUtilsPrivate::absolutePathOverDirectory(
-    const QString &dirPath,
-    const QString &relativePath
+    const QString &absoluteDirPath,
+    const QString &relativeTargetPath
 )
 {
-    mp_simpleDir.setPath(dirPath);
+    mp_simpleDir.setPath(absoluteDirPath);
 
-    return mp_simpleDir.cleanPath(mp_simpleDir.absoluteFilePath(relativePath));
+    return mp_simpleDir
+            .cleanPath(mp_simpleDir.absoluteFilePath(relativeTargetPath));
+}
+
+QString
+JveFsUtilsPrivate::relativePathOverDirectory(
+    const QString &absoluteDirPath,
+    const QString &absoluteTargetPath
+)
+{
+    mp_simpleDir.setPath(absoluteDirPath);
+
+    return mp_simpleDir.relativeFilePath(absoluteTargetPath);
 }
 
 QString

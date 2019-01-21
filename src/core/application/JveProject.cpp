@@ -45,6 +45,12 @@ JveProject::~JveProject(void)
 {
 }
 
+bool
+JveProject::isMater(void) const
+{
+    return mp_masterMode;
+}
+
 QString
 JveProject::parentDirPath(void) const
 {
@@ -61,6 +67,12 @@ QString
 JveProject::fileName(void) const
 {
     return mp_fileName;
+}
+
+QDomDocument &
+JveProject::domDocument(void)
+{
+    return mp_domDocument;
 }
 
 JveHistory *

@@ -27,8 +27,13 @@ class JveSourcesModel : public JveBaseModel
         void upSet(void);
     private:
         void attachSourceItem(JveSourcesItemModel *item);
+    private:
+        QDomElement createSingleResourceItemDom(
+            const QString &resourceTagName,
+            const QString &resourcePath
+        );
     private slots:
-        void slotAddItems(const QStringList &itemsList);
+        void slotAddItems(const QStringList &resourcesList);
         void slotAddImagesSequenceItem(const QStringList &imagesList);
     private:
         // members
