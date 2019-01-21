@@ -428,15 +428,19 @@ JveProject::save(const QString &filePath)
 
     /**********************************************************/
 
+    // update environment
+    setEnv(filePath);
+
+    // TODO rebuild all sources path's for actual project path
+
+    /**********************************************************/
+
     QTextStream stream(&projectFile);
 
     // write data
     stream << mp_domDocument.toString(JVE_XML_FILE_INDENT_SIZE);
     // close file
     projectFile.close();
-
-    // update environment
-    setEnv(filePath);
 
     if (mp_masterMode) {
         // set clean state for history
