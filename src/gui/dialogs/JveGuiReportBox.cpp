@@ -66,7 +66,7 @@ JveGuiReportBox::exec(const JveReport &report)
     if (layouts.size()) {
         // bottom spacer
         QSpacerItem *bottomSpacer = new QSpacerItem(
-            JVE_GUI_REPORT_BOX_MIN_WIDTH,
+            JVE_GUI_DIALOG_MIN_WIDTH,
             0,
             QSizePolicy::Minimum,
             QSizePolicy::Fixed
