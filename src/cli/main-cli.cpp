@@ -16,7 +16,7 @@
 #include "../core/application/JveReport.h"
 #include "../core/signals/JveGlobalSignals.h"
 
-#include "../core/application/JveApplicationThread.h"
+#include "../core/application/JveThreadPool.h"
 #include "JveCli.h"
 
 
@@ -43,8 +43,8 @@ main(int argc, char *argv[])
 
     // init command line interface
     JveCli mainCli;
-    // init main application thread
-    JveApplicationThread appThread;
+    // init threadpool
+    JveThreadPool threadPool;
 
     try {
 
@@ -56,8 +56,8 @@ main(int argc, char *argv[])
         // init required xml validator resources (can be throw inside)
         JveXmlValidator.init();
 
-        // run application event loop
-        appThread.runApplication();
+        // start jve threads
+        threadPool.startThreads();
 
     } catch (const JveReport report) {
         // report here only when user interface is not populated
@@ -68,9 +68,8 @@ main(int argc, char *argv[])
     //run main event loop
     int exitCode = qtApp.exec();
 
-    // shutdown
-    appThread.quit();
-    appThread.wait();
+    // stop all jve threads
+    threadPool.stopThreads();
 
     return exitCode;
 }
