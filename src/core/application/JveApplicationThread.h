@@ -17,7 +17,7 @@ class JveApplicationThread : public QThread
         explicit  JveApplicationThread(void);
         virtual  ~JveApplicationThread(void);
     private slots:
-        void slotRunByOptions(void);
+        void slotRun(void);
     private:
         // members
         JveApplication mp_app;

@@ -22,7 +22,8 @@ JveApplicationThread::JveApplicationThread(void)
         this,
         SIGNAL(started()),
         this,
-        SLOT(slotRunByOptions())
+        SLOT(slotRun()),
+        Qt::DirectConnection
     );
 }
 
@@ -31,7 +32,7 @@ JveApplicationThread::~JveApplicationThread(void)
 }
 
 void
-JveApplicationThread::slotRunByOptions(void)
+JveApplicationThread::slotRun(void)
 {
     int options = JveOptionsParser.options();
 

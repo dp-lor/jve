@@ -11,10 +11,10 @@ class JveEngine : public QObject
 {
     Q_OBJECT
     public:
-        explicit  JveEngine(QObject *parent);
+        explicit  JveEngine(void);
         virtual  ~JveEngine(void);
-    public:
-        void process(void);
+    public slots:
+        void slotWakeUp(void);
 };
 
 

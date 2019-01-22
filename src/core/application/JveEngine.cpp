@@ -8,8 +8,8 @@
 #include <QDebug>
 
 
-JveEngine::JveEngine(QObject *parent)
-    : QObject(parent)
+JveEngine::JveEngine(void)
+    : QObject(nullptr)
 {
 }
 
@@ -18,6 +18,12 @@ JveEngine::~JveEngine(void)
 }
 
 void
+JveEngine::slotWakeUp(void)
+{
+    // TODO connect to play/stop and other signals
+}
+
+/*void
 JveEngine::process(void)
 {
     while (true) {
@@ -29,14 +35,15 @@ JveEngine::process(void)
         // playing or render
         } else if (2 == 2) {
             //JveState::projectState->playheadPosition++;
-            /*if (JveState::mode == JveState::MODE_GUI) {
-                emit wantUpdateUi();
-            }*/
+            //if (JveState::mode == JveState::MODE_GUI) {
+            //  emit wantUpdateUi();
+            //}
             //qDebug() << "playing";
         }
         // TODO unlock project mutex
         QThread::usleep(qCeil(1.0 / 23.976023976 * 1000000));
+        qDebug() << "working";
     }
-}
+}*/
 
 
