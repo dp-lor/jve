@@ -4,6 +4,8 @@
 #define JVETHREADPOOL_H
 
 
+#include "../utils/JveImageProviderThread.h"
+
 #include "JveApplicationThread.h"
 
 
@@ -17,7 +19,8 @@ class JveThreadPool
         void stopThreads(void);
     private:
         // members
-        JveApplicationThread mp_appThread;
+        JveImageProviderThread mp_imageProviderThread;
+        JveApplicationThread   mp_appThread;
 };
 
 

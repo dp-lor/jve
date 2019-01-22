@@ -31,12 +31,6 @@ JveApplicationThread::~JveApplicationThread(void)
 }
 
 void
-JveApplicationThread::runApplication(void)
-{
-    start(QThread::HighPriority);
-}
-
-void
 JveApplicationThread::slotRunByOptions(void)
 {
     int options = JveOptionsParser.options();
