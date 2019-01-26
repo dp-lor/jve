@@ -4,6 +4,7 @@
 
 
 #include <QEvent>
+#include <QThread>
 
 
 #include "../definitions/JveOption.h"
@@ -340,6 +341,15 @@ JveApplication::loadProject(const QString &loadingFilePath)
 
         mp_project.load(loadingFilePath);
         setProjectOpenedState();
+
+
+        emit JveProjectSignals.wantShowLoadingProjectProgress();
+        for (int i = 0; i < 100; i += 1) {
+            QThread::usleep(30000);
+            emit JveProjectSignals.loadingProgressUpdated(i);
+        }
+        emit JveProjectSignals.loadingProcessCompleted();
+
 
         emit JveProjectSignals
                 .nameChanged(mp_project.fileName());

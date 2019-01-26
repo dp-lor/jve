@@ -16,6 +16,7 @@
 #include "../../core/signals/JveProjectSignals.h"
 #include "../../core/signals/JveProjectSourcesSignals.h"
 
+#include "../dialogs/JveGuiLoadingProjectProgressDialod.h"
 #include "../dialogs/JveGuiReportBox.h"
 #include "../dialogs/JveGuiOpenProjectDialog.h"
 #include "../dialogs/JveGuiSaveProjectDialog.h"
@@ -88,6 +89,14 @@ JveGuiWindowManager::populateGui(void)
     // activate main window
     mp_mainWindow->activateWindow();
 
+    // slot show loading project progress dialog
+    connect(
+        &JveProjectSignals,
+        SIGNAL(wantShowLoadingProjectProgress()),
+        this,
+        SLOT(slotShowLoadingProjectProgressDialog()),
+        Qt::QueuedConnection
+    );
     // slot modified project warning
     connect(
         &JveProjectSignals,
@@ -265,6 +274,19 @@ JveGuiWindowManager::slotShowReport(const JveReport &report)
         break;
 
     }
+}
+
+void
+JveGuiWindowManager::slotShowLoadingProjectProgressDialog(void)
+{
+    QPointer<JveGuiLoadingProjectProgressDialod>
+        dialog = new JveGuiLoadingProjectProgressDialod(qApp->activeWindow());
+
+    if (QDialog::Rejected == dialog->exec()) {
+        emit JveProjectSignals.wantRejectLoadingProjectProcess();
+    }
+
+    delete dialog;
 }
 
 void

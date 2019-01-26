@@ -19,7 +19,8 @@ class JveProjectSignalsPrivate : public QObject
 
         // global
         void nameChanged(const QString &projectName);
-        //void stateChanged(const int state);
+        void loadingProgressUpdated(const int value);
+        void loadingProcessCompleted(void);
 
         // recent
         void wantAddToRecentItems(const QString &filePath);
@@ -34,6 +35,8 @@ class JveProjectSignalsPrivate : public QObject
                 const QString &loadingProjectUrl = nullptr
         );
         void wantShowOpenProjectDialog(void);
+        void wantShowLoadingProjectProgress(void);
+        void wantRejectLoadingProjectProcess(void);
 
         // project actions
         void wantCloseProject(void);

@@ -28,6 +28,7 @@ class JveGuiWindowManager : public QObject
         void slotQuitAccepted(void);
         void slotStateChanged(const int state);
         void slotShowReport(const JveReport &report);
+        void slotShowLoadingProjectProgressDialog(void);
         void slotShowModifiedProjectWarning(
                 const int      options,
                 const QString &loadingProjectUrl

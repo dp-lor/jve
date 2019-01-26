@@ -7,11 +7,13 @@
 #define JVE_GUI_MENU_RECENT_MAX_NUMBER  9 // entries
 
 
-#define JVE_GUI_MARGIN_SIZE  5 // pixels
+#define JVE_GUI_MARGIN_SIZE       5 // pixels
+#define JVE_GUI_BIG_MARGIN_SIZE  10 // pixels
 
 
-#define JVE_GUI_HORIZONTAL_SPACE  5 // pixels
-#define JVE_GUI_VERTICAL_SPACE    5 // pixels
+#define JVE_GUI_HORIZONTAL_SPACE     5 // pixels
+#define JVE_GUI_VERTICAL_SPACE       5 // pixels
+#define JVE_GUI_BIG_VERTICAL_SPACE  10 // pixels
 
 
 #define JVE_GUI_TOOLS_LAYOUT_SPACING  2 // pixels
