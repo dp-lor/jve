@@ -5,13 +5,16 @@
 
 #include <QEvent>
 #include <QThread>
+#include <QDebug>
 
 
 #include "../definitions/JveOption.h"
 #include "../definitions/JveState.h"
 
-#include "../mutexes/JveProjectMutex.h"
 #include "../utils/JveIdProvider.h"
+
+#include "../mutexes/JveProjectMutex.h"
+#include "../mutexes/JveLoadingProjectMutex.h"
 
 #include "JveReport.h"
 #include "JveProject.h"
@@ -26,7 +29,8 @@
 JveApplication::JveApplication(void)
     : QObject(nullptr),
         mp_state(JveState::None),
-        mp_project(this)
+        mp_loadingProjectProcessRejected(false)/*,
+        mp_project(this)*/
 {
     // ui change event
     connect(
@@ -72,6 +76,15 @@ JveApplication::JveApplication(void)
         Qt::QueuedConnection
     );
 
+    // slot reject loading project process
+    connect(
+        &JveProjectSignals,
+        SIGNAL(wantRejectLoadingProjectProcess()),
+        this,
+        SLOT(slotRejectLoadingProjectProcess()),
+        Qt::QueuedConnection
+    );
+
     // slot save project
     connect(
         &JveProjectSignals,
@@ -113,6 +126,18 @@ JveApplication::~JveApplication(void)
 }
 
 bool
+JveApplication::isLoadingProjectProcessRejected(void) const
+{
+    bool rejected = false;
+
+    JveLoadingProjectMutex.lock();
+    rejected = mp_loadingProjectProcessRejected;
+    JveLoadingProjectMutex.unlock();
+
+    return rejected;
+}
+
+bool
 JveApplication::isProjectOpened(void) const
 {
     return (mp_state & JveState::ProjectOpened);
@@ -134,6 +159,14 @@ bool
 JveApplication::isProjectModified(void) const
 {
     return (mp_state & JveState::ProjectModified);
+}
+
+void
+JveApplication::setLoadingProjectProcessNotRejected(void)
+{
+    JveLoadingProjectMutex.lock();
+    mp_loadingProjectProcessRejected = false;
+    JveLoadingProjectMutex.unlock();
 }
 
 void
@@ -193,12 +226,12 @@ JveApplication::justCloseProject(void)
         )
     );
 
-    mp_project.close();
+    /*mp_project.close();
     JveIdProvider.clear();
     setProjectClosedState();
 
     emit JveProjectSignals
-            .nameChanged(mp_project.fileName());
+            .nameChanged(mp_project.fileName());*/
 
     emit JveGlobalSignals.wantShowReport(
         JveReport(
@@ -247,7 +280,7 @@ JveApplication::closeProject(
 
                 try {
 
-                    mp_project.save(mp_project.filePath());
+                    /*mp_project.save(mp_project.filePath());
 
                     emit JveProjectSignals
                             .wantAddToRecentItems(mp_project.filePath());
@@ -257,7 +290,7 @@ JveApplication::closeProject(
                     setProjectClosedState();
 
                     emit JveProjectSignals
-                            .nameChanged(mp_project.fileName());
+                            .nameChanged(mp_project.fileName());*/
 
                     emit JveGlobalSignals.wantShowReport(
                         JveReport(
@@ -296,6 +329,11 @@ JveApplication::closeProject(
 void
 JveApplication::loadNewProject(void)
 {
+    // can not load over opened other
+    if (isProjectOpened()) {
+        return;
+    }
+
     emit JveGlobalSignals.stateChanged(mp_state | JveState::Busy);
     emit JveGlobalSignals.wantShowReport(
         JveReport(
@@ -306,11 +344,11 @@ JveApplication::loadNewProject(void)
 
     try {
 
-        mp_project.loadNew();
+        /*mp_project.loadNew();
         setNewProjectOpenedState();
 
         emit JveProjectSignals
-                .nameChanged(mp_project.fileName());
+                .nameChanged(mp_project.fileName());*/
 
         emit JveGlobalSignals.wantShowReport(
             JveReport(
@@ -329,6 +367,13 @@ JveApplication::loadNewProject(void)
 void
 JveApplication::loadProject(const QString &loadingFilePath)
 {
+    // can not load over opened other
+    if (isProjectOpened()) {
+        return;
+    }
+
+    setLoadingProjectProcessNotRejected();
+
     emit JveGlobalSignals.stateChanged(mp_state | JveState::Busy);
     emit JveGlobalSignals.wantShowReport(
         JveReport(
@@ -337,24 +382,50 @@ JveApplication::loadProject(const QString &loadingFilePath)
         )
     );
 
+    emit JveProjectSignals
+            .wantShowLoadingProjectProgress();
+
     try {
 
-        mp_project.load(loadingFilePath);
+        //mp_project.load(loadingFilePath);
+
+        qDebug() << isLoadingProjectProcessRejected();
+
         setProjectOpenedState();
 
+        /*bool x        = false;
+        int  progress = 0;
 
-        emit JveProjectSignals.wantShowLoadingProjectProgress();
-        for (int i = 0; i < 100; i += 1) {
-            QThread::usleep(30000);
-            emit JveProjectSignals.loadingProgressUpdated(i);
+        if (isLoadingProjectProcessRejected()) {
+            throw x;
         }
-        emit JveProjectSignals.loadingProcessCompleted();
 
+        QFile loadingFile = mp_project.loadFile(loadingFilePath);
+        int   version     = mp_project.determineVersion(&loadingFile);
 
-        emit JveProjectSignals
+        if (isLoadingProjectProcessRejected()) {
+            throw x;
+        }
+
+        progress += 5;
+        emit JveProjectSignals.loadingProgressUpdated(progress);
+
+        for (int i = 0; i < 95; i++, progress++) {
+
+            if (isLoadingProjectProcessRejected()) {
+                throw x;
+            }
+
+            QThread::usleep(30000);
+            emit JveProjectSignals.loadingProgressUpdated(progress);
+        }
+
+        setProjectOpenedState();*/
+
+        /*emit JveProjectSignals
                 .nameChanged(mp_project.fileName());
         emit JveProjectSignals
-                .wantAddToRecentItems(mp_project.filePath());
+                .wantAddToRecentItems(mp_project.filePath());*/
 
         emit JveGlobalSignals.wantShowReport(
             JveReport(
@@ -364,10 +435,19 @@ JveApplication::loadProject(const QString &loadingFilePath)
         );
 
     } catch (const JveReport &report) {
-        emit JveGlobalSignals.wantShowReport(report);
+        if (JveReport::LoadingProjectProcessRejected == report.subType()) {
+            //mp_project.close();
+            JveIdProvider.clear();
+            setProjectClosedState();
+        }
+        emit JveGlobalSignals
+                .wantShowReport(report);
     }
 
-    emit JveGlobalSignals.stateChanged(mp_state);
+    emit JveProjectSignals
+            .loadingProcessCompleted();
+    emit JveGlobalSignals
+            .stateChanged(mp_state);
 }
 
 void
@@ -391,13 +471,13 @@ JveApplication::saveProject(
 
         try {
 
-            mp_project.save(savingFilePath);
+            /*mp_project.save(savingFilePath);
             setProjectOpenedState();
 
             emit JveProjectSignals
                     .nameChanged(mp_project.fileName());
             emit JveProjectSignals
-                    .wantAddToRecentItems(mp_project.filePath());
+                    .wantAddToRecentItems(mp_project.filePath());*/
 
             emit JveGlobalSignals.wantShowReport(
                 JveReport(
@@ -453,7 +533,7 @@ void
 JveApplication::addSourcesItems(const QStringList &resourcesList)
 {
     emit JveGlobalSignals.stateChanged(mp_state | JveState::Busy);
-    mp_project.sourcesModel()->addItems(resourcesList);
+    //mp_project.sourcesModel()->addItems(resourcesList);
     emit JveGlobalSignals.stateChanged(mp_state);
 }
 
@@ -467,10 +547,10 @@ JveApplication::watchUiChangeEventType(const int eventType)
             && isProjectOpened()
             && isProjectNew()
     ) {
-        mp_project.updateTranslations();
+        /*mp_project.updateTranslations();
 
         emit JveProjectSignals
-                .nameChanged(mp_project.fileName());
+                .nameChanged(mp_project.fileName());*/
     }
 
     JveProjectMutex.unlock();
@@ -537,6 +617,15 @@ JveApplication::slotLoadProject(const QString &loadingFilePath)
 }
 
 void
+JveApplication::slotRejectLoadingProjectProcess(void)
+{
+    JveLoadingProjectMutex.lock();
+    mp_loadingProjectProcessRejected = true;
+    qDebug() << "set rejected" << mp_loadingProjectProcessRejected;
+    JveLoadingProjectMutex.unlock();
+}
+
+void
 JveApplication::slotSaveProject(
     const int      options,
     const QString &loadingFilePath
@@ -552,11 +641,11 @@ JveApplication::slotSaveProject(
         );
     // exists
     } else {
-        saveProject(
+        /*saveProject(
             options,
             loadingFilePath,
             mp_project.filePath()
-        );
+        );*/
     }
 
     JveProjectMutex.unlock();

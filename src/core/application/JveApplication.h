@@ -9,7 +9,7 @@
 #include <QStringList>
 
 
-#include "JveProject.h"
+//#include "JveProject.h"
 
 
 class JveApplication : public QObject
@@ -19,11 +19,13 @@ class JveApplication : public QObject
         explicit  JveApplication(void);
         virtual  ~JveApplication(void);
     public:
+        bool isLoadingProjectProcessRejected(void) const;
         bool isProjectOpened(void) const;
         bool isProjectNew(void) const;
         bool isProjectHiddenModified(void) const;
         bool isProjectModified(void) const;
     public:
+        void setLoadingProjectProcessNotRejected(void);
         void setProjectClosedState(void);
         void setProjectOpenedState(void);
         void setNewProjectOpenedState(void);
@@ -56,6 +58,7 @@ class JveApplication : public QObject
         void slotCloseProject(void);
         void slotLoadNewProject(void);
         void slotLoadProject(const QString &loadingFilePath);
+        void slotRejectLoadingProjectProcess(void);
         void slotSaveProject(
                 const int      options,
                 const QString &loadingFilePath
@@ -71,7 +74,8 @@ class JveApplication : public QObject
     private:
         // members
         int        mp_state;
-        JveProject mp_project;
+        bool       mp_loadingProjectProcessRejected;
+        //JveProject mp_project;
 };
 
 

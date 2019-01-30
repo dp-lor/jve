@@ -264,11 +264,16 @@
     </message>
     <message>
         <location filename="../../src/core/localization/JveTrPrivate.cpp" line="246"/>
+        <source>report_message_loading_project_process_rejected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/core/localization/JveTrPrivate.cpp" line="251"/>
         <source>report_message_project_loaded</source>
         <translation>Проект загружен</translation>
     </message>
     <message>
-        <location filename="../../src/core/localization/JveTrPrivate.cpp" line="251"/>
+        <location filename="../../src/core/localization/JveTrPrivate.cpp" line="256"/>
         <source>report_message_project_saved</source>
         <translation>Проект сохранён</translation>
     </message>

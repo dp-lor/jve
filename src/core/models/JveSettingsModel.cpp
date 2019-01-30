@@ -8,6 +8,7 @@
 #include "../signals/JveProjectSettingsSignals.h"
 
 #include "JveStateModel.h"
+#include "../application/Jve.h"
 #include "../application/JveProject.h"
 
 #include "../history/JveHistory.h"
@@ -170,7 +171,7 @@ JveSettingsModel::slotSetRangeStart(const int rangeStart)
     }
 
     if (newRangeStart != mp_rangeStart) {
-        mp_project->history()->appendUndoCommand(
+        Jve.history().appendUndoCommand(
             new JveSetRangeStartCommand(
                 this,
                 mp_rangeStart,
@@ -198,7 +199,7 @@ JveSettingsModel::slotSetRangeEnd(const int rangeEnd)
     }
 
     if (newRangeEnd != mp_rangeEnd) {
-        mp_project->history()->appendUndoCommand(
+        Jve.history().appendUndoCommand(
             new JveSetRangeEndCommand(
                 this,
                 mp_rangeEnd,

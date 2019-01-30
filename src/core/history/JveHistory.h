@@ -8,7 +8,7 @@
 #include <QList>
 
 
-class JveProject;
+//class JveProject;
 class JveUndoCommand;
 
 
@@ -16,7 +16,7 @@ class JveHistory : public QObject
 {
     Q_OBJECT
     public:
-        explicit  JveHistory(JveProject *project);
+        explicit  JveHistory(void/*JveProject *project*/);
         virtual  ~JveHistory(void);
     public:
         void clear(void);
@@ -37,7 +37,7 @@ class JveHistory : public QObject
         void slotSetUndoStackCurrentIndex(const int index);
     private:
         // members
-        JveProject              *mp_project;
+        //JveProject              *mp_project;
         int                      mp_undoStackCurrentIndex;
         int                      mp_undoStackCleanIndex;
         QList<JveUndoCommand *>  mp_undoStack;

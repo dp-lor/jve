@@ -11,7 +11,7 @@
 class JveApplication;
 
 class JveProjectRootModel;
-class JveHistory;
+//class JveHistory;
 
 class JveSettingsModel;
 class JveSourcesModel;
@@ -33,7 +33,7 @@ class JveProject
     public:
         QDomDocument & domDocument(void);
     public:
-        JveHistory * history(void);
+        //JveHistory * history(void);
     public:
         JveSettingsModel * settingsModel(void);
         JveSourcesModel  * sourcesModel(void);
@@ -52,10 +52,16 @@ class JveProject
         void close(void);
         void loadNew(void);
         void load(const QString &filePath);
+    public:
+        /*QFile loadFile(const QString &filePath);
+        int   determineVersion(QFile *loadingFile) const;
+        void  loadData(QFile &loadingFile, const int version);*/
+    public:
         void save(const QString &filePath);
     private:
         void setNewEnv(void);
         void setEnv(const QString &projectFilePath);
+        void throwIfIsMasterAndLoadingProcessRejected(void);
     private:
         // members
         JveApplication *mp_app;
@@ -68,7 +74,7 @@ class JveProject
         QDomDocument         mp_domDocument;
         JveProjectRootModel *mp_rootModel;
         // shared data members
-        JveHistory       *mp_history;
+        //JveHistory       *mp_history;
         JveSettingsModel *mp_settingsModel;
         JveSourcesModel  *mp_sourcesModel;
         JveTreeModel     *mp_treeModel;

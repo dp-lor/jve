@@ -240,6 +240,11 @@ JveTrPrivate::update(void)
         JveReport::ProjectNewLoaded,
         tr("report_message_project_new_loaded")
     );
+    // loading project process rejected
+    mp_messages.replace(
+        JveReport::LoadingProjectProcessRejected,
+        tr("report_message_loading_project_process_rejected")
+    );
     // project loaded
     mp_messages.replace(
         JveReport::ProjectLoaded,

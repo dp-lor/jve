@@ -40,7 +40,7 @@ JveOptionsParserPrivate::parse(
     // because parser eat its as arguments for other options
 
 
-    /*** ADD BOOLEAN OPTIONS **********************************************/
+    /*** ADD BOOLEAN OPTIONS **********************************/
 
     // help
     QCommandLineOption optionHelp = mp_parser.addHelpOption();
@@ -64,7 +64,7 @@ JveOptionsParserPrivate::parse(
     mp_parser.addOption(optionProjectRender);
 
 
-    /*** PARSE BOOLEAN OPTIONS ********************************************/
+    /*** PARSE BOOLEAN OPTIONS ********************************/
 
     // parse boolean options
     mp_parser.parse(arguments);
@@ -81,7 +81,7 @@ JveOptionsParserPrivate::parse(
     }
 
 
-    /*** NON BOOLEAN OPTIONS **********************************************/
+    /*** NON BOOLEAN OPTIONS **********************************/
 
     // load project
     QCommandLineOption optionProjectLoad(
@@ -94,7 +94,7 @@ JveOptionsParserPrivate::parse(
     mp_parser.addOption(optionProjectLoad);
 
 
-    /*** PARSE AGAIN BUT FOR ALL OPTIONS **********************************/
+    /*** PARSE AGAIN BUT FOR ALL OPTIONS **********************/
 
     // IMPORTANT!!!
     // this parse process throw reports
@@ -145,6 +145,7 @@ JveOptionsParserPrivate::parse(
     // load project
     if (mp_parser.isSet(optionProjectLoad)) {
         mp_options |= JveOption::LoadProject;
+        // TODO fix relative file path (make absolute)
         mp_projectFilePath = mp_parser.value(optionProjectLoad);
     }
 

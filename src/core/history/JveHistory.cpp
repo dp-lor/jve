@@ -6,7 +6,7 @@
 #include "../signals/JveHistorySignals.h"
 
 #include "../mutexes/JveProjectMutex.h"
-#include "../application/JveProject.h"
+//#include "../application/JveProject.h"
 
 #include "JveUndoCommand.h"
 
@@ -21,21 +21,21 @@
 #include "JveSetRangeEndCommandInfo.h"
 
 
-JveHistory::JveHistory(JveProject *project)
+JveHistory::JveHistory(void/*JveProject *project*/)
     : QObject(nullptr),
-        mp_project(project),
+        //mp_project(project),
         mp_undoStackCurrentIndex(-1),
         mp_undoStackCleanIndex(-1),
         mp_undoStack()
 {
     // slot set undo stack current index
-    connect(
+    /*connect(
         &JveHistorySignals,
         SIGNAL(wantSetUndoStackCurrentIndex(int)),
         this,
         SLOT(slotSetUndoStackCurrentIndex(int)),
         Qt::QueuedConnection
-    );
+    );*/
 }
 
 JveHistory::~JveHistory(void)
@@ -85,7 +85,7 @@ JveHistory::setUndoStackClean(void)
 {
     if (mp_undoStackCleanIndex != mp_undoStackCurrentIndex) {
         mp_undoStackCleanIndex = mp_undoStackCurrentIndex;
-        mp_project->setModified(false);
+        //mp_project->setModified(false);
         emit JveHistorySignals.undoStackChanged(
             mp_undoStack.size(),
             mp_undoStackCurrentIndex,
@@ -127,7 +127,7 @@ JveHistory::appendUndoCommandWithModifiedState(
             }
             if (mp_undoStackCleanIndex > (mp_undoStack.size() - 1)) {
                 mp_undoStackCleanIndex = -1;
-                mp_project->setModified(modified);
+                //mp_project->setModified(modified);
             }
 
         }
@@ -144,7 +144,7 @@ JveHistory::appendUndoCommandWithModifiedState(
         mp_undoStackCurrentIndex = nextCommandIndex;
         undoCommandInfo          = undoCommand->info();
 
-        mp_project->setModified(modified);
+        //mp_project->setModified(modified);
     }
 
     // always something changed
@@ -214,9 +214,9 @@ JveHistory::slotSetUndoStackCurrentIndex(const int index)
 
         mp_undoStackCurrentIndex = index;
 
-        mp_project->setModified(
+        /*mp_project->setModified(
             mp_undoStackCleanIndex != mp_undoStackCurrentIndex
-        );
+        );*/
         emit JveHistorySignals.undoStackChanged(
             mp_undoStack.size(),
             mp_undoStackCurrentIndex,

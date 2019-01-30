@@ -26,7 +26,7 @@
 #include "../localization/JveTr.h"
 
 #include "../models/JveProjectRootModel.h"
-#include "../history/JveHistory.h"
+//#include "../history/JveHistory.h"
 
 
 JveProject::JveProject(JveApplication *app)
@@ -36,8 +36,8 @@ JveProject::JveProject(JveApplication *app)
         mp_filePath(),
         mp_fileName(),
         mp_domDocument(),
-        mp_rootModel(nullptr),
-        mp_history(nullptr)
+        mp_rootModel(nullptr)/*,
+        mp_history(nullptr)*/
 {
 }
 
@@ -75,11 +75,11 @@ JveProject::domDocument(void)
     return mp_domDocument;
 }
 
-JveHistory *
+/*JveHistory *
 JveProject::history(void)
 {
     return mp_history;
-}
+}*/
 
 JveSettingsModel *
 JveProject::settingsModel(void)
@@ -166,14 +166,14 @@ JveProject::close(void)
         mp_treeModel     = nullptr;
         mp_stateModel    = nullptr;
 
-        if (nullptr != mp_history) {
-            mp_history->clear();
-
-            delete mp_history;
-            mp_history = nullptr;
-        }
-
     }
+
+    /*if (nullptr != mp_history) {
+        mp_history->clear();
+
+        delete mp_history;
+        mp_history = nullptr;
+    }*/
 
     mp_domDocument   .clear();
     mp_parentDirPath .clear();
@@ -233,18 +233,20 @@ JveProject::loadNew(void)
 
     if (mp_masterMode) {
         // create history
-        mp_history = new JveHistory(this);
+        //mp_history = new JveHistory(this);
 
         // set up project models
         mp_rootModel->setUp();
         // set up history
-        mp_history->setNewProjectLoadedState();
+        //mp_history->setNewProjectLoadedState();
     }
 }
 
 void
 JveProject::load(const QString &filePath)
 {
+    throwIfIsMasterAndLoadingProcessRejected();
+
     // check file
     int status = JveFsUtils.checkFile(
         filePath,
@@ -277,6 +279,8 @@ JveProject::load(const QString &filePath)
 
     /**********************************************************/
 
+    throwIfIsMasterAndLoadingProcessRejected();
+
     QFile projectFile(filePath);
 
     // try open file
@@ -289,6 +293,8 @@ JveProject::load(const QString &filePath)
     }
 
     /**********************************************************/
+
+    throwIfIsMasterAndLoadingProcessRejected();
 
     // validate file structure
     int version = JveXmlValidator.validateProjectFile(&projectFile);
@@ -303,9 +309,19 @@ JveProject::load(const QString &filePath)
 
     /**********************************************************/
 
+    throwIfIsMasterAndLoadingProcessRejected();
+
     // TODO validate each dom element with id attribute for unique id
 
     /**********************************************************/
+
+    throwIfIsMasterAndLoadingProcessRejected();
+
+    // TODO validate dependencies ( regions <-> sources )
+
+    /**********************************************************/
+
+    throwIfIsMasterAndLoadingProcessRejected();
 
     // load project data
     projectFile.seek(0);
@@ -321,6 +337,118 @@ JveProject::load(const QString &filePath)
     // set environment
     setEnv(filePath);
 
+    /**********************************************************/
+
+    throwIfIsMasterAndLoadingProcessRejected();
+
+    // create root model
+    mp_rootModel = new JveProjectRootModel(
+        this,
+        mp_domDocument.documentElement()
+    );
+
+    if (mp_masterMode) {
+        // create history
+        //mp_history = new JveHistory(this);
+
+        // set up project models
+        mp_rootModel->setUp();
+        // set up history
+        //mp_history->setProjectLoadedState();
+    }
+
+    /**********************************************************/
+
+    throwIfIsMasterAndLoadingProcessRejected();
+}
+
+/*QFile
+JveProject::loadFile(const QString &filePath)
+{
+    // check file
+    int status = JveFsUtils.checkFile(
+        filePath,
+        JveFsCheckOption::IsExists | JveFsCheckOption::IsReadable
+    );
+
+    switch (status) {
+        // not exists
+        case JveFsCheckStatus::NotExists:
+            throw JveReport(
+                JveReport::Error,
+                JveReport::FileNotExists,
+                filePath
+            );
+        // not a file
+        case JveFsCheckStatus::NotFile:
+            throw JveReport(
+                JveReport::Error,
+                JveReport::FileIsNotFile,
+                filePath
+            );
+        // not readable
+        case JveFsCheckStatus::NotReadable:
+            throw JveReport(
+                JveReport::Error,
+                JveReport::FileNotReadable,
+                filePath
+            );
+    }
+
+    QFile loadingFile(filePath);
+
+    // try open file
+    if (!loadingFile.open(QFile::ReadOnly)) {
+        throw JveReport(
+            JveReport::Error,
+            JveReport::FileNotReadable,
+            filePath
+        );
+    }
+
+    return QFile(loadingFile);
+}
+
+int
+JveProject::determineVersion(QFile *loadingFile) const
+{
+    QString filePath = loadingFile->fileName();
+    int     version  = JveXmlValidator.validateProjectFile(loadingFile);
+
+    // unsupported version
+    if (JveProjectVersion::Unsupported == version) {
+        loadingFile->close();
+        throw JveReport(
+            JveReport::Error,
+            JveReport::FileFormatUnsupported,
+            filePath
+        );
+    }
+}
+
+void
+JveProject::loadData(QFile &loadingFile, const int version)
+{
+    QString filePath = loadingFile.fileName();
+
+    // load project data
+    loadingFile.seek(0);
+    mp_domDocument.setContent(&loadingFile);
+    // upgrade project data
+    JveProjectUtils::convertProject(
+        &mp_domDocument,
+         mp_loadingFileVersion,
+         JveProjectVersion::Last
+    );
+    mp_loadingFile.close();
+
+    // TODO validate each dom element with id attribute for unique id
+
+    // TODO validate dependencies ( regions <-> sources )
+
+    // set environment
+    setEnv(filePath);
+
     // create root model
     mp_rootModel = new JveProjectRootModel(
         this,
@@ -332,11 +460,11 @@ JveProject::load(const QString &filePath)
         mp_history = new JveHistory(this);
 
         // set up project models
-        mp_rootModel->setUp();
+        //mp_rootModel->setUp();
         // set up history
-        mp_history->setProjectLoadedState();
+        //mp_history->setProjectLoadedState();
     }
-}
+}*/
 
 void
 JveProject::save(const QString &filePath)
@@ -444,7 +572,7 @@ JveProject::save(const QString &filePath)
 
     if (mp_masterMode) {
         // set clean state for history
-        mp_history->setUndoStackClean();
+        //mp_history->setUndoStackClean();
     }
 }
 
@@ -468,6 +596,17 @@ JveProject::setEnv(const QString &projectFilePath)
     mp_parentDirPath = info.absoluteDir().path();
     mp_filePath      = info.filePath();
     mp_fileName      = info.fileName();
+}
+
+void
+JveProject::throwIfIsMasterAndLoadingProcessRejected(void)
+{
+    if (mp_masterMode && mp_app->isLoadingProjectProcessRejected()) {
+        throw JveReport(
+            JveReport::Success,
+            JveReport::LoadingProjectProcessRejected
+        );
+    }
 }
 
 

@@ -72,6 +72,7 @@ class JveReport
             // project successes
             ProjectClosed,
             ProjectNewLoaded,
+            LoadingProjectProcessRejected,
             ProjectLoaded,
             ProjectSaved,
 
