@@ -3,6 +3,6 @@
 Makefile
 build.sh
 run-linguist.sh
-.qmake-stash
+*.qmake-stash
 
 
