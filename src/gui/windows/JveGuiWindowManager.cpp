@@ -16,6 +16,9 @@
 #include "../../core/signals/JveProjectSignals.h"
 #include "../../core/signals/JveProjectSourcesSignals.h"
 
+#include "../../core/mutexes/JveLoadingProjectMutex.h"
+#include "../../core/application/Jve.h"
+
 #include "../dialogs/JveGuiLoadingProjectProgressDialod.h"
 #include "../dialogs/JveGuiReportBox.h"
 #include "../dialogs/JveGuiOpenProjectDialog.h"
@@ -283,7 +286,9 @@ JveGuiWindowManager::slotShowLoadingProjectProgressDialog(void)
         dialog = new JveGuiLoadingProjectProgressDialod(qApp->activeWindow());
 
     if (QDialog::Rejected == dialog->exec()) {
-        emit JveProjectSignals.wantRejectLoadingProjectProcess();
+        JveLoadingProjectMutex.lock();
+        Jve.setLoadingProjectProcessRejected(true);
+        JveLoadingProjectMutex.unlock();
     }
 
     delete dialog;

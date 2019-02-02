@@ -265,7 +265,7 @@ Parser message:
     <message>
         <location filename="../../src/core/localization/JveTrPrivate.cpp" line="246"/>
         <source>report_message_loading_project_process_rejected</source>
-        <translation type="unfinished"></translation>
+        <translation>Loading project process was rejected</translation>
     </message>
     <message>
         <location filename="../../src/core/localization/JveTrPrivate.cpp" line="251"/>

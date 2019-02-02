@@ -4,181 +4,36 @@
 
 
 #include <QFile>
-#include <QFileInfo>
 #include <QTextStream>
+#include <QDomDocument>
 
+
+#include "../definitions/JveXmlDefines.h"
+#include "../definitions/JveProjectFileDefines.h"
 
 #include "../definitions/JveFsCheckOption.h"
 #include "../definitions/JveFsCheckStatus.h"
 #include "../definitions/JveProjectVersion.h"
-#include "../definitions/JveXmlDefines.h"
 
+#include "../mutexes/JveLoadingProjectMutex.h"
 
+#include "Jve.h"
 #include "JveReport.h"
-#include "JveApplication.h"
 
+#include "../utils/JveIdProvider.h"
 #include "../utils/JveFsUtils.h"
 #include "../utils/JveXmlValidator.h"
 #include "../utils/JveProjectUtils.h"
 
-#include "../mutexes/JveLocalizationMutex.h"
-#include "../localization/JveTranslation.h"
-#include "../localization/JveTr.h"
+#include "../history/JveHistory.h"
 
-#include "../models/JveProjectRootModel.h"
-//#include "../history/JveHistory.h"
-
-
-JveProject::JveProject(JveApplication *app)
-    : mp_app(app),
-        mp_masterMode(nullptr != mp_app),
-        mp_parentDirPath(),
-        mp_filePath(),
-        mp_fileName(),
-        mp_domDocument(),
-        mp_rootModel(nullptr)/*,
-        mp_history(nullptr)*/
-{
-}
-
-JveProject::~JveProject(void)
-{
-}
-
-bool
-JveProject::isMater(void) const
-{
-    return mp_masterMode;
-}
-
-QString
-JveProject::parentDirPath(void) const
-{
-    return mp_parentDirPath;
-}
-
-QString
-JveProject::filePath(void) const
-{
-    return mp_filePath;
-}
-
-QString
-JveProject::fileName(void) const
-{
-    return mp_fileName;
-}
-
-QDomDocument &
-JveProject::domDocument(void)
-{
-    return mp_domDocument;
-}
-
-/*JveHistory *
-JveProject::history(void)
-{
-    return mp_history;
-}*/
-
-JveSettingsModel *
-JveProject::settingsModel(void)
-{
-    return mp_settingsModel;
-}
-
-JveSourcesModel *
-JveProject::sourcesModel(void)
-{
-    return mp_sourcesModel;
-}
-
-JveTreeModel *
-JveProject::treeModel(void)
-{
-    return mp_treeModel;
-}
-
-JveStateModel *
-JveProject::stateModel(void)
-{
-    return mp_stateModel;
-}
-
-void
-JveProject::setSettingsModel(JveSettingsModel *settingsModel)
-{
-    mp_settingsModel = settingsModel;
-}
-
-void
-JveProject::setSourcesModel(JveSourcesModel *sourcesModel)
-{
-    mp_sourcesModel = sourcesModel;
-}
-
-void
-JveProject::setTreeModel(JveTreeModel *treeModel)
-{
-    mp_treeModel = treeModel;
-}
-
-void
-JveProject::setStateModel(JveStateModel *stateModel)
-{
-    mp_stateModel = stateModel;
-}
-
-void
-JveProject::setHiddenModified(const bool status)
-{
-    if (mp_masterMode) {
-        mp_app->setProjectHiddenModifiedState(status);
-    }
-}
-
-void
-JveProject::setModified(const bool status)
-{
-    if (mp_masterMode) {
-        mp_app->setProjectModifiedState(status);
-    }
-}
-
-void
-JveProject::updateTranslations(void)
-{
-    JveLocalizationMutex.lock();
-    mp_fileName = JveTr.textAt(JveTranslation::NewProjectName);
-    JveLocalizationMutex.unlock();
-}
 
 void
 JveProject::close(void)
 {
-    if (nullptr != mp_rootModel) {
-
-        delete mp_rootModel;
-
-        mp_rootModel     = nullptr;
-        mp_settingsModel = nullptr;
-        mp_sourcesModel  = nullptr;
-        mp_treeModel     = nullptr;
-        mp_stateModel    = nullptr;
-
-    }
-
-    /*if (nullptr != mp_history) {
-        mp_history->clear();
-
-        delete mp_history;
-        mp_history = nullptr;
-    }*/
-
-    mp_domDocument   .clear();
-    mp_parentDirPath .clear();
-    mp_filePath      .clear();
-    mp_fileName      .clear();
+    Jve.clear();
+    JveIdProvider.clear();
+    Jve.setProjectClosedState();
 }
 
 void
@@ -196,7 +51,7 @@ JveProject::loadNew(void)
         );
     }
 
-    /**********************************************************/
+    //------------------------------------------------------------//
 
     // validate structure
     int version = JveXmlValidator.validateProjectFile(&projectFile);
@@ -209,44 +64,37 @@ JveProject::loadNew(void)
         );
     }
 
-    /**********************************************************/
+    //------------------------------------------------------------//
 
     // load data
     projectFile.seek(0);
-    mp_domDocument.setContent(&projectFile);
+    Jve.domDocument().setContent(&projectFile);
     // upgrade data
     JveProjectUtils::convertProject(
-        &mp_domDocument,
+        &(Jve.domDocument()),
          version,
          JveProjectVersion::Last
     );
     projectFile.close();
 
     // set environment
-    setNewEnv();
+    Jve.setNewProjectEnv();
 
-    // create root model
-    mp_rootModel = new JveProjectRootModel(
-        this,
-        mp_domDocument.documentElement()
-    );
+    // create project models
+    Jve.createProjectModels();
 
-    if (mp_masterMode) {
-        // create history
-        //mp_history = new JveHistory(this);
+    // set up history
+    Jve.history().setNewProjectLoadedState();
+    // set clean opened new project state
+    Jve.setNewProjectOpenedState();
 
-        // set up project models
-        mp_rootModel->setUp();
-        // set up history
-        //mp_history->setNewProjectLoadedState();
-    }
+    // set up project models
+    Jve.setUpProjectModels();
 }
 
 void
-JveProject::load(const QString &filePath)
+JveProject::loadXmlToDom(const QString &filePath)
 {
-    throwIfIsMasterAndLoadingProcessRejected();
-
     // check file
     int status = JveFsUtils.checkFile(
         filePath,
@@ -277,9 +125,7 @@ JveProject::load(const QString &filePath)
             );
     }
 
-    /**********************************************************/
-
-    throwIfIsMasterAndLoadingProcessRejected();
+    //------------------------------------------------------------//
 
     QFile projectFile(filePath);
 
@@ -292,9 +138,7 @@ JveProject::load(const QString &filePath)
         );
     }
 
-    /**********************************************************/
-
-    throwIfIsMasterAndLoadingProcessRejected();
+    //------------------------------------------------------------//
 
     // validate file structure
     int version = JveXmlValidator.validateProjectFile(&projectFile);
@@ -307,164 +151,99 @@ JveProject::load(const QString &filePath)
         );
     }
 
-    /**********************************************************/
-
-    throwIfIsMasterAndLoadingProcessRejected();
-
-    // TODO validate each dom element with id attribute for unique id
-
-    /**********************************************************/
-
-    throwIfIsMasterAndLoadingProcessRejected();
-
-    // TODO validate dependencies ( regions <-> sources )
-
-    /**********************************************************/
-
-    throwIfIsMasterAndLoadingProcessRejected();
+    //------------------------------------------------------------//
 
     // load project data
     projectFile.seek(0);
-    mp_domDocument.setContent(&projectFile);
-    // upgrade project data
+    Jve.domDocument().setContent(&projectFile);
+    // upgrade data
     JveProjectUtils::convertProject(
-        &mp_domDocument,
+        &(Jve.domDocument()),
          version,
          JveProjectVersion::Last
     );
     projectFile.close();
 
     // set environment
-    setEnv(filePath);
+    Jve.setProjectEnv(filePath);
 
-    /**********************************************************/
+    //------------------------------------------------------------//
 
-    throwIfIsMasterAndLoadingProcessRejected();
-
-    // create root model
-    mp_rootModel = new JveProjectRootModel(
-        this,
-        mp_domDocument.documentElement()
-    );
-
-    if (mp_masterMode) {
-        // create history
-        //mp_history = new JveHistory(this);
-
-        // set up project models
-        mp_rootModel->setUp();
-        // set up history
-        //mp_history->setProjectLoadedState();
-    }
-
-    /**********************************************************/
-
-    throwIfIsMasterAndLoadingProcessRejected();
-}
-
-/*QFile
-JveProject::loadFile(const QString &filePath)
-{
-    // check file
-    int status = JveFsUtils.checkFile(
-        filePath,
-        JveFsCheckOption::IsExists | JveFsCheckOption::IsReadable
-    );
-
-    switch (status) {
-        // not exists
-        case JveFsCheckStatus::NotExists:
-            throw JveReport(
-                JveReport::Error,
-                JveReport::FileNotExists,
-                filePath
-            );
-        // not a file
-        case JveFsCheckStatus::NotFile:
-            throw JveReport(
-                JveReport::Error,
-                JveReport::FileIsNotFile,
-                filePath
-            );
-        // not readable
-        case JveFsCheckStatus::NotReadable:
-            throw JveReport(
-                JveReport::Error,
-                JveReport::FileNotReadable,
-                filePath
-            );
-    }
-
-    QFile loadingFile(filePath);
-
-    // try open file
-    if (!loadingFile.open(QFile::ReadOnly)) {
+    if (isLoadingProcessRejected()) {
         throw JveReport(
-            JveReport::Error,
-            JveReport::FileNotReadable,
-            filePath
-        );
-    }
-
-    return QFile(loadingFile);
-}
-
-int
-JveProject::determineVersion(QFile *loadingFile) const
-{
-    QString filePath = loadingFile->fileName();
-    int     version  = JveXmlValidator.validateProjectFile(loadingFile);
-
-    // unsupported version
-    if (JveProjectVersion::Unsupported == version) {
-        loadingFile->close();
-        throw JveReport(
-            JveReport::Error,
-            JveReport::FileFormatUnsupported,
-            filePath
+            JveReport::Success,
+            JveReport::LoadingProjectProcessRejected
         );
     }
 }
 
 void
-JveProject::loadData(QFile &loadingFile, const int version)
+JveProject::validateIds(void)
 {
-    QString filePath = loadingFile.fileName();
-
-    // load project data
-    loadingFile.seek(0);
-    mp_domDocument.setContent(&loadingFile);
-    // upgrade project data
-    JveProjectUtils::convertProject(
-        &mp_domDocument,
-         mp_loadingFileVersion,
-         JveProjectVersion::Last
-    );
-    mp_loadingFile.close();
-
     // TODO validate each dom element with id attribute for unique id
 
-    // TODO validate dependencies ( regions <-> sources )
+    //------------------------------------------------------------//
 
-    // set environment
-    setEnv(filePath);
-
-    // create root model
-    mp_rootModel = new JveProjectRootModel(
-        this,
-        mp_domDocument.documentElement()
-    );
-
-    if (mp_masterMode) {
-        // create history
-        mp_history = new JveHistory(this);
-
-        // set up project models
-        //mp_rootModel->setUp();
-        // set up history
-        //mp_history->setProjectLoadedState();
+    if (isLoadingProcessRejected()) {
+        throw JveReport(
+            JveReport::Success,
+            JveReport::LoadingProjectProcessRejected
+        );
     }
-}*/
+}
+
+void
+JveProject::validateReferences(void)
+{
+    // TODO validate id references ( sources <-> regions )
+
+    //------------------------------------------------------------//
+
+    if (isLoadingProcessRejected()) {
+        throw JveReport(
+            JveReport::Success,
+            JveReport::LoadingProjectProcessRejected
+        );
+    }
+}
+
+void
+JveProject::createModels(void)
+{
+    Jve.createProjectModels();
+
+    //------------------------------------------------------------//
+
+    if (isLoadingProcessRejected()) {
+        throw JveReport(
+            JveReport::Success,
+            JveReport::LoadingProjectProcessRejected
+        );
+    }
+}
+
+void
+JveProject::initSources(void)
+{
+    /*
+    // create history
+    //mp_history = new JveHistory(this);
+
+    // set up project models
+    mp_rootModel->setUp();
+    // set up history
+    //mp_history->setProjectLoadedState();
+    */
+
+    //------------------------------------------------------------//
+
+    if (isLoadingProcessRejected()) {
+        throw JveReport(
+            JveReport::Success,
+            JveReport::LoadingProjectProcessRejected
+        );
+    }
+}
 
 void
 JveProject::save(const QString &filePath)
@@ -533,7 +312,7 @@ JveProject::save(const QString &filePath)
 
     }
 
-    /**********************************************************/
+    //------------------------------------------------------------//
 
     QFile projectFile(filePath);
 
@@ -554,59 +333,38 @@ JveProject::save(const QString &filePath)
         }
     }
 
-    /**********************************************************/
+    //------------------------------------------------------------//
 
     // update environment
-    setEnv(filePath);
+    Jve.setProjectEnv(filePath);
+
 
     // TODO rebuild all sources path's for actual project path
 
-    /**********************************************************/
-
-    QTextStream stream(&projectFile);
 
     // write data
-    stream << mp_domDocument.toString(JVE_XML_FILE_INDENT_SIZE);
+    QTextStream stream(&projectFile);
+    stream << Jve.domDocument().toString(JVE_PROJECT_FILE_XML_INDENT_SIZE);
+
     // close file
     projectFile.close();
 
-    if (mp_masterMode) {
-        // set clean state for history
-        //mp_history->setUndoStackClean();
-    }
+    // set clean state for history
+    Jve.history().setUndoStackClean();
+    // set clean opened project state
+    Jve.setProjectOpenedState();
 }
 
-void
-JveProject::setNewEnv(void)
+bool
+JveProject::isLoadingProcessRejected(void)
 {
-    // TODO https://stackoverflow.com/a/28052962/3558278
-    QFileInfo info(QDir::currentPath());
+    bool rejected;
 
-    mp_parentDirPath = info.absoluteDir().path();
-    mp_filePath      = info.filePath();
+    JveLoadingProjectMutex.lock();
+    rejected = Jve.isLoadingProjectProcessRejected();
+    JveLoadingProjectMutex.unlock();
 
-    updateTranslations();
-}
-
-void
-JveProject::setEnv(const QString &projectFilePath)
-{
-    QFileInfo info(projectFilePath);
-
-    mp_parentDirPath = info.absoluteDir().path();
-    mp_filePath      = info.filePath();
-    mp_fileName      = info.fileName();
-}
-
-void
-JveProject::throwIfIsMasterAndLoadingProcessRejected(void)
-{
-    if (mp_masterMode && mp_app->isLoadingProjectProcessRejected()) {
-        throw JveReport(
-            JveReport::Success,
-            JveReport::LoadingProjectProcessRejected
-        );
-    }
+    return rejected;
 }
 
 

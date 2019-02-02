@@ -4,7 +4,7 @@
 
 
 JveThreadPool::JveThreadPool(void)
-    : mp_appThread(),
+    : mp_mainThread(),
         mp_engineThread()
 {
 }
@@ -16,7 +16,7 @@ JveThreadPool::~JveThreadPool(void)
 void
 JveThreadPool::startThreads(void)
 {
-    mp_appThread    .start( QThread::HighestPriority );
+    mp_mainThread   .start( QThread::HighestPriority );
     mp_engineThread .start( QThread::NormalPriority  );
 }
 
@@ -26,8 +26,8 @@ JveThreadPool::stopThreads(void)
     mp_engineThread.quit();
     mp_engineThread.wait();
 
-    mp_appThread.quit();
-    mp_appThread.wait();
+    mp_mainThread.quit();
+    mp_mainThread.wait();
 }
 
 

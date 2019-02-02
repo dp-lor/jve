@@ -265,7 +265,7 @@
     <message>
         <location filename="../../src/core/localization/JveTrPrivate.cpp" line="246"/>
         <source>report_message_loading_project_process_rejected</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка проекта была отменена</translation>
     </message>
     <message>
         <location filename="../../src/core/localization/JveTrPrivate.cpp" line="251"/>

@@ -11,7 +11,7 @@
 #include "../history/JveHistory.h"
 
 
-class JveProjectRootModel;
+class JveRootModel;
 class JveSettingsModel;
 class JveSourcesModel;
 class JveTreeModel;
@@ -24,21 +24,52 @@ class JvePrivate
         explicit  JvePrivate(void);
         virtual  ~JvePrivate(void);
     public:
-        JveHistory & history(void);
+        int  state(void) const;
+        bool isLoadingProjectProcessRejected(void) const;
+        bool isProjectOpened(void) const;
+        bool isProjectNew(void) const;
+        bool isProjectHiddenModified(void) const;
+        bool isProjectModified(void) const;
+    public:
+        QString projectParentDirPath(void) const;
+        QString projectFilePath(void) const;
+        QString projectFileName(void) const;
+    public:
+        JveHistory   & history(void);
+        QDomDocument & domDocument(void);
+    public:
+        JveSettingsModel * settingsModel(void);
+        JveSourcesModel  * sourcesModel(void);
+        JveTreeModel     * treeModel(void);
+        JveStateModel    * stateModel(void);
+    public:
+        void setLoadingProjectProcessRejected(const bool rejected);
+        void setProjectClosedState(void);
+        void setProjectOpenedState(void);
+        void setNewProjectOpenedState(void);
+        void setProjectHiddenModifiedState(const bool status);
+        void setProjectModifiedState(const bool status);
+        void updateProjectNameTranslation(void);
+        void setNewProjectEnv(void);
+        void setProjectEnv(const QString &filePath);
+    public:
+        void clear(void);
+        void createProjectModels(void);
+        void setUpProjectModels(void);
     private:
-        // global application state
-        int mp_state;
-        // undo/redo history
-        JveHistory mp_history;
+        // states
+        int  mp_state;
+        bool mp_loadingProjectProcessRejected;
         // project environment
         QString mp_projectParentDirPath;
         QString mp_projectFilePath;
         QString mp_projectFileName;
+        // undo/redo history
+        JveHistory mp_history;
         // project data
         QDomDocument mp_domDocument;
-        // shared project objects
-        JveProjectRootModel *mp_rootModel;
-        //JveRootModel     *mp_rootModel;
+        // project shared objects
+        JveRootModel     *mp_rootModel;
         JveSettingsModel *mp_settingsModel;
         JveSourcesModel  *mp_sourcesModel;
         JveTreeModel     *mp_treeModel;

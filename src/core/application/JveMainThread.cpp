@@ -1,6 +1,6 @@
 
 
-#include "JveApplicationThread.h"
+#include "JveMainThread.h"
 
 
 #include "../definitions/JveOption.h"
@@ -10,12 +10,12 @@
 #include "../signals/JveProjectSignals.h"
 
 
-JveApplicationThread::JveApplicationThread(void)
+JveMainThread::JveMainThread(void)
     : QThread(nullptr),
-        mp_app()
+        mp_controller()
 {
-    // move application to thread
-    mp_app.moveToThread(this);
+    // move controller to thread
+    mp_controller.moveToThread(this);
 
     // connect for self started
     connect(
@@ -27,12 +27,12 @@ JveApplicationThread::JveApplicationThread(void)
     );
 }
 
-JveApplicationThread::~JveApplicationThread(void)
+JveMainThread::~JveMainThread(void)
 {
 }
 
 void
-JveApplicationThread::slotRun(void)
+JveMainThread::slotRun(void)
 {
     int options = JveOptionsParser.options();
 

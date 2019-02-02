@@ -74,7 +74,7 @@ JveSingleResourceItemModel::initByResource(
 {
     // absolute path
     mp_itemStruct.absolutePath = JveFsUtils.absolutePathOverDirectory(
-        mp_project->parentDirPath(),
+        "",//mp_project->parentDirPath(),
         resourcePath
     );
     // display name

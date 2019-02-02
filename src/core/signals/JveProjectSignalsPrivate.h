@@ -36,7 +36,6 @@ class JveProjectSignalsPrivate : public QObject
         );
         void wantShowOpenProjectDialog(void);
         void wantShowLoadingProjectProgress(void);
-        void wantRejectLoadingProjectProcess(void);
 
         // project actions
         void wantCloseProject(void);

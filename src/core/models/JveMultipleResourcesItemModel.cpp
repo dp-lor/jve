@@ -34,7 +34,7 @@ JveMultipleResourcesItemModel::initByResources(
 {
     // absolute path
     mp_itemStruct.absolutePath = JveFsUtils.absolutePathOverDirectory(
-        mp_project->parentDirPath(),
+        "",//mp_project->parentDirPath(),
         resourcesDirPath
     );
     // display name

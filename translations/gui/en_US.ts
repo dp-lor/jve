@@ -150,7 +150,7 @@
     <message>
         <location filename="../../src/gui/dialogs/JveGuiLoadingProjectProgressDialod.cpp" line="122"/>
         <source>gui_loading_project_progress_dialog_title_label</source>
-        <translation>Loading project data...</translation>
+        <translation>Loading project data..</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/JveGuiLoadingProjectProgressDialod.cpp" line="127"/>

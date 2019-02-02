@@ -1,7 +1,7 @@
 
 
-#ifndef JVEAPPLICATION_H
-#define JVEAPPLICATION_H
+#ifndef JVEMAINCONTROLLER_H
+#define JVEMAINCONTROLLER_H
 
 
 #include <QObject>
@@ -9,28 +9,15 @@
 #include <QStringList>
 
 
-//#include "JveProject.h"
-
-
-class JveApplication : public QObject
+class JveMainController : public QObject
 {
     Q_OBJECT
     public:
-        explicit  JveApplication(void);
-        virtual  ~JveApplication(void);
-    public:
+        explicit  JveMainController(void);
+        virtual  ~JveMainController(void);
+    private:
         bool isLoadingProjectProcessRejected(void) const;
-        bool isProjectOpened(void) const;
-        bool isProjectNew(void) const;
-        bool isProjectHiddenModified(void) const;
-        bool isProjectModified(void) const;
-    public:
-        void setLoadingProjectProcessNotRejected(void);
-        void setProjectClosedState(void);
-        void setProjectOpenedState(void);
-        void setNewProjectOpenedState(void);
-        void setProjectHiddenModifiedState(const bool status);
-        void setProjectModifiedState(const bool status);
+        void resetLoadingProjectProcess(void);
     private:
         void justCloseProject(void);
         void closeProject(
@@ -54,11 +41,10 @@ class JveApplication : public QObject
         void addSourcesItems(const QStringList &resourcesList);
     private slots:
         void watchUiChangeEventType(const int eventType);
-        void slotExit(void);
+        void slotQuit(void);
         void slotCloseProject(void);
         void slotLoadNewProject(void);
         void slotLoadProject(const QString &loadingFilePath);
-        void slotRejectLoadingProjectProcess(void);
         void slotSaveProject(
                 const int      options,
                 const QString &loadingFilePath
@@ -73,12 +59,10 @@ class JveApplication : public QObject
         void slotAddSourcesItems(const QStringList &resourcesList);
     private:
         // members
-        int        mp_state;
-        bool       mp_loadingProjectProcessRejected;
-        //JveProject mp_project;
+        int mp_loadingProjectProgress;
 };
 
 
-#endif // JVEAPPLICATION_H
+#endif // JVEMAINCONTROLLER_H
 
 

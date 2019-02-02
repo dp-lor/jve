@@ -25,7 +25,7 @@ JveSettingsModel::JveSettingsModel(
         mp_rangeEnd(JVE_UNSIGNED_FRAME_NUMBER_MAX)
 {
     // share self to project
-    mp_project->setSettingsModel(this);
+    //mp_project->setSettingsModel(this);
 
     // range
     int rangeStart = mp_domElement.attribute("rangeStart").toInt();
@@ -115,12 +115,12 @@ JveSettingsModel::setRangeStart(
     emit JveProjectSettingsSignals.rangeStartChanged(mp_rangeStart);
 
     // fix playhead position
-    if (mp_project->stateModel()->playheadPosition() < mp_rangeStart) {
+    /*if (mp_project->stateModel()->playheadPosition() < mp_rangeStart) {
         mp_project->stateModel()->setPlayheadPosition(
             mp_rangeStart,
             locked ?: lockItself
         );
-    }
+    }*/
 
     if (lockItself) {
         JveProjectMutex.unlock();
@@ -145,12 +145,12 @@ JveSettingsModel::setRangeEnd(
     emit JveProjectSettingsSignals.rangeEndChanged(mp_rangeEnd);
 
     // fix playhead position
-    if (mp_project->stateModel()->playheadPosition() > mp_rangeEnd) {
+    /*if (mp_project->stateModel()->playheadPosition() > mp_rangeEnd) {
         mp_project->stateModel()->setPlayheadPosition(
             mp_rangeEnd,
             locked ?: lockItself
         );
-    }
+    }*/
 
     if (lockItself) {
         JveProjectMutex.unlock();

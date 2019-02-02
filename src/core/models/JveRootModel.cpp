@@ -1,6 +1,6 @@
 
 
-#include "JveProjectRootModel.h"
+#include "JveRootModel.h"
 
 
 #include "JveSettingsModel.h"
@@ -9,35 +9,33 @@
 #include "JveStateModel.h"
 
 
-JveProjectRootModel::JveProjectRootModel(
-    JveProject  *project,
-    QDomElement  domElement
-): JveBaseModel(domElement),
+JveRootModel::JveRootModel(QDomElement domElement)
+    : JveBaseModel(domElement),
     // settings
     mp_settings(
         new JveSettingsModel(
-            project,
+            nullptr,
             mp_domElement.firstChildElement("settings")
         )
     ),
     // sources
     mp_sources(
         new JveSourcesModel(
-            project,
+            nullptr,
             mp_domElement.firstChildElement("sources")
         )
     ),
     // tree
     mp_tree(
         new JveTreeModel(
-            project,
+            nullptr,
             mp_domElement.firstChildElement("tree")
         )
     ),
     // state
     mp_state(
         new JveStateModel(
-            project,
+            nullptr,
             mp_domElement.firstChildElement("state")
         )
     )
@@ -48,13 +46,37 @@ JveProjectRootModel::JveProjectRootModel(
     attachChild(mp_state);
 }
 
-JveProjectRootModel::~JveProjectRootModel(void)
+JveRootModel::~JveRootModel(void)
 {
     clear();
 }
 
+JveSettingsModel *
+JveRootModel::settingsModel(void)
+{
+    return mp_settings;
+}
+
+JveSourcesModel *
+JveRootModel::sourcesModel(void)
+{
+    return mp_sources;
+}
+
+JveTreeModel *
+JveRootModel::treeModel(void)
+{
+    return mp_tree;
+}
+
+JveStateModel *
+JveRootModel::stateModel(void)
+{
+    return mp_state;
+}
+
 void
-JveProjectRootModel::setUp(void)
+JveRootModel::setUp(void)
 {
     mp_settings ->setUp();
     mp_sources  ->setUp();

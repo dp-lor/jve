@@ -18,11 +18,11 @@ JveStateModel::JveStateModel(
         mp_project(project)
 {
     // share self to project
-    mp_project->setStateModel(this);
+    //mp_project->setStateModel(this);
 
     // playhead position
-    int rangeStart = mp_project->settingsModel()->rangeStart();
-    int rangeEnd   = mp_project->settingsModel()->rangeEnd();
+    int rangeStart = 1;//mp_project->settingsModel()->rangeStart();
+    int rangeEnd   = 1;//mp_project->settingsModel()->rangeEnd();
 
     mp_playheadPosition = mp_domElement.attribute("playheadPosition").toInt();
     if (mp_playheadPosition < rangeStart) {
@@ -95,7 +95,7 @@ JveStateModel::setPlayheadPosition(
     mp_playheadPosition = position;
     mp_domElement.setAttribute("playheadPosition", mp_playheadPosition);
 
-    mp_project->setHiddenModified(true);
+    //mp_project->setHiddenModified(true);
     emit JveProjectStateSignals.playheadPositionChanged(mp_playheadPosition);
 
     if (lockItself) {
@@ -118,7 +118,7 @@ JveStateModel::setVideoMonitorQuality(
     mp_videoMonitorQuality = quality;
     mp_domElement.setAttribute("videoMonitorQuality", mp_videoMonitorQuality);
 
-    mp_project->setHiddenModified(true);
+    //mp_project->setHiddenModified(true);
     emit JveProjectStateSignals
                 .videoMonitorQualityChanged(mp_videoMonitorQuality);
 
@@ -133,8 +133,8 @@ JveStateModel::slotSetPlayheadPosition(const int position)
     JveProjectMutex.lock();
 
     int newPosition = position;
-    int rangeStart  = mp_project->settingsModel()->rangeStart();
-    int rangeEnd    = mp_project->settingsModel()->rangeEnd();
+    int rangeStart  = 1;//mp_project->settingsModel()->rangeStart();
+    int rangeEnd    = 1;//mp_project->settingsModel()->rangeEnd();
 
     if (newPosition < rangeStart) {
         newPosition = rangeStart;

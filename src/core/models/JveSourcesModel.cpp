@@ -28,7 +28,7 @@ JveSourcesModel::JveSourcesModel(
         mp_items()
 {
     // share self to project
-    mp_project->setSourcesModel(this);
+    //mp_project->setSourcesModel(this);
 
     // items
     QDomNodeList sources = mp_domElement.childNodes();
@@ -197,12 +197,12 @@ JveSourcesModel::createSingleResourceItemDom(
     const QString &resourcePath
 )
 {
-    return JveSingleResourceItemModel::createItemDom(
+    return QDomElement();/*return JveSingleResourceItemModel::createItemDom(
         mp_project->domDocument(),
         resourceTagName,
         mp_project->parentDirPath(),
         resourcePath
-    );
+    );*/
 }
 
 void
