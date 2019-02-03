@@ -35,6 +35,10 @@ class JvePrivate
         QString projectFilePath(void) const;
         QString projectFileName(void) const;
     public:
+        qint64 projectFileSize(const int multiplier = 1) const;
+        qint64 resourcesSize(void) const;
+        int    resourcesCount(void) const;
+    public:
         JveHistory   & history(void);
         QDomDocument & domDocument(void);
     public:
@@ -52,9 +56,10 @@ class JvePrivate
         void updateProjectNameTranslation(void);
         void setNewProjectEnv(void);
         void setProjectEnv(const QString &filePath);
+        void addToResourcesStat(const qint64 size);
     public:
         void clear(void);
-        void createProjectModels(void);
+        void createAndAttachProjectModels(void);
         void setUpProjectModels(void);
     private:
         // states
@@ -64,6 +69,10 @@ class JvePrivate
         QString mp_projectParentDirPath;
         QString mp_projectFilePath;
         QString mp_projectFileName;
+        // project counters
+        qint64 mp_projectFileSize;
+        qint64 mp_resourcesSize;
+        int    mp_resourcesCount;
         // undo/redo history
         JveHistory mp_history;
         // project data

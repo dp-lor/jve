@@ -290,7 +290,11 @@ JveMainController::loadProject(const QString &loadingFilePath)
 
     resetLoadingProjectProcess();
 
-    emit JveGlobalSignals.stateChanged(Jve.state() | JveState::Busy);
+    emit JveProjectSignals
+            .wantShowLoadingProjectProgress();
+    emit JveGlobalSignals
+            .stateChanged(Jve.state() | JveState::Busy);
+
     emit JveGlobalSignals.wantShowReport(
         JveReport(
             JveReport::Message,
@@ -298,34 +302,12 @@ JveMainController::loadProject(const QString &loadingFilePath)
         )
     );
 
-    emit JveProjectSignals
-            .wantShowLoadingProjectProgress();
+    // sleep one second because progress dialog show with timeout
+    //QThread::usleep(1000000);
 
     try {
 
-        // load file to dom document
-        JveProject::loadXmlToDom(loadingFilePath);
-        mp_loadingProjectProgress += 2;
-        emit JveProjectSignals
-                .loadingProgressUpdated(mp_loadingProjectProgress);
-
-        // validate ids
-        JveProject::validateIds();
-        mp_loadingProjectProgress += 1;
-        emit JveProjectSignals
-                .loadingProgressUpdated(mp_loadingProjectProgress);
-
-        // validate references
-        JveProject::validateReferences();
-        mp_loadingProjectProgress += 1;
-        emit JveProjectSignals
-                .loadingProgressUpdated(mp_loadingProjectProgress);
-
-        // create models
-        JveProject::createModels();
-        mp_loadingProjectProgress += 1;
-        emit JveProjectSignals
-                .loadingProgressUpdated(mp_loadingProjectProgress);
+        JveProject::load(loadingFilePath);
 
         // init sources
         JveProject::initSources();
@@ -334,7 +316,7 @@ JveMainController::loadProject(const QString &loadingFilePath)
                 .loadingProgressUpdated(mp_loadingProjectProgress);
 
 
-        for (int i = 0; i < 96; i++, mp_loadingProjectProgress++) {
+        /*for (int i = 0; i < 96; i++, mp_loadingProjectProgress++) {
 
             if (isLoadingProjectProcessRejected()) {
                 throw JveReport(
@@ -346,7 +328,7 @@ JveMainController::loadProject(const QString &loadingFilePath)
             QThread::usleep(50000);
             emit JveProjectSignals
                     .loadingProgressUpdated(mp_loadingProjectProgress);
-        }
+        }*/
 
 
         Jve.setProjectOpenedState();
@@ -372,10 +354,10 @@ JveMainController::loadProject(const QString &loadingFilePath)
                 .wantShowReport(report);
     }
 
-    emit JveProjectSignals
-            .loadingProcessCompleted();
     emit JveGlobalSignals
             .stateChanged(Jve.state());
+    emit JveProjectSignals
+            .loadingProcessCompleted();
 }
 
 void

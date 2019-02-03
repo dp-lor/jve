@@ -26,6 +26,9 @@ JvePrivate::JvePrivate(void)
         mp_projectParentDirPath(),
         mp_projectFilePath(),
         mp_projectFileName(),
+        mp_projectFileSize(0),
+        mp_resourcesSize(0),
+        mp_resourcesCount(0),
         mp_history(),
         mp_domDocument(),
         mp_rootModel(nullptr),
@@ -92,6 +95,24 @@ QString
 JvePrivate::projectFileName(void) const
 {
     return mp_projectFileName;
+}
+
+qint64
+JvePrivate::projectFileSize(const int multiplier) const
+{
+    return (mp_projectFileSize * multiplier);
+}
+
+qint64
+JvePrivate::resourcesSize(void) const
+{
+    return mp_resourcesSize;
+}
+
+int
+JvePrivate::resourcesCount(void) const
+{
+    return mp_resourcesCount;
 }
 
 JveHistory &
@@ -197,6 +218,8 @@ JvePrivate::setNewProjectEnv(void)
     mp_projectFilePath      = info.absoluteFilePath();
 
     updateProjectNameTranslation();
+
+    mp_projectFileSize = 0;
 }
 
 void
@@ -207,6 +230,14 @@ JvePrivate::setProjectEnv(const QString &filePath)
     mp_projectParentDirPath = info.absoluteDir().path();
     mp_projectFilePath      = info.absoluteFilePath();
     mp_projectFileName      = info.fileName();
+    mp_projectFileSize      = info.size();
+}
+
+void
+JvePrivate::addToResourcesStat(const qint64 size)
+{
+    mp_resourcesSize  += size;
+    mp_resourcesCount += 1;
 }
 
 void
@@ -227,13 +258,17 @@ JvePrivate::clear(void)
     mp_history     .clear();
     mp_domDocument .clear();
 
+    mp_projectFileSize = 0;
+    mp_resourcesSize   = 0;
+    mp_resourcesCount  = 0;
+
     mp_projectParentDirPath .clear();
     mp_projectFilePath      .clear();
     mp_projectFileName      .clear();
 }
 
 void
-JvePrivate::createProjectModels(void)
+JvePrivate::createAndAttachProjectModels(void)
 {
     mp_rootModel = new JveRootModel(mp_domDocument.documentElement());
 

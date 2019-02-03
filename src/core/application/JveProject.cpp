@@ -80,8 +80,8 @@ JveProject::loadNew(void)
     // set environment
     Jve.setNewProjectEnv();
 
-    // create project models
-    Jve.createProjectModels();
+    // attach models to dom
+    Jve.createAndAttachProjectModels();
 
     // set up history
     Jve.history().setNewProjectLoadedState();
@@ -93,7 +93,7 @@ JveProject::loadNew(void)
 }
 
 void
-JveProject::loadXmlToDom(const QString &filePath)
+JveProject::load(const QString &filePath)
 {
     // check file
     int status = JveFsUtils.checkFile(
@@ -175,11 +175,9 @@ JveProject::loadXmlToDom(const QString &filePath)
             JveReport::LoadingProjectProcessRejected
         );
     }
-}
 
-void
-JveProject::validateIds(void)
-{
+    //------------------------------------------------------------//
+
     // TODO validate each dom element with id attribute for unique id
 
     //------------------------------------------------------------//
@@ -190,11 +188,9 @@ JveProject::validateIds(void)
             JveReport::LoadingProjectProcessRejected
         );
     }
-}
 
-void
-JveProject::validateReferences(void)
-{
+    //------------------------------------------------------------//
+
     // TODO validate id references ( sources <-> regions )
 
     //------------------------------------------------------------//
@@ -205,12 +201,12 @@ JveProject::validateReferences(void)
             JveReport::LoadingProjectProcessRejected
         );
     }
-}
 
-void
-JveProject::createModels(void)
-{
-    Jve.createProjectModels();
+    //------------------------------------------------------------//
+
+    // attach models to dom
+    Jve.createAndAttachProjectModels();
+    // TODO init models here
 
     //------------------------------------------------------------//
 
@@ -220,6 +216,12 @@ JveProject::createModels(void)
             JveReport::LoadingProjectProcessRejected
         );
     }
+
+    //------------------------------------------------------------//
+
+    // add project size to statistics
+    // 6 = number of actions with project data (check, read, validate, etc..)
+    Jve.addToResourcesStat(Jve.projectFileSize(6));
 }
 
 void

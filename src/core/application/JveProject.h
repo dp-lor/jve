@@ -12,10 +12,7 @@ class JveProject
     public:
         static void close(void);
         static void loadNew(void);
-        static void loadXmlToDom(const QString &filePath);
-        static void validateIds(void);
-        static void validateReferences(void);
-        static void createModels(void);
+        static void load(const QString &filePath);
         static void initSources(void);
         static void save(const QString &filePath);
     private:
