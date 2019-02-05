@@ -302,9 +302,6 @@ JveMainController::loadProject(const QString &loadingFilePath)
         )
     );
 
-    // sleep one second because progress dialog show with timeout
-    //QThread::usleep(1000000);
-
     try {
 
         JveProject::load(loadingFilePath);
@@ -354,10 +351,10 @@ JveMainController::loadProject(const QString &loadingFilePath)
                 .wantShowReport(report);
     }
 
-    emit JveGlobalSignals
-            .stateChanged(Jve.state());
     emit JveProjectSignals
             .loadingProcessCompleted();
+    emit JveGlobalSignals
+            .stateChanged(Jve.state());
 }
 
 void

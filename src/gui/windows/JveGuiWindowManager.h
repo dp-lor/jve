@@ -13,6 +13,7 @@
 
 
 class JveGuiMainWindow;
+class JveGuiLoadingProjectProgressDialod;
 
 
 class JveGuiWindowManager : public QObject
@@ -29,6 +30,7 @@ class JveGuiWindowManager : public QObject
         void slotStateChanged(const int state);
         void slotShowReport(const JveReport &report);
         void slotShowLoadingProjectProgressDialog(void);
+        void slotLoadingProjectProcessCompleted(void);
         void slotShowModifiedProjectWarning(
                 const int      options,
                 const QString &loadingProjectUrl
@@ -53,6 +55,7 @@ class JveGuiWindowManager : public QObject
     private:
         // members
         JveGuiMainWindow *mp_mainWindow;
+        JveGuiLoadingProjectProgressDialod *mp_loadingProjectProgressDialog;
 };
 
 

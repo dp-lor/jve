@@ -27,7 +27,6 @@ class JveGuiLoadingProjectProgressDialod : public QDialog
         void changeEvent(QEvent *event);
     private slots:
         void slotProgressUpdated(const int value);
-        void slotProcessCompleted(void);
     private:
         void updateTranslations(void);
     private:

@@ -39,7 +39,8 @@ JveGuiWindowManager::JveGuiWindowManager(void)
     : QObject(nullptr),
         mp_isPopulated(false),
         mp_isBusy(false),
-        mp_mainWindow(nullptr)
+        mp_mainWindow(nullptr),
+        mp_loadingProjectProgressDialog(nullptr)
 {
     // slot quit
     connect(
@@ -98,6 +99,14 @@ JveGuiWindowManager::populateGui(void)
         SIGNAL(wantShowLoadingProjectProgress()),
         this,
         SLOT(slotShowLoadingProjectProgressDialog()),
+        Qt::QueuedConnection
+    );
+    // slot process completed
+    connect(
+        &JveProjectSignals,
+        SIGNAL(loadingProcessCompleted()),
+        this,
+        SLOT(slotLoadingProjectProcessCompleted()),
         Qt::QueuedConnection
     );
     // slot modified project warning
@@ -282,16 +291,26 @@ JveGuiWindowManager::slotShowReport(const JveReport &report)
 void
 JveGuiWindowManager::slotShowLoadingProjectProgressDialog(void)
 {
-    QPointer<JveGuiLoadingProjectProgressDialod>
-        dialog = new JveGuiLoadingProjectProgressDialod(qApp->activeWindow());
+    mp_loadingProjectProgressDialog
+        = new JveGuiLoadingProjectProgressDialod(qApp->activeWindow());
 
-    if (QDialog::Rejected == dialog->exec()) {
+    if (QDialog::Rejected == mp_loadingProjectProgressDialog->exec()) {
         JveLoadingProjectMutex.lock();
         Jve.setLoadingProjectProcessRejected(true);
         JveLoadingProjectMutex.unlock();
     }
 
-    delete dialog;
+    delete mp_loadingProjectProgressDialog;
+
+    mp_loadingProjectProgressDialog = nullptr;
+}
+
+void
+JveGuiWindowManager::slotLoadingProjectProcessCompleted(void)
+{
+    if (nullptr != mp_loadingProjectProgressDialog) {
+        mp_loadingProjectProgressDialog->accept();
+    }
 }
 
 void

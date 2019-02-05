@@ -76,14 +76,14 @@ JveGuiLoadingProjectProgressDialod
         SLOT(slotProgressUpdated(int)),
         Qt::QueuedConnection
     );
-    // slot process completed
+    /*// slot process completed
     connect(
         &JveProjectSignals,
         SIGNAL(loadingProcessCompleted()),
         this,
         SLOT(slotProcessCompleted()),
         Qt::QueuedConnection
-    );
+    );*/
 
     // initial translate
     updateTranslations();
@@ -106,12 +106,6 @@ void
 JveGuiLoadingProjectProgressDialod::slotProgressUpdated(const int value)
 {
     mp_progress.setValue(value);
-}
-
-void
-JveGuiLoadingProjectProgressDialod::slotProcessCompleted(void)
-{
-    accept();
 }
 
 void
