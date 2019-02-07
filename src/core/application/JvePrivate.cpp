@@ -98,9 +98,9 @@ JvePrivate::projectFileName(void) const
 }
 
 qint64
-JvePrivate::projectFileSize(const int multiplier) const
+JvePrivate::projectFileSize(void) const
 {
-    return (mp_projectFileSize * multiplier);
+    return mp_projectFileSize;
 }
 
 qint64
@@ -276,6 +276,14 @@ JvePrivate::createAndAttachProjectModels(void)
     mp_sourcesModel  = mp_rootModel->sourcesModel();
     mp_treeModel     = mp_rootModel->treeModel();
     mp_stateModel    = mp_rootModel->stateModel();
+}
+
+void
+JvePrivate::initProjectModels(void)
+{
+    //mp_sourcesModel  ->init();
+    //mp_treeModel     ->init();
+    //mp_stateModel    ->init();
 }
 
 void

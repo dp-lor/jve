@@ -7,26 +7,19 @@
 #include "../mutexes/JveProjectMutex.h"
 #include "../signals/JveProjectSettingsSignals.h"
 
-#include "JveStateModel.h"
 #include "../application/Jve.h"
-#include "../application/JveProject.h"
+#include "JveStateModel.h"
 
 #include "../history/JveHistory.h"
 #include "../history/JveSetRangeStartCommand.h"
 #include "../history/JveSetRangeEndCommand.h"
 
 
-JveSettingsModel::JveSettingsModel(
-    JveProject  *project,
-    QDomElement  domElement
-) : JveBaseModel(domElement),
-        mp_project(project),
+JveSettingsModel::JveSettingsModel(QDomElement domElement)
+    : JveBaseModel(domElement),
         mp_rangeStart(JVE_UNSIGNED_FRAME_NUMBER_MIN),
         mp_rangeEnd(JVE_UNSIGNED_FRAME_NUMBER_MAX)
 {
-    // share self to project
-    //mp_project->setSettingsModel(this);
-
     // range
     int rangeStart = mp_domElement.attribute("rangeStart").toInt();
     int rangeEnd   = mp_domElement.attribute("rangeEnd"  ).toInt();
@@ -115,12 +108,12 @@ JveSettingsModel::setRangeStart(
     emit JveProjectSettingsSignals.rangeStartChanged(mp_rangeStart);
 
     // fix playhead position
-    /*if (mp_project->stateModel()->playheadPosition() < mp_rangeStart) {
-        mp_project->stateModel()->setPlayheadPosition(
+    if (Jve.stateModel()->playheadPosition() < mp_rangeStart) {
+        Jve.stateModel()->setPlayheadPosition(
             mp_rangeStart,
             locked ?: lockItself
         );
-    }*/
+    }
 
     if (lockItself) {
         JveProjectMutex.unlock();
@@ -145,12 +138,12 @@ JveSettingsModel::setRangeEnd(
     emit JveProjectSettingsSignals.rangeEndChanged(mp_rangeEnd);
 
     // fix playhead position
-    /*if (mp_project->stateModel()->playheadPosition() > mp_rangeEnd) {
-        mp_project->stateModel()->setPlayheadPosition(
+    if (Jve.stateModel()->playheadPosition() > mp_rangeEnd) {
+        Jve.stateModel()->setPlayheadPosition(
             mp_rangeEnd,
             locked ?: lockItself
         );
-    }*/
+    }
 
     if (lockItself) {
         JveProjectMutex.unlock();

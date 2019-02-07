@@ -10,39 +10,32 @@
 
 
 JveRootModel::JveRootModel(QDomElement domElement)
-    : JveBaseModel(domElement),
-    // settings
-    mp_settings(
-        new JveSettingsModel(
-            nullptr,
-            mp_domElement.firstChildElement("settings")
-        )
-    ),
-    // sources
-    mp_sources(
-        new JveSourcesModel(
-            nullptr,
-            mp_domElement.firstChildElement("sources")
-        )
-    ),
-    // tree
-    mp_tree(
-        new JveTreeModel(
-            nullptr,
-            mp_domElement.firstChildElement("tree")
-        )
-    ),
-    // state
-    mp_state(
-        new JveStateModel(
-            nullptr,
-            mp_domElement.firstChildElement("state")
-        )
-    )
+    : JveBaseModel(domElement)
 {
+    // settings
+    mp_settings = new JveSettingsModel(
+        mp_domElement.firstChildElement("settings")
+    );
     attachChild(mp_settings);
+
+    // sources
+    mp_sources = new JveSourcesModel(
+        mp_domElement.firstChildElement("sources")
+    );
     attachChild(mp_sources);
+
+    // tree
+    mp_tree = new JveTreeModel(
+        nullptr,
+        mp_domElement.firstChildElement("tree")
+    );
     attachChild(mp_tree);
+
+    // state
+    mp_state = new JveStateModel(
+        nullptr,
+        mp_domElement.firstChildElement("state")
+    );
     attachChild(mp_state);
 }
 

@@ -166,9 +166,13 @@ JveProject::load(const QString &filePath)
 
     // set environment
     Jve.setProjectEnv(filePath);
+    // add project size to statistics
+    Jve.addToResourcesStat(Jve.projectFileSize());
+}
 
-    //------------------------------------------------------------//
-
+void
+JveProject::validateAttributes(void)
+{
     if (isLoadingProcessRejected()) {
         throw JveReport(
             JveReport::Success,
@@ -179,9 +183,11 @@ JveProject::load(const QString &filePath)
     //------------------------------------------------------------//
 
     // TODO validate each dom element with id attribute for unique id
+}
 
-    //------------------------------------------------------------//
-
+void
+JveProject::validateReferences(void)
+{
     if (isLoadingProcessRejected()) {
         throw JveReport(
             JveReport::Success,
@@ -192,9 +198,11 @@ JveProject::load(const QString &filePath)
     //------------------------------------------------------------//
 
     // TODO validate id references ( sources <-> regions )
+}
 
-    //------------------------------------------------------------//
-
+void
+JveProject::initModels(void)
+{
     if (isLoadingProcessRejected()) {
         throw JveReport(
             JveReport::Success,
@@ -206,27 +214,17 @@ JveProject::load(const QString &filePath)
 
     // attach models to dom
     Jve.createAndAttachProjectModels();
-    // TODO init models here
+    // init models
+    Jve.initProjectModels();
 
-    //------------------------------------------------------------//
+    /*// set up history
+    Jve.history().setProjectLoadedState();
+    // set clean opened new project state
+    Jve.setProjectOpenedState();
 
-    if (isLoadingProcessRejected()) {
-        throw JveReport(
-            JveReport::Success,
-            JveReport::LoadingProjectProcessRejected
-        );
-    }
+    // set up project models
+    Jve.setUpProjectModels();*/
 
-    //------------------------------------------------------------//
-
-    // add project size to statistics
-    // 6 = number of actions with project data (check, read, validate, etc..)
-    Jve.addToResourcesStat(Jve.projectFileSize(6));
-}
-
-void
-JveProject::initSources(void)
-{
     /*
     // create history
     //mp_history = new JveHistory(this);
@@ -236,15 +234,6 @@ JveProject::initSources(void)
     // set up history
     //mp_history->setProjectLoadedState();
     */
-
-    //------------------------------------------------------------//
-
-    if (isLoadingProcessRejected()) {
-        throw JveReport(
-            JveReport::Success,
-            JveReport::LoadingProjectProcessRejected
-        );
-    }
 }
 
 void

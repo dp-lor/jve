@@ -35,7 +35,7 @@ class JvePrivate
         QString projectFilePath(void) const;
         QString projectFileName(void) const;
     public:
-        qint64 projectFileSize(const int multiplier = 1) const;
+        qint64 projectFileSize(void) const;
         qint64 resourcesSize(void) const;
         int    resourcesCount(void) const;
     public:
@@ -60,6 +60,7 @@ class JvePrivate
     public:
         void clear(void);
         void createAndAttachProjectModels(void);
+        void initProjectModels(void);
         void setUpProjectModels(void);
     private:
         // states

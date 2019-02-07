@@ -305,9 +305,10 @@ JveMainController::loadProject(const QString &loadingFilePath)
     try {
 
         JveProject::load(loadingFilePath);
+        JveProject::validateAttributes();
+        JveProject::validateReferences();
+        JveProject::initModels();
 
-        // init sources
-        JveProject::initSources();
         mp_loadingProjectProgress += 1;
         emit JveProjectSignals
                 .loadingProgressUpdated(mp_loadingProjectProgress);

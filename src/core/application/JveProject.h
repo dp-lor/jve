@@ -13,7 +13,9 @@ class JveProject
         static void close(void);
         static void loadNew(void);
         static void load(const QString &filePath);
-        static void initSources(void);
+        static void validateAttributes(void);
+        static void validateReferences(void);
+        static void initModels(void);
         static void save(const QString &filePath);
     private:
         static bool isLoadingProcessRejected(void);

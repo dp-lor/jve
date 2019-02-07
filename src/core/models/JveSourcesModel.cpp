@@ -6,13 +6,11 @@
 #include <QDebug>
 
 
-
 #include "JveImageItemModel.h"
 #include "JveImagesSequenceItemModel.h"
 #include "JveAudioItemModel.h"
 #include "JveVideoItemModel.h"
 
-#include "../application/JveProject.h"
 #include "../utils/JveIdProvider.h"
 #include "../utils/JveFsUtils.h"
 #include "../mutexes/JveProjectMutex.h"
@@ -20,16 +18,10 @@
 #include "../signals/JveProjectSourcesSignals.h"
 
 
-JveSourcesModel::JveSourcesModel(
-    JveProject  *project,
-    QDomElement  domElement
-) : JveBaseModel(domElement),
-        mp_project(project),
+JveSourcesModel::JveSourcesModel(QDomElement domElement)
+    : JveBaseModel(domElement),
         mp_items()
 {
-    // share self to project
-    //mp_project->setSourcesModel(this);
-
     // items
     QDomNodeList sources = mp_domElement.childNodes();
     for (int i = 0; i < sources.length(); i++) {
@@ -41,7 +33,7 @@ JveSourcesModel::JveSourcesModel(
         if ("image" == itemType) {
             attachSourceItem(
                 new JveImageItemModel(
-                    mp_project,
+                    nullptr,
                     siDomElement,
                     JveSourcesItemOption::ValidateCheckSum
                 )
@@ -50,7 +42,7 @@ JveSourcesModel::JveSourcesModel(
         } else if ("imagesSequence" == itemType) {
             attachSourceItem(
                 new JveImagesSequenceItemModel(
-                    mp_project,
+                    nullptr,
                     siDomElement
                 )
             );
@@ -58,7 +50,7 @@ JveSourcesModel::JveSourcesModel(
         } else if ("audio" == itemType) {
             attachSourceItem(
                 new JveAudioItemModel(
-                    mp_project,
+                    nullptr,
                     siDomElement,
                     JveSourcesItemOption::ValidateCheckSum
                 )
@@ -67,7 +59,7 @@ JveSourcesModel::JveSourcesModel(
         } else if ("video" == itemType) {
             attachSourceItem(
                 new JveVideoItemModel(
-                    mp_project,
+                    nullptr,
                     siDomElement,
                     JveSourcesItemOption::ValidateCheckSum
                 )
@@ -122,7 +114,7 @@ JveSourcesModel::addItems(const QStringList &resourcesList)
             case JveFsFileFormat::Image:
                 {
                     JveImageItemModel *item = new JveImageItemModel(
-                        mp_project,
+                        nullptr,
                         createSingleResourceItemDom("image", resourcePath),
                         JveSourcesItemOption::None
                     );
@@ -141,7 +133,7 @@ JveSourcesModel::addItems(const QStringList &resourcesList)
             case JveFsFileFormat::Audio:
                 {
                     JveAudioItemModel *item = new JveAudioItemModel(
-                        mp_project,
+                        nullptr,
                         createSingleResourceItemDom("audio", resourcePath),
                         JveSourcesItemOption::None
                     );
@@ -160,7 +152,7 @@ JveSourcesModel::addItems(const QStringList &resourcesList)
             case JveFsFileFormat::Video:
                 {
                     JveVideoItemModel *item = new JveVideoItemModel(
-                        mp_project,
+                        nullptr,
                         createSingleResourceItemDom("video", resourcePath),
                         JveSourcesItemOption::None
                     );

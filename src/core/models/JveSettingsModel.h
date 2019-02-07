@@ -7,18 +7,12 @@
 #include "JveBaseModel.h"
 
 
-class JveProject;
-
-
 class JveSettingsModel : public JveBaseModel
 {
     Q_OBJECT
     public:
-        explicit JveSettingsModel(
-            JveProject  *project,
-            QDomElement  domElement
-        );
-        virtual ~JveSettingsModel(void);
+        explicit  JveSettingsModel(QDomElement domElement);
+        virtual  ~JveSettingsModel(void);
     public:
         void setUp(void);
         void upSet(void);
@@ -33,9 +27,8 @@ class JveSettingsModel : public JveBaseModel
         void slotSetRangeEnd(const int rangeEnd);
     private:
         // members
-        JveProject *mp_project;
-        int         mp_rangeStart;
-        int         mp_rangeEnd;
+        int mp_rangeStart;
+        int mp_rangeEnd;
 };
 
 
