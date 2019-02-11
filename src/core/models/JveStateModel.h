@@ -7,14 +7,11 @@
 #include "JveBaseModel.h"
 
 
-class JveProject;
-
-
 class JveStateModel : public JveBaseModel
 {
     Q_OBJECT
     public:
-        explicit  JveStateModel(JveProject *project, QDomElement domElement);
+        explicit  JveStateModel(QDomElement domElement);
         virtual  ~JveStateModel(void);
     public:
         void setUp(void);
@@ -35,9 +32,8 @@ class JveStateModel : public JveBaseModel
         void slotSetVideoMonitorQuality(const int quality);
     private:
         // members
-        JveProject *mp_project;
-        int         mp_playheadPosition;
-        int         mp_videoMonitorQuality;
+        int mp_playheadPosition;
+        int mp_videoMonitorQuality;
 };
 
 

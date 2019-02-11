@@ -24,7 +24,12 @@ JveSourcesModel::JveSourcesModel(QDomElement domElement)
 {
     // items
     QDomNodeList sources = mp_domElement.childNodes();
+
+    qDebug() << sources.length();
+
     for (int i = 0; i < sources.length(); i++) {
+
+        break;
 
         QDomElement siDomElement = sources.at(i).toElement();
         QString     itemType     = siDomElement.childNodes().at(0).nodeName();

@@ -179,6 +179,11 @@ JveBaseModel::removeDomFromParentDom(void)
 }
 
 void
+JveBaseModel::init(void)
+{
+}
+
+void
 JveBaseModel::setUp(void)
 {
 }

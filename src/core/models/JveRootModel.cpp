@@ -26,14 +26,12 @@ JveRootModel::JveRootModel(QDomElement domElement)
 
     // tree
     mp_tree = new JveTreeModel(
-        nullptr,
         mp_domElement.firstChildElement("tree")
     );
     attachChild(mp_tree);
 
     // state
     mp_state = new JveStateModel(
-        nullptr,
         mp_domElement.firstChildElement("state")
     );
     attachChild(mp_state);

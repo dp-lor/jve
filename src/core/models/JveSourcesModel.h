@@ -37,7 +37,7 @@ class JveSourcesModel : public JveBaseModel
         void slotAddImagesSequenceItem(const QStringList &imagesList);
     private:
         // sources items
-        QHash<QString, JveSourcesItemModel *>  mp_items;
+        QHash<QString, JveSourcesItemModel *> mp_items;
 };
 
 

@@ -40,6 +40,7 @@ class JveBaseModel : public QObject
         void appendDomToNewParentDom(QDomElement parentDomElement);
         void removeDomFromParentDom(void);
     public:
+        virtual void init(void);
         virtual void setUp(void);
         virtual void upSet(void);
     protected:

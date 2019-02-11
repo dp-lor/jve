@@ -7,18 +7,12 @@
 #include "JveBaseModel.h"
 
 
-class JveProject;
-
-
 class JveTreeModel : public JveBaseModel
 {
     Q_OBJECT
     public:
-        explicit  JveTreeModel(JveProject *project, QDomElement domElement);
+        explicit  JveTreeModel(QDomElement domElement);
         virtual  ~JveTreeModel(void);
-    private:
-        // members
-        JveProject *mp_project;
 };
 
 

@@ -3,26 +3,25 @@
 #include "JveStateModel.h"
 
 
+#include <QDebug>
+
+
 #include "../definitions/JveLimits.h"
 #include "../mutexes/JveProjectMutex.h"
 #include "../signals/JveProjectStateSignals.h"
 
+#include "../application/Jve.h"
 #include "JveSettingsModel.h"
-#include "../application/JveProject.h"
 
 
-JveStateModel::JveStateModel(
-    JveProject  *project,
-    QDomElement  domElement
-) : JveBaseModel(domElement),
-        mp_project(project)
+JveStateModel::JveStateModel(QDomElement domElement)
+    : JveBaseModel(domElement)
 {
-    // share self to project
-    //mp_project->setStateModel(this);
-
     // playhead position
-    int rangeStart = 1;//mp_project->settingsModel()->rangeStart();
-    int rangeEnd   = 1;//mp_project->settingsModel()->rangeEnd();
+    int rangeStart = 1;//Jve.settingsModel()->rangeStart();
+    int rangeEnd   = 1;//Jve.settingsModel()->rangeEnd();
+
+    qDebug() << Jve.settingsModel();
 
     mp_playheadPosition = mp_domElement.attribute("playheadPosition").toInt();
     if (mp_playheadPosition < rangeStart) {
@@ -95,7 +94,7 @@ JveStateModel::setPlayheadPosition(
     mp_playheadPosition = position;
     mp_domElement.setAttribute("playheadPosition", mp_playheadPosition);
 
-    //mp_project->setHiddenModified(true);
+    Jve.setProjectHiddenModifiedState(true);
     emit JveProjectStateSignals.playheadPositionChanged(mp_playheadPosition);
 
     if (lockItself) {
@@ -118,7 +117,7 @@ JveStateModel::setVideoMonitorQuality(
     mp_videoMonitorQuality = quality;
     mp_domElement.setAttribute("videoMonitorQuality", mp_videoMonitorQuality);
 
-    //mp_project->setHiddenModified(true);
+    Jve.setProjectHiddenModifiedState(true);
     emit JveProjectStateSignals
                 .videoMonitorQualityChanged(mp_videoMonitorQuality);
 
@@ -133,8 +132,8 @@ JveStateModel::slotSetPlayheadPosition(const int position)
     JveProjectMutex.lock();
 
     int newPosition = position;
-    int rangeStart  = 1;//mp_project->settingsModel()->rangeStart();
-    int rangeEnd    = 1;//mp_project->settingsModel()->rangeEnd();
+    int rangeStart  = Jve.settingsModel()->rangeStart();
+    int rangeEnd    = Jve.settingsModel()->rangeEnd();
 
     if (newPosition < rangeStart) {
         newPosition = rangeStart;
